@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
-:root::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(135deg, #3b82f6, #2563eb, #1e40af);
-  z-index: -1;
-
+html,
+body {
+  min-height: 100vh;
+  background: linear-gradient(
+    to bottom left,
+    #bfdbfe,
+    #2563eb,
+    #3b82f6
+  ); /* blue-200, blue-600, blue-500 */
+  background-attachment: fixed; /* Prevents white on overscroll */
 }
-
 
 /* Ensure Geist font is applied globally */
 * {
