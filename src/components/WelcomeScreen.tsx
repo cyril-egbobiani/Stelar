@@ -229,7 +229,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
 
         <div
           ref={buttonsContainerRef}
-          className="flex flex-col md:flex-row gap-4 justify-center border-4 px-9 md:px-0"
+          className="flex flex-col md:flex-row gap-4 justify-center px-9 md:px-0"
         >
           <button
             ref={primaryButtonRef}
