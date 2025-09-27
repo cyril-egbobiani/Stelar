@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/* Ensure Geist font is applied globally */
+* {
+  font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif !important;
+}
+
+body {
+  font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+}
+
+/* Force Geist on common elements */
+h1, h2, h3, h4, h5, h6, p, span, div, button {
+  font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif !important;
+}
+
