@@ -122,7 +122,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
         }`}
       >
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-2">
+        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-3">
           {messages.map((msg, idx) => (
             <div
               key={idx}
@@ -131,10 +131,10 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
               }`}
             >
               <div
-                className={`max-w-md px-4 py-2 rounded-2xl  ${
+                className={`w-fit max-w-[60%] break-words px-4 py-2 rounded-2xl ${
                   msg.sender === "user"
                     ? darkMode
-                      ? "bg-gray-700 text-white rounded"
+                      ? "bg-gray-900 text-white rounded"
                       : "bg-gray-100 text-black rounded"
                     : darkMode
                     ? "bg-gradient-to-t from-blue-600 to-blue-500 text-white rounded"
@@ -154,12 +154,12 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
         >
           <input
             className={`flex-1 px-4 py-2 rounded-full font-medium focus:outline-none ${
-              darkMode ? "bg-gray-700 text-white" : "bg-white/50 text-black"
+              darkMode ? "bg-gray-700 text-white" : "bg-gray-100 text-black"
             }`}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Share your toughts..."
+            placeholder="Share your thoughts..."
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
           <button
