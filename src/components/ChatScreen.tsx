@@ -49,11 +49,11 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
       ref={containerRef}
       className={`min-h-screen flex flex-col items-center ${
         darkMode ? "bg-black" : "bg-gray-50"
-      } transition-colors duration-300`}
+      }  `}
     >
       <div className="w-full flex justify-between items-center p-2 h-fit">
         <button
-          className={` border-black/20 px-4 py-2 rounded-full   transition duration-180 ease-in ${
+          className={` border-black/20 px-4 py-2 rounded-full ${
             darkMode
               ? "text-white hover:bg-gray-800"
               : "text-black hover hover:bg-gray-200"
@@ -107,11 +107,11 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
               }`}
             >
               <div
-                className={`max-w-xs px-4 py-2 rounded-2xl shadow ${
+                className={`max-w-md px-4 py-2 rounded-2xl  ${
                   msg.sender === "user"
                     ? darkMode
-                      ? "bg-gray-700 text-white rounded-bl-none"
-                      : "bg-white/80 text-blue-700 rounded-bl-none"
+                      ? "bg-gray-700 text-white rounded"
+                      : "bg-gray-100 text-black rounded"
                     : darkMode
                     ? "bg-gradient-to-t from-blue-600 to-blue-500 text-white rounded"
                     : "bg-gradient-to-t from-blue-600 to-blue-500 text-white rounded"
@@ -135,7 +135,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
+            placeholder="Share your toughts..."
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
           <button
