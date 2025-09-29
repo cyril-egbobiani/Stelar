@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import WelcomeScreen from "./components/WelcomeScreen";
 import AboutScreen from "./components/AboutScreen";
+import ChatScreen from "./components/ChatScreen";
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<
@@ -19,7 +20,7 @@ function App() {
       case "about":
         return <AboutScreen onNavigate={handleNavigation} />;
       case "chat":
-        return <div>Chat Screen (Coming Soon)</div>;
+        return <ChatScreen onNavigate={handleNavigation} />;
       default:
         return <WelcomeScreen onNavigate={handleNavigation} />;
     }

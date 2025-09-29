@@ -1,4 +1,4 @@
-import { useRef,  } from "react";
+import {useRef, } from "react";
  
 interface AboutScreenProps {
   onNavigate: (screen: "welcome" | "about" | "chat") => void;
