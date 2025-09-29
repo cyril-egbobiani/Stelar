@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
+html {
+  overscroll-behavior: none;
+}
+
 html,
 body {
-   background-attachment: fixed;
+  background-attachment: fixed;
 }
 
 * {
@@ -38,6 +42,6 @@ button {
     sans-serif !important;
 }
 
-html {
-  overscroll-behavior: none;
+textPosition: {
+  zindex: 10;
 }
