@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import gsap from "gsap";
 
 interface ChatScreenProps {
   onNavigate: (screen: "welcome" | "about" | "chat") => void;
@@ -12,6 +13,9 @@ type Message = {
 function ChatScreen({ onNavigate }: ChatScreenProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [darkMode, setDarkMode] = useState(false);
+  const iconRef = useRef<HTMLDivElement>(null);
+  const [animating, setAnimating] = useState(false);
+  const [iconState, setIconState] = useState(darkMode ? "sun" : "moon");
 
   const greetings = [
     "Hey there! 😊 What's on your mind today?",
@@ -44,6 +48,37 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
     }
   };
 
+  const handleToggleDarkMode = () => {
+    if (animating) return;
+    setAnimating(true);
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setAnimating(false);
+      },
+    });
+
+    // Scale down and blur out
+    tl.to(iconRef.current, {
+      scale: 0.7,
+      filter: "blur(8px)",
+      duration: 0.18,
+      ease: "power2.in",
+      onComplete: () => {
+        setDarkMode((prev) => !prev);
+        setIconState((prev) => (prev === "sun" ? "moon" : "sun"));
+      },
+    });
+
+    // Scale up and blur in
+    tl.to(iconRef.current, {
+      scale: 1,
+      filter: "blur(0px)",
+      duration: 0.18,
+      ease: "power2.out",
+    });
+  };
+
   return (
     <div
       ref={containerRef}
@@ -65,30 +100,19 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
         <button
           className={`p-2 rounded-full font-semibold ${
             darkMode
-              ? " text-white hover:bg-gray-800  transition duration-180 ease-in"
-              : " text-black hover:bg-gray-200  transition duration-180 ease-in"
+              ? "text-white hover:bg-gray-800 transition duration-180 ease-in"
+              : "text-black hover:bg-gray-200 transition duration-180 ease-in"
           } transition`}
-          onClick={() => setDarkMode((prev) => !prev)}
+          onClick={handleToggleDarkMode}
+          disabled={animating}
         >
-          {darkMode ? (
-            <h1>
-              <img
-                width={24}
-                color="white"
-                src="/Sun.svg"
-                alt="Light mode"
-              ></img>
-            </h1>
-          ) : (
-            <h1>
-              <img
-                width={24}
-                color="white"
-                src="/Solar.svg"
-                alt="Light mode"
-              ></img>
-            </h1>
-          )}
+          <div ref={iconRef}>
+            {iconState === "sun" ? (
+              <img width={24} src="/Sun.svg" alt="Light mode" />
+            ) : (
+              <img width={24} src="/Solar.svg" alt="Dark mode" />
+            )}
+          </div>
         </button>
       </div>
       {/* Text Containier */}
@@ -126,7 +150,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
         <div
           className={`px-4 py-3 flex items-center gap-2 w-full backdrop-blur-md ${
             darkMode ? "bg-black/60" : "bg-white/40"
-          } fixed bottom-0 left-0 md:static rounded-b-3xl textPosition`}
+          } fixed bottom-0 left-0 md:static  textPosition`}
         >
           <input
             className={`flex-1 px-4 py-2 rounded-full font-medium focus:outline-none ${
