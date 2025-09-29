@@ -72,7 +72,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
                 ${
                   msg.sender === "user"
                     ? "bg-white/80  text-blue-700 rounded-bl-none"
-                    : " bg-gradient-to-t from-blue-600 to-blue-500 text-white rounded"
+                    : " bg-gradient-to-t from-blue-500 to-blue-400 text-white rounded"
                 }`}
               >
                 {msg.text}
