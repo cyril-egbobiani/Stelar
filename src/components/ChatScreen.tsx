@@ -96,7 +96,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
       {/* Header */}
       <div className="w-full flex justify-between items-center p-2 h-fit">
         <button
-          className={` border-black/20 px-4 py-2 rounded-full ${
+          className={` px-4 py-2 rounded-full transition duration-180 ease-in ${
             darkMode
               ? "text-white hover:bg-gray-800"
               : "text-black hover hover:bg-gray-200"

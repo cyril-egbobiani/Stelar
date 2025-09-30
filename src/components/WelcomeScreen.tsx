@@ -206,8 +206,8 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
       .call(() => onNavigate("chat"));
   };
   return (
-    <div className="no-scroll min-h-screen flex items-center justify-center p-8 bg-gradient-to-bl from-blue-200 via-blue-600 to-blue-500">
-      <div className="max-w-md text-center text-white">
+    <div className=" min-h-screen flex items-center justify-center p-8 bg-gradient-to-bl from-blue-200 via-blue-600 to-blue-500">
+      <div className="no-scroll max-w-md text-center text-white">
         <div className="flex justify-center mb-4 ">
           <img src="/StelarLogo.svg" alt="logo" className="" ref={imageRef} />
         </div>
