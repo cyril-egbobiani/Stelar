@@ -124,7 +124,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
         </button>
       </div>
       <div
-        className={`chat-area flex flex-col rounded-3xl rounded-b-none border-gray-200 border-1 w-full md:max-w-5xl shadow-sm overflow-hidden ${
+        className={`chat-area flex flex-col rounded-3xl rounded-b-none border-gray-200 border-1 w-full md:max-w-3xl shadow-sm overflow-hidden ${
           darkMode ? "bg-gray-950 border-gray-900" : "bg-white border-gray-100"
         }`}
       >
@@ -181,12 +181,6 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
           </button>
         </div>
       </div>
-      <button
-        className="px-4 py-2 rounded bg-blue-500 text-white font-semibold mt-4"
-        onClick={() => onNavigate("questions")}
-      >
-        Start Wellbeing Questions
-      </button>
     </div>
   );
 }

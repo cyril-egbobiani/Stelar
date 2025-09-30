@@ -2,32 +2,14 @@ import { useState } from "react";
 import WelcomeScreen from "./components/WelcomeScreen";
 import AboutScreen from "./components/AboutScreen";
 import ChatScreen from "./components/ChatScreen";
-import QuestionFlow from "./components/QuestionFlow";
-
-const dummyQuestions = [
-  "What's your name?",
-  "How are you feeling today?",
-  "What made you smile recently?",
-  "Is there something on your mind?",
-  "How do you usually relax?",
-  "What's one thing you'd like to improve?",
-  "Any goals for this week?",
-];
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<
-    "welcome" | "about" | "chat" | "questions"
+    "welcome" | "about" | "chat"
   >("welcome");
 
-  const handleNavigation = (
-    screen: "welcome" | "about" | "chat" | "questions"
-  ) => {
+  const handleNavigation = (screen: "welcome" | "about" | "chat") => {
     setCurrentScreen(screen);
-  };
-
-  const handleQuestionsComplete = (answers: string[]) => {
-    // Handle answers (e.g., save, show summary, etc.)
-    setCurrentScreen("chat"); // Go back to chat or another screen
   };
 
   const renderScreen = () => {
@@ -38,11 +20,6 @@ function App() {
         return <AboutScreen onNavigate={handleNavigation} />;
       case "chat":
         return <ChatScreen onNavigate={handleNavigation} />;
-      case "questions":
-        return (
-          <QuestionFlow
-           />
-        );
       default:
         return <WelcomeScreen onNavigate={handleNavigation} />;
     }
