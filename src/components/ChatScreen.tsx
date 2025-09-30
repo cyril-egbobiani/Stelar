@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 
 interface ChatScreenProps {
@@ -34,6 +34,13 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
     },
   ]);
   const [input, setInput] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const handleSend = () => {
     if (input.trim()) {
@@ -124,7 +131,10 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
         style={{ height: "calc(100vh - 56px)", position: "relative" }} // 56px = header height
       >
         {/* Messages: only this div scrolls */}
-        <div className="no-scroll flex-1 overflow-y-auto px-4 py-6 space-y-3 pb-20">
+        <div
+          className="no-scroll flex-1 overflow-y-auto px-4 py-6 space-y-3 pb-24 messages-scroll"
+          id="messages-container"
+        >
           {messages.map((msg, idx) => (
             <div
               key={idx}
@@ -147,6 +157,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
               </div>
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
         {/* Input Bar: always at bottom of chat area */}
         <div
