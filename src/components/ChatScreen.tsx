@@ -123,12 +123,10 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
           </div>
         </button>
       </div>
-      {/* Chat area: fixed height, flex column */}
       <div
-        className={`flex  flex-col rounded-3xl rounded-b-none border-gray-200 border-1 w-full md:max-w-5xl shadow-sm overflow-hidden ${
+        className={`chat-area flex flex-col rounded-3xl rounded-b-none border-gray-200 border-1 w-full md:max-w-5xl shadow-sm overflow-hidden ${
           darkMode ? "bg-gray-950 border-gray-900" : "bg-white border-gray-100"
         }`}
-        style={{ height: "calc(100vh - 56px)", position: "relative" }} // 56px = header height
       >
         {/* Messages: only this div scrolls */}
         <div
@@ -161,16 +159,9 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
         </div>
         {/* Input Bar: always at bottom of chat area */}
         <div
-          className={`px-4 py-3 flex items-center gap-2 w-full backdrop-blur-md ${
+          className={`p-absolute px-4 py-3 flex items-center gap-2 w-full backdrop-blur-md ${
             darkMode ? "bg-black/60" : "bg-white/40"
           }`}
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            zIndex: 10,
-          }}
         >
           <input
             className={`flex-1 px-4 py-2 rounded-full font-medium focus:outline-none ${
@@ -190,6 +181,12 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
           </button>
         </div>
       </div>
+      <button
+        className="px-4 py-2 rounded bg-blue-500 text-white font-semibold mt-4"
+        onClick={() => onNavigate("questions")}
+      >
+        Start Wellbeing Questions
+      </button>
     </div>
   );
 }

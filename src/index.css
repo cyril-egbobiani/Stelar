@@ -30,7 +30,6 @@ body::-webkit-scrollbar {
 .no-scroll::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
- 
 
 h1,
 h2,
@@ -49,4 +48,16 @@ button {
 
 textposition: {
   zindex: 10;
+}
+
+.p-abolute: {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  zindex: 10;
+  position: absolute;
+}
+.chat-area {
+  height: calc(100vh - 56px); /* 56px = header height */
+  position: relative;
 }
