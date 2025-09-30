@@ -84,8 +84,9 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
       ref={containerRef}
       className={`min-h-screen flex flex-col items-center ${
         darkMode ? "bg-black" : "bg-gray-50"
-      }  `}
+      }`}
     >
+      {/* Header */}
       <div className="w-full flex justify-between items-center p-2 h-fit">
         <button
           className={` border-black/20 px-4 py-2 rounded-full ${
@@ -115,14 +116,15 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
           </div>
         </button>
       </div>
-      {/* Text Containier */}
+      {/* Chat area: fixed height, flex column */}
       <div
-        className={`rounded-3xl rounded-b-none flex-1 border-gray-200 border-1 h-full w-full md:max-w-5xl flex flex-col shadow-sm overflow-hidden ${
+        className={`flex  flex-col rounded-3xl rounded-b-none border-gray-200 border-1 w-full md:max-w-5xl shadow-sm overflow-hidden ${
           darkMode ? "bg-gray-950 border-gray-900" : "bg-white border-gray-100"
         }`}
+        style={{ height: "calc(100vh - 56px)", position: "relative" }} // 56px = header height
       >
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-3">
+        {/* Messages: only this div scrolls */}
+        <div className="no-scroll flex-1 overflow-y-auto px-4 py-6 space-y-3 pb-20">
           {messages.map((msg, idx) => (
             <div
               key={idx}
@@ -146,11 +148,18 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
             </div>
           ))}
         </div>
-        {/* Input Bar */}
+        {/* Input Bar: always at bottom of chat area */}
         <div
           className={`px-4 py-3 flex items-center gap-2 w-full backdrop-blur-md ${
             darkMode ? "bg-black/60" : "bg-white/40"
-          } fixed bottom-0 left-0 md:static  textPosition`}
+          }`}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 10,
+          }}
         >
           <input
             className={`flex-1 px-4 py-2 rounded-full font-medium focus:outline-none ${

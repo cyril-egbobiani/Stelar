@@ -27,6 +27,11 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+.no-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+ 
+
 h1,
 h2,
 h3,
@@ -42,6 +47,6 @@ button {
     sans-serif !important;
 }
 
-textPosition: {
+textposition: {
   zindex: 10;
 }
