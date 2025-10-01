@@ -34,6 +34,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
     },
   ]);
   const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,16 +43,32 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
     }
   }, [messages]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim()) {
       setMessages([...messages, { text: input, sender: "user" }]);
       setInput("");
-      setTimeout(() => {
+      setIsTyping(true);
+      try {
+        const response = await fetch("http://localhost:5000/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: input }),
+        });
+        const data = await response.json();
+        if (data.reply && data.reply.trim() !== "") {
+          setMessages((msgs) => [
+            ...msgs,
+            { text: data.reply, sender: "stelar" },
+          ]);
+        }
+      } catch {
         setMessages((msgs) => [
           ...msgs,
-          { text: "I'm here to support you!", sender: "stelar" },
+          { text: "Sorry, something went wrong.", sender: "stelar" },
         ]);
-      }, 1000);
+      } finally {
+        setIsTyping(false);
+      }
     }
   };
 
@@ -133,28 +150,48 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
           className="no-scroll flex-1 overflow-y-auto px-4 py-6 space-y-3 pb-24 messages-scroll"
           id="messages-container"
         >
-          {messages.map((msg, idx) => (
-            <div
-              key={idx}
-              className={`flex ${
-                msg.sender === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
+          {messages.map((msg, idx) => {
+            // Check if this is the last message and from "stelar"
+            const isLatestAI =
+              idx === messages.length - 1 && msg.sender === "stelar";
+            return (
               <div
-                className={`w-fit max-w-[60%] break-words px-4 py-2 rounded-2xl ${
-                  msg.sender === "user"
-                    ? darkMode
-                      ? "bg-gray-900 text-white rounded"
-                      : "bg-gray-100 text-black rounded"
-                    : darkMode
-                    ? "bg-gradient-to-t from-blue-600 to-blue-500 text-white rounded"
-                    : "bg-gradient-to-t from-blue-600 to-blue-500 text-white rounded"
+                key={idx}
+                className={`flex ${
+                  msg.sender === "user" ? "justify-end" : "justify-start"
                 }`}
               >
-                {msg.text}
+                <div
+                  className={`w-fit max-w-[70%] break-words px-4 py-2 rounded-2xl ${
+                    msg.sender === "user"
+                      ? darkMode
+                        ? "bg-gray-900 text-white rounded"
+                        : "bg-gray-100 text-black rounded"
+                      : darkMode
+                      ? "bg-gradient-to-t from-blue-600 to-blue-600 text-white rounded"
+                      : "bg-gradient-to-t from-blue-600 to-blue-600 text-white rounded"
+                  } ${isLatestAI ? "ai-fade-in" : ""}`} // <-- Add animation class
+                >
+                  {msg.text}
+                </div>
+              </div>
+            );
+          })}
+          {isTyping && (
+            <div className="flex justify-start">
+              <div className="w-fit  text-white rounded-2xl px-4 py-2 mb-2 flex items-center gap-1">
+                <span className="block w-3 h-3   animate-bounce [animation-delay:0s]">
+                  <img src="/StelarLogo.svg" alt="." />
+                </span>
+                <span className="block w-3 h-3   animate-bounce [animation-delay:0.1s]">
+                  <img src="/StelarLogo.svg" alt="." />
+                </span>
+                <span className="block w-3 h-3  animate-bounce  [animation-delay:0.3s]">
+                  <img src="/StelarLogo.svg" alt="." />
+                </span>
               </div>
             </div>
-          ))}
+          )}
           <div ref={messagesEndRef} />
         </div>
         {/* Input Bar: always at bottom of chat area */}

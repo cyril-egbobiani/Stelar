@@ -4,9 +4,21 @@ html {
   overscroll-behavior: none;
 }
 
+html::-webkit-scrollbar {
+  display: none;
+}
+
 html,
 body {
-  background-attachment: fixed;
+  /* background-attachment: fixed; */
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 * {
@@ -21,14 +33,6 @@ body {
     sans-serif;
   font-feature-settings: "rlig" 1, "calt" 1;
   -ms-overflow-style: none; /* IE and Edge */
-}
-
-body::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scroll::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
 }
 
 h1,
@@ -60,4 +64,12 @@ textposition: {
 .chat-area {
   height: calc(100vh - 56px); /* 56px = header height */
   position: relative;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+.ai-fade-in {
+  animation: fadeIn 0.5s ease;
 }

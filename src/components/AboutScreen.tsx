@@ -20,7 +20,7 @@ function AboutScreen({ onNavigate }: AboutScreenProps) {
         for your wellbeing journey.
       </p>
       <button
-            className="px-8 py-4 bg-white/10 text-white rounded-full text-lg font-semibold border-2 border-white/30 backdrop-blur-sm hover:bg-white/20 hover:border-white/50 min-w-44 font-sans transition-colors duration-180"
+            className="px-6 py-4 bg-white/10 text-white rounded-full text-lg font-semibold border-2 border-white/30 backdrop-blur-sm hover:bg-white/20 hover:border-white/50 min-w-44 font-sans transition-colors duration-180"
         onClick={() => onNavigate("welcome")}
       >
         Back to Welcome

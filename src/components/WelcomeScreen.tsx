@@ -229,19 +229,18 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
 
         <div
           ref={buttonsContainerRef}
-          className="flex flex-col md:flex-row gap-4 justify-center px-9 md:px-0"
+          className="flex gap-6 justify-center"
         >
           <button
             ref={primaryButtonRef}
-            className="px-8 py-4 bg-white/10 text-white rounded-full text-lg font-semibold border-2 border-white/30 backdrop-blur-sm hover:bg-white/20 hover:border-white/50 min-w-44 font-sans transition-colors duration-180"
+            className="py-4 px-6 bg-white/10 text-white rounded-full text-lg font-semibold border-2 border-white/30 backdrop-blur-sm hover:bg-white/20 hover:border-white/50 w-fit font-sans transition-colors duration-180"
             onClick={handleWhatAmI}
           >
             About me
           </button>
-
           <button
             ref={secondaryButtonRef}
-            className="px-8 py-4 bg-white/95 text-blue-500 rounded-full text-lg font-semibold shadow-lg shadow-white/20 hover:bg-white hover:shadow-xl hover:shadow-white/30 min-w-44 font-sans transition-colors duration-180"
+            className="py-4 px-6 bg-white/95 text-blue-500 rounded-full text-lg font-semibold shadow-lg shadow-white/20 hover:bg-white hover:shadow-xl hover:shadow-white/30 w-fit font-sans transition-colors duration-180"
             onClick={handleLetsTalk}
           >
             Let's talk
