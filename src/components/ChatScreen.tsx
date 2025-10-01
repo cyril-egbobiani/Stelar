@@ -162,7 +162,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
                 }`}
               >
                 <div
-                  className={`w-fit max-w-[56%] break-words px-4 py-2 rounded-2xl ${
+                  className={`w-fit max-w-[56%] break-words px-2 py-2 rounded-2xl ${
                     msg.sender === "user"
                       ? darkMode
                         ? "bg-gray-900 text-white rounded"
