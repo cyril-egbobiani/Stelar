@@ -147,7 +147,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
       >
         {/* Messages: only this div scrolls */}
         <div
-          className="no-scroll flex-1 overflow-y-auto px-4 py-6 space-y-3 pb-24 messages-scroll"
+          className="no-scroll flex-1 overflow-y-auto px-4 py-6 space-y-8 pb-24 messages-scroll"
           id="messages-container"
         >
           {messages.map((msg, idx) => {
@@ -162,7 +162,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
                 }`}
               >
                 <div
-                  className={`w-fit max-w-[70%] break-words px-4 py-2 rounded-2xl ${
+                  className={`w-fit max-w-[56%] break-words px-4 py-2 rounded-2xl ${
                     msg.sender === "user"
                       ? darkMode
                         ? "bg-gray-900 text-white rounded"
