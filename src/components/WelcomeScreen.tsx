@@ -207,7 +207,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
   };
   return (
     <div className=" min-h-screen flex items-center justify-center p-8 bg-gradient-to-bl from-blue-200 via-blue-600 to-blue-500">
-      <div className="no-scroll max-w-md text-center text-white">
+      <div className="no-scrollbar max-w-md text-center text-white">
         <div className="flex justify-center mb-4 ">
           <img src="/StelarLogo.svg" alt="logo" className="" ref={imageRef} />
         </div>

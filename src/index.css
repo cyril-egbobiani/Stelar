@@ -17,7 +17,7 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-.no-scroll::-webkit-scrollbar {
+.no-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
 

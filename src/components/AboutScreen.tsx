@@ -11,7 +11,7 @@ function AboutScreen({ onNavigate }: AboutScreenProps) {
   return (
     <div
       ref={containerRef}
-      className="no-scroll min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-bl from-blue-200 via-blue-600 to-blue-500"
+      className="no-scrollbar min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-bl from-blue-200 via-blue-600 to-blue-500"
     >
       <h1 className="text-4xl font-md text-white mb-4">About Stelar</h1>
       <p className="text-lg text-white/90 max-w-xl text-center mb-8">
