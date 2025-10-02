@@ -49,11 +49,14 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
       setInput("");
       setIsTyping(true);
       try {
-        const response = await fetch("http://localhost:5000/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: input }),
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/chat`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: input }),
+          }
+        );
         const data = await response.json();
         if (data.reply && data.reply.trim() !== "") {
           setMessages((msgs) => [
