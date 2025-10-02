@@ -50,7 +50,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
       setIsTyping(true);
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/chat`,
+          `${import.meta.env.BACKEND_URL}/chat`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
