@@ -49,11 +49,14 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
       setInput("");
       setIsTyping(true);
       try {
-        const response = await fetch(`${import.meta.env.BACKEND_URL}/chat`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: input }),
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/chat`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: input }),
+          }
+        );
         const data = await response.json();
         if (data.reply && data.reply.trim() !== "") {
           setMessages((msgs) => [
@@ -210,7 +213,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
             placeholder="Share your thoughts..."
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
-          
+
           <button
             className={`px-6 py-2 rounded-full font-semibold transition ${"bg-emerald-500 text-white hover:bg-emerald-600"}`}
             onClick={handleSend}
