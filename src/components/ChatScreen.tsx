@@ -12,13 +12,13 @@ type Message = {
 
 function ChatScreen({ onNavigate }: ChatScreenProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const iconRef = useRef<HTMLDivElement>(null);
   const [animating, setAnimating] = useState(false);
   const [iconState, setIconState] = useState(darkMode ? "sun" : "moon");
 
   const greetings = [
-    "Hey there! 😊 What's on your mind today?",
+    "Hey there! What's on your mind today?",
     "Hi! How's your day going so far?",
     "Hello! I'm here if you want to talk about anything.",
     "Hey! Is there something you'd like to share?",
@@ -49,14 +49,11 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
       setInput("");
       setIsTyping(true);
       try {
-        const response = await fetch(
-          `${import.meta.env.BACKEND_URL}/chat`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: input }),
-          }
-        );
+        const response = await fetch(`${import.meta.env.BACKEND_URL}/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: input }),
+        });
         const data = await response.json();
         if (data.reply && data.reply.trim() !== "") {
           setMessages((msgs) => [
@@ -145,7 +142,7 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
       </div>
       <div
         className={`chat-area flex flex-col rounded-3xl rounded-b-none border-gray-200 border-1 w-full md:max-w-3xl shadow-sm overflow-hidden ${
-          darkMode ? "bg-gray-950 border-gray-900" : "bg-white border-gray-100"
+          darkMode ? "bg-black border-gray-900" : "bg-white border-gray-100"
         }`}
       >
         {/* Messages: only this div scrolls */}
@@ -168,11 +165,11 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
                   className={`w-fit max-w-[60%] break-words px-4 py-2 rounded-2xl ${
                     msg.sender === "user"
                       ? darkMode
-                        ? "bg-gray-900 text-white rounded"
-                        : "bg-gray-100 text-black rounded"
+                        ? "bg-emerald-600 text-white rounded"
+                        : "bg-emerald-500 text-white rounded"
                       : darkMode
-                      ? "bg-gradient-to-t from-blue-600 to-blue-600 text-white rounded"
-                      : "bg-gradient-to-t from-blue-600 to-blue-600 text-white rounded"
+                      ? " text-white"
+                      : " text-black"
                   } ${isLatestAI ? "ai-fade-in" : ""}`} // <-- Add animation class
                 >
                   {msg.text}
@@ -204,8 +201,8 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
           }`}
         >
           <input
-            className={`flex-1 px-4 py-2 rounded-full font-medium focus:outline-none ${
-              darkMode ? "bg-gray-700 text-white" : "bg-gray-100 text-black"
+            className={`flex-1 px-4 py-2 rounded-xl font-medium focus:outline-none  ${
+              darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
             }`}
             type="text"
             value={input}
@@ -213,8 +210,9 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
             placeholder="Share your thoughts..."
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
+          
           <button
-            className={`px-6 py-2 rounded-full font-semibold transition ${"bg-blue-500 text-white hover:bg-blue-600"}`}
+            className={`px-6 py-2 rounded-full font-semibold transition ${"bg-emerald-500 text-white hover:bg-emerald-600"}`}
             onClick={handleSend}
           >
             Send

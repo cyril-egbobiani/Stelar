@@ -18,7 +18,6 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
   const secondaryButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    // Enable GSAP performance optimizations
     gsap.config({
       force3D: true,
       nullTargetWarn: false,
@@ -26,7 +25,6 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
 
     const timeline = gsap.timeline();
 
-    // Set initial states for smooth slide-up effect
     gsap.set(
       [
         imageRef.current,
@@ -61,7 +59,6 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
       }
     );
 
-    // Title animation - ultra smooth slide up effect
     timeline.to(titleRef.current, {
       opacity: 1,
       y: 0,
@@ -71,11 +68,10 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
       ease: "power4.out",
     });
 
-    // Subtitle animation - smooth slide up then typewriter
     if (subtitleRef.current) {
       const subtitleText =
         "Your personal welfare helper, designed to listen, understand, and support your wellbeing journey.";
-      subtitleRef.current.textContent = subtitleText; // Set text directly
+      subtitleRef.current.textContent = subtitleText;
 
       timeline.fromTo(
         subtitleRef.current,
@@ -84,7 +80,6 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
       );
     }
 
-    // Buttons animation - ultra smooth entrance
     timeline.to(
       buttonsContainerRef.current,
       {
@@ -96,9 +91,8 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
         ease: "power4.out",
       },
       "-=1.0"
-    ); // Start while typewriter is still going
+    );
 
-    // Setup button interactions
     const setupButtonHover = (
       buttonRef: React.RefObject<HTMLButtonElement | null>
     ) => {
@@ -123,7 +117,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
 
       const handleMouseDown = () => {
         gsap.to(button, {
-          scale: 0.97, // Within your 0.95-0.98 range
+          scale: 0.97,
           duration: 0.08,
           ease: "power2.out",
         });
@@ -161,7 +155,6 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
   }, []);
 
   const handleWhatAmI = () => {
-    // Add exit animation before navigation
     gsap
       .timeline()
       .to(
@@ -184,7 +177,6 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
   };
 
   const handleLetsTalk = () => {
-    // Add exit animation before navigation
     gsap
       .timeline()
       .to(
@@ -205,9 +197,11 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
       )
       .call(() => onNavigate("chat"));
   };
+
   return (
-    <div className=" min-h-screen flex items-center justify-center p-8 bg-gradient-to-bl from-blue-200 via-blue-600 to-blue-500">
-      <div className="no-scrollbar max-w-md text-center text-white">
+    <div className="relative min-h-screen flex items-center justify-center p-8 overflow-hidden bg-gradient-to-b from-cyan-800 from- via-emerald-900 via- to-slate-900 to-">
+      {/* Main content */}
+      <div className="no-scrollbar max-w-md text-center text-white relative z-20">
         <div className="flex justify-center mb-4 ">
           <img src="/StelarLogo.svg" alt="logo" className="" ref={imageRef} />
         </div>
@@ -227,23 +221,30 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
           </p>
         </div>
 
-        <div
-          ref={buttonsContainerRef}
-          className="flex gap-6 justify-center"
-        >
+        <div ref={buttonsContainerRef} className="flex gap-6 justify-center">
           <button
             ref={primaryButtonRef}
-            className="py-4 px-6 bg-white/10 text-white rounded-full text-lg font-semibold border-2 border-white/30 backdrop-blur-sm hover:bg-white/20 hover:border-white/50 w-fit font-sans transition-colors duration-180"
+            className="relative h-12 px-6 rounded-full overflow-hidden border-2 border-white/30 bg-white/10 text-white text-lg font-normal backdrop-blur-sm transition-all duration-300 group hover:bg-white/20 hover:border-white/50"
             onClick={handleWhatAmI}
           >
-            About me
+            <span className="relative z-10 flex items-center justify-center h-full">
+              About me
+            </span>
           </button>
+
           <button
             ref={secondaryButtonRef}
-            className="py-4 px-6 bg-white/95 text-blue-500 rounded-full text-lg font-semibold shadow-lg shadow-white/20 hover:bg-white hover:shadow-xl hover:shadow-white/30 w-fit font-sans transition-colors duration-180"
+            className="relative h-12 px-6 rounded-full overflow-hidden group transition-all duration-180"
             onClick={handleLetsTalk}
           >
-            Let's talk
+            {/* Gradient border */}
+            <div className="absolute inset-0 bg-gradient-to-b from-emerald-400 via-emerald-600 to-emerald-800 rounded-full p-[2px]"></div>
+            {/* Button background */}
+            <div className="absolute inset-[2px] bg-emerald-950 rounded-full group-hover:bg-emerald-900 transition-colors duration-180"></div>
+            {/* Text */}
+            <span className="relative z-10 text-lg font-semibold bg-gradient-to-b from-emerald-200 to-emerald-400 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(16,185,129,0.4)] tracking-tighter flex items-center justify-center h-full">
+              Let's talk
+            </span>
           </button>
         </div>
       </div>
