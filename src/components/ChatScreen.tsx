@@ -1,16 +1,20 @@
 import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
+import type { Message } from "../types";
 
 interface ChatScreenProps {
-  onNavigate: (screen: "welcome" | "about" | "chat") => void;
+  onNavigate: (
+    screen: "welcome" | "about" | "chat" | "report" | "conclusion"
+  ) => void;
+  conversationData: Message[];
+  setConversationData: React.Dispatch<React.SetStateAction<Message[]>>;
 }
 
-type Message = {
-  text: string;
-  sender: "user" | "stelar";
-};
-
-function ChatScreen({ onNavigate }: ChatScreenProps) {
+function ChatScreen({
+  onNavigate,
+  conversationData,
+  setConversationData,
+}: ChatScreenProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [darkMode, setDarkMode] = useState(true);
   const iconRef = useRef<HTMLDivElement>(null);
@@ -27,12 +31,21 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
     "Hi! I'm all ears, what's up?",
   ];
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      text: greetings[Math.floor(Math.random() * greetings.length)],
-      sender: "stelar",
-    },
-  ]);
+  // If conversationData is empty, show a greeting
+  useEffect(() => {
+    if (conversationData.length === 0) {
+      setConversationData([
+        {
+          id: Date.now().toString(), // or use a uuid
+          text: greetings[Math.floor(Math.random() * greetings.length)],
+          sender: "stelar",
+          timestamp: Date.now(),
+        },
+      ]);
+    }
+    // eslint-disable-next-line
+  }, [conversationData]);
+
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -41,11 +54,18 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages]);
+  }, [conversationData]);
 
   const handleSend = async () => {
     if (input.trim()) {
-      setMessages([...messages, { text: input, sender: "user" }]);
+      const newMessage: Message = {
+        id: Date.now().toString(), // or use a uuid
+        text: input,
+        sender: "user",
+        timestamp: Date.now(),
+      };
+      const updatedMessages = [...conversationData, newMessage];
+      setConversationData(updatedMessages);
       setInput("");
       setIsTyping(true);
       try {
@@ -58,17 +78,33 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
           }
         );
         const data = await response.json();
-        if (data.reply && data.reply.trim() !== "") {
-          setMessages((msgs) => [
-            ...msgs,
-            { text: data.reply, sender: "stelar" },
-          ]);
+        if (data.reply) {
+          const replyMessage: Message = {
+            id: Date.now().toString(),
+            timestamp: Date.now(),
+            // or use a uuid
+            text: data.reply,
+            sender: "stelar",
+          };
+          setConversationData((msgs) => [...msgs, replyMessage]);
+        }
+        if (data.nextQuestion) {
+          const questionMessage: Message = {
+            id: Date.now().toString(),
+            timestamp: Date.now(),
+            text: data.nextQuestion,
+            sender: "stelar",
+          };
+          setConversationData((msgs) => [...msgs, questionMessage]);
         }
       } catch {
-        setMessages((msgs) => [
-          ...msgs,
-          { text: "Sorry, something went wrong.", sender: "stelar" },
-        ]);
+        const errorMessage: Message = {
+          id: Date.now().toString(),
+          timestamp: Date.now(),
+          text: "Sorry, something went wrong.",
+          sender: "stelar",
+        };
+        setConversationData((msgs) => [...msgs, errorMessage]);
       } finally {
         setIsTyping(false);
       }
@@ -153,10 +189,10 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
           className="no-scrollbar flex-1 overflow-y-auto px-4 py-6 space-y-8 pb-24 messages-scroll"
           id="messages-container"
         >
-          {messages.map((msg, idx) => {
+          {conversationData.map((msg, idx) => {
             // Check if this is the last message and from "stelar"
             const isLatestAI =
-              idx === messages.length - 1 && msg.sender === "stelar";
+              idx === conversationData.length - 1 && msg.sender === "stelar";
             return (
               <div
                 key={idx}
@@ -165,11 +201,11 @@ function ChatScreen({ onNavigate }: ChatScreenProps) {
                 }`}
               >
                 <div
-                  className={`w-fit max-w-[60%] break-words px-4 py-2 rounded-2xl ${
+                  className={`w-fit  break-words px-4 py-2 rounded-2xl ${
                     msg.sender === "user"
                       ? darkMode
-                        ? "bg-emerald-600 text-white rounded"
-                        : "bg-emerald-500 text-white rounded"
+                        ? "bg-emerald-600 text-white rounded max-w-[72%]"
+                        : "bg-emerald-500 text-white rounded max-w-[72%]"
                       : darkMode
                       ? " text-white"
                       : " text-black"

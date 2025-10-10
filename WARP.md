@@ -109,3 +109,5 @@ The build process runs TypeScript compilation first (`tsc -b`) followed by Vite 
 - Strict TypeScript settings prevent common errors
 - ESLint enforces consistent code style
 - React 19 features available (concurrent features, automatic batching)
+
+<!-- alright then , the app is now communicating with the user , now as i planned earlier . as the user expresses themselves and lets the user know what going, the ai converses the asks the user some more questionto get more details. then once when done , all the data is collocated and the user is sent to another section (report section) that shows a header "based on your report" , it list out what the user is going through , why they are possibly going through it and many more otheer reasons before it takes the user  to a conclusions section -->

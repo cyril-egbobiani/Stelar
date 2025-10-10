@@ -154,27 +154,27 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
     };
   }, []);
 
-  const handleWhatAmI = () => {
-    gsap
-      .timeline()
-      .to(
-        [
-          imageRef.current,
-          titleRef.current,
-          subtitleRef.current,
-          buttonsContainerRef.current,
-        ],
-        {
-          opacity: 0,
-          y: -20,
-          scale: 0.95,
-          duration: 0.15,
-          ease: "power2.in",
-          stagger: 0.02,
-        }
-      )
-      .call(() => onNavigate("about"));
-  };
+  // const handleWhatAmI = () => {
+  //   gsap
+  //     .timeline()
+  //     .to(
+  //       [
+  //         imageRef.current,
+  //         titleRef.current,
+  //         subtitleRef.current,
+  //         buttonsContainerRef.current,
+  //       ],
+  //       {
+  //         opacity: 0,
+  //         y: -20,
+  //         scale: 0.95,
+  //         duration: 0.15,
+  //         ease: "power2.in",
+  //         stagger: 0.02,
+  //       }
+  //     )
+  //     .call(() => onNavigate("about"));
+  // };
 
   const handleLetsTalk = () => {
     gsap
@@ -199,11 +199,11 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-8 overflow-hidden bg-gradient-to-b from-cyan-800 from- via-emerald-900 via- to-slate-900 to-">
+    <div className="relative min-h-screen flex items-center justify-center p-8 overflow-hidden bg-gradient-to-b from-cyan-800 via-emerald-900 to-slate-900">
       {/* Main content */}
       <div className="no-scrollbar max-w-md text-center text-white relative z-20">
-        <div className="flex justify-center mb-4 ">
-          <img src="/StelarLogo.svg" alt="logo" className="" ref={imageRef} />
+        <div className="flex justify-center mb-4">
+          <img src="/StelarLogo.svg" alt="logo" ref={imageRef} />
         </div>
 
         <div className="mb-12">
@@ -222,25 +222,29 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
         </div>
 
         <div ref={buttonsContainerRef} className="flex gap-6 justify-center">
-          <button
+          {/* About (secondary) button */}
+          {/* <button
             ref={primaryButtonRef}
+            aria-label="About"
             className="relative h-12 px-6 rounded-full overflow-hidden border-2 border-white/30 bg-white/10 text-white text-lg font-normal backdrop-blur-sm transition-all duration-300 group hover:bg-white/20 hover:border-white/50"
             onClick={handleWhatAmI}
           >
             <span className="relative z-10 flex items-center justify-center h-full">
-              About me
+              About
             </span>
-          </button>
+          </button> */}
 
+          {/* Let's talk (primary/emerald) button */}
           <button
             ref={secondaryButtonRef}
-            className="relative h-12 px-6 rounded-full overflow-hidden group transition-all duration-180"
+            aria-label="Let's talk"
+            className="relative h-12 px-6 rounded-full overflow-hidden group transition-all duration-300"
             onClick={handleLetsTalk}
           >
             {/* Gradient border */}
             <div className="absolute inset-0 bg-gradient-to-b from-emerald-400 via-emerald-600 to-emerald-800 rounded-full p-[2px]"></div>
             {/* Button background */}
-            <div className="absolute inset-[2px] bg-emerald-950 rounded-full group-hover:bg-emerald-900 transition-colors duration-180"></div>
+            <div className="absolute inset-[2px] bg-emerald-950 rounded-full group-hover:bg-emerald-900 transition-colors duration-300"></div>
             {/* Text */}
             <span className="relative z-10 text-lg font-semibold bg-gradient-to-b from-emerald-200 to-emerald-400 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(16,185,129,0.4)] tracking-tighter flex items-center justify-center h-full">
               Let's talk
