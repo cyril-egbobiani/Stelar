@@ -199,7 +199,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-8 overflow-hidden bg-gradient-to-b from-cyan-800 via-emerald-900 to-slate-900">
+    <div className="relative min-h-screen flex items-center justify-center p-8 overflow-hidden bg-gradient-to-b from-cyan-900 via-emerald-950 to-slate-950">
       {/* Main content */}
       <div className="no-scrollbar max-w-md text-center text-white relative z-20">
         <div className="flex justify-center mb-4">
