@@ -209,13 +209,13 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
         <div className="mb-12">
           <h1
             ref={titleRef}
-            className="text-4xl font-medium mb-4 text-white font-sans leading-tight"
+            className="text-4xl kavoon font-medium mb-4 text-green-200 font-sans leading-tight"
           >
             Welcome to Stelar
           </h1>
           <p
             ref={subtitleRef}
-            className="text-lg leading-relaxed font-sans min-h-[4rem]"
+            className="text-lg leading-relaxed geist text-white/80 font-sans min-h-[4rem]"
           >
             {/* Text will be animated in via GSAP */}
           </p>
@@ -238,7 +238,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
           <button
             ref={secondaryButtonRef}
             aria-label="Let's talk"
-            className="relative h-12 px-6 rounded-full overflow-hidden group transition-all duration-300"
+            className="relative h-12 px-6  rounded-full overflow-hidden group transition-all duration-300"
             onClick={handleLetsTalk}
           >
             {/* Gradient border */}

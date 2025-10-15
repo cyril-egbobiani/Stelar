@@ -1,34 +1,32 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
-        'sans': ['Geist', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
-        'mono': ['Geist Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+        kavoon: ["Kavoon", "cursive"],
+        geist: ["Geist", "sans-serif"], // Keep Geist
+      
       },
       animation: {
-        'fade-in-up': 'fadeInUp 180ms ease-out forwards',
+        "fade-in-up": "fadeInUp 180ms ease-out forwards",
       },
       keyframes: {
         fadeInUp: {
-          'from': {
-            opacity: '0',
-            transform: 'translateY(20px)',
+          from: {
+            opacity: "0",
+            transform: "translateY(20px)",
           },
-          'to': {
-            opacity: '1',
-            transform: 'translateY(0)',
+          to: {
+            opacity: "1",
+            transform: "translateY(0)",
           },
         },
       },
       transitionDuration: {
-        '180': '180ms',
+        180: "180ms",
       },
     },
   },
   plugins: [],
-}
+};
