@@ -215,7 +215,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
           </h1>
           <p
             ref={subtitleRef}
-            className="text-lg leading-relaxed geist text-white/80 font-sans min-h-[4rem]"
+            className="text-lg leading-relaxed geist text-green-200 font-sans min-h-[4rem]"
           >
             {/* Text will be animated in via GSAP */}
           </p>
