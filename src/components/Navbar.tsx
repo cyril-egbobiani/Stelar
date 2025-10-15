@@ -99,7 +99,7 @@ function Navbar() {
       {/* Navigation Links */}
       <div
         ref={linksRef}
-        className={`gap-4 md:gap-8 mt-2 md:mt-0 md:flex  kavoon md:items-center rounded-3xl flex-col items-center absolute top-full left-0 w-full bg-emerald-950 border-3 shadow-sm shadow-emerald-700 border-emerald-500 backdrop-blur-md p-6`}
+        className={`gap-4 md:gap-8 mt-2 md:mt-0 md:flex text-lg kavoon md:items-center rounded-3xl flex-col items-center absolute top-full left-0 w-full bg-emerald-950 border-3 shadow-sm shadow-emerald-700 border-emerald-500 backdrop-blur-md p-6`}
         style={{ display: "none" }} // Initially hidden
       >
         <a

@@ -10,7 +10,6 @@ interface WelcomeScreenProps {
 }
 
 function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
-  const imageRef = useRef<HTMLImageElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const buttonsContainerRef = useRef<HTMLDivElement>(null);
@@ -26,36 +25,12 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
     const timeline = gsap.timeline();
 
     gsap.set(
-      [
-        imageRef.current,
-        titleRef.current,
-        subtitleRef.current,
-        buttonsContainerRef.current,
-      ],
+      [titleRef.current, subtitleRef.current, buttonsContainerRef.current],
       {
         opacity: 0,
         y: 60,
         scale: 0.95,
         filter: "blur(4px)",
-      }
-    );
-
-    timeline.fromTo(
-      imageRef.current,
-      {
-        opacity: 0,
-        filter: "blur(8px)",
-        scale: 0.95,
-        y: 0,
-        duration: 0.8,
-        ease: "power4.out",
-      },
-      {
-        opacity: 1,
-        filter: "blur(0px)",
-        scale: 1,
-        duration: 0.8,
-        ease: "power4.out",
       }
     );
 
@@ -154,38 +129,11 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
     };
   }, []);
 
-  // const handleWhatAmI = () => {
-  //   gsap
-  //     .timeline()
-  //     .to(
-  //       [
-  //         imageRef.current,
-  //         titleRef.current,
-  //         subtitleRef.current,
-  //         buttonsContainerRef.current,
-  //       ],
-  //       {
-  //         opacity: 0,
-  //         y: -20,
-  //         scale: 0.95,
-  //         duration: 0.15,
-  //         ease: "power2.in",
-  //         stagger: 0.02,
-  //       }
-  //     )
-  //     .call(() => onNavigate("about"));
-  // };
-
   const handleLetsTalk = () => {
     gsap
       .timeline()
       .to(
-        [
-          imageRef.current,
-          titleRef.current,
-          subtitleRef.current,
-          buttonsContainerRef.current,
-        ],
+        [titleRef.current, subtitleRef.current, buttonsContainerRef.current],
         {
           opacity: 0,
           y: -20,
@@ -202,38 +150,22 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
     <div className="relative min-h-screen flex items-center justify-center p-8 overflow-hidden bg-gradient-to-b from-cyan-900 via-emerald-950 to-slate-950">
       {/* Main content */}
       <div className="no-scrollbar max-w-md text-center text-white relative z-20">
-        <div className="flex justify-center mb-4">
-          <img src="/StelarLogo.svg" alt="logo" ref={imageRef} />
-        </div>
-
         <div className="mb-12">
           <h1
             ref={titleRef}
-            className="text-4xl kavoon font-medium mb-4 text-green-200 font-sans leading-tight"
+            className="text-4xl kavoon font-medium mb-4 text-white font-sans leading-tight"
           >
             Welcome to Stelar
           </h1>
           <p
             ref={subtitleRef}
-            className="text-lg leading-relaxed geist text-green-200 font-sans min-h-[4rem]"
+            className="text-lg leading-relaxed geist text-white/90 min-h-[4rem]"
           >
             {/* Text will be animated in via GSAP */}
           </p>
         </div>
 
         <div ref={buttonsContainerRef} className="flex gap-6 justify-center">
-          {/* About (secondary) button */}
-          {/* <button
-            ref={primaryButtonRef}
-            aria-label="About"
-            className="relative h-12 px-6 rounded-full overflow-hidden border-2 border-white/30 bg-white/10 text-white text-lg font-normal backdrop-blur-sm transition-all duration-300 group hover:bg-white/20 hover:border-white/50"
-            onClick={handleWhatAmI}
-          >
-            <span className="relative z-10 flex items-center justify-center h-full">
-              About
-            </span>
-          </button> */}
-
           {/* Let's talk (primary/emerald) button */}
           <button
             ref={secondaryButtonRef}
