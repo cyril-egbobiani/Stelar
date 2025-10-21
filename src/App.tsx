@@ -27,10 +27,11 @@ function App() {
           <>
             <Navbar />
             <WelcomeScreen onNavigate={handleNavigation} />
+            <AboutScreen />
           </>
         );
       case "about":
-        return <AboutScreen onNavigate={handleNavigation} />;
+        return <AboutScreen />;
       case "chat":
         return (
           <ChatScreen

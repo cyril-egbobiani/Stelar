@@ -37,11 +37,11 @@ h6,
 p,
 span,
 div, */
-button {
+/* button {
   font-family: "Geist", ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
     sans-serif !important;
-}
+} */
 
 .kavoon {
   font-family: "Kavoon", serif;
@@ -81,4 +81,8 @@ textposition: {
 }
 .ai-fade-in {
   animation: fadeIn 0.5s ease;
+}
+
+.none {
+  display: none;
 }

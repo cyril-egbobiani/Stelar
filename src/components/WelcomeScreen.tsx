@@ -153,19 +153,22 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
         <div className="mb-12">
           <h1
             ref={titleRef}
-            className="text-4xl kavoon font-medium mb-4 text-white font-sans leading-tight"
+            className="text-4xl font-medium kavoon mb-4  bg-white bg-clip-text text-transparent font-sans leading-tight"
           >
             Welcome to Stelar
           </h1>
           <p
             ref={subtitleRef}
-            className="text-lg leading-relaxed geist text-white/90 min-h-[4rem]"
+            className="text-lg leading-relaxed geist  text-white/90 min-h-[4rem]"
           >
             {/* Text will be animated in via GSAP */}
           </p>
         </div>
 
-        <div ref={buttonsContainerRef} className="flex gap-6 justify-center">
+        <div
+          ref={buttonsContainerRef}
+          className="flex gap-6 kavoon justify-center"
+        >
           {/* Let's talk (primary/emerald) button */}
           <button
             ref={secondaryButtonRef}
@@ -178,7 +181,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
             {/* Button background */}
             <div className="absolute inset-[2px] bg-emerald-950 rounded-full group-hover:bg-emerald-900 transition-colors duration-300"></div>
             {/* Text */}
-            <span className="relative z-10 text-lg font-semibold bg-gradient-to-b from-emerald-200 to-emerald-400 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(16,185,129,0.4)] tracking-tighter flex items-center justify-center h-full">
+            <span className="relative z-10 text-lg  bg-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(16,185,129,0.4)] tracking-tighter flex items-center justify-center h-full">
               Let's talk
             </span>
           </button>

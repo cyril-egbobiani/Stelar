@@ -3,6 +3,7 @@ import gsap from "gsap";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Refs for animation targets
   const brandRef = useRef<HTMLSpanElement>(null);
@@ -15,20 +16,24 @@ function Navbar() {
       { opacity: 0, x: -20 },
       { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" },
       "-=0.3"
-    ).fromTo(
-      linksRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-      "-=0.2"
     );
   }, []);
 
   // Spring animation for mobile nav links when menu opens
   useEffect(() => {
-    if (linksRef.current) {
+    // Only animate on mobile
+    if (linksRef.current && window.innerWidth < 768) {
       if (open) {
-        // Show the element first, then animate in
-        gsap.set(linksRef.current, { display: "flex" });
+        setIsAnimating(true);
+        gsap.set(linksRef.current, {
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          position: "absolute",
+          top: "100%",
+          left: "0",
+          width: "100%",
+        });
         gsap.fromTo(
           linksRef.current,
           {
@@ -42,10 +47,11 @@ function Navbar() {
             y: 0,
             duration: 0.4,
             ease: "back.out(1.7)",
+            onComplete: () => setIsAnimating(false),
           }
         );
       } else {
-        // Animate out, then hide
+        setIsAnimating(true);
         gsap.to(linksRef.current, {
           opacity: 0,
           scale: 0.6,
@@ -54,6 +60,7 @@ function Navbar() {
           ease: "back.in(1.7)",
           onComplete: () => {
             gsap.set(linksRef.current, { display: "none" });
+            setIsAnimating(false);
           },
         });
       }
@@ -65,13 +72,10 @@ function Navbar() {
       {/* Logo/Brand */}
       <div className="flex items-center gap-2">
         <img src="/StelarLogo.svg" alt="Stelar Logo" className="h-8 w-8" />
-        {/* <span ref={brandRef} className="text-xl kavoon text-white">
-          Stelar
-        </span> */}
       </div>
 
       {/* Divider - only visible on mobile */}
-      <div className=" h-6 w-px bg-white/30"></div>
+      <div className="md:hidden h-6 w-px bg-white/30"></div>
 
       {/* Hamburger Icon (mobile) */}
       <button
@@ -99,8 +103,9 @@ function Navbar() {
       {/* Navigation Links */}
       <div
         ref={linksRef}
-        className={`gap-4 md:gap-8 mt-2 md:mt-0 md:flex text-lg kavoon md:items-center rounded-3xl flex-col items-center absolute top-full left-0 w-full bg-emerald-950 border-3 shadow-sm shadow-emerald-700 border-emerald-500 backdrop-blur-md p-6`}
-        style={{ display: "none" }} // Initially hidden
+        className={`gap-4 md:gap-8 mt-2 md:mt-0 text-lg kavoon md:items-center px-6 rounded-3xl bg-emerald-950 border-3  shadow-emerald-700 border-emerald-500 backdrop-blur-md p-6 ${
+          !isAnimating && !open ? "hidden" : ""
+        } md:flex md:static md:w-auto  md:border-0 md:shadow-none md:p-0 md:flex-row md:bg-none`}
       >
         <a
           href="/"
