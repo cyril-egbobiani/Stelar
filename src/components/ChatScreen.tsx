@@ -201,10 +201,10 @@ function ChatScreen({
                 }`}
               >
                 <div
-                  className={`w-fit  break-words px-4 py-2 rounded-2xl ${
+                  className={`w-fit  break-wordsrounded-2xl ${
                     msg.sender === "user"
                       ? darkMode
-                        ? "bg-emerald-600 text-white rounded max-w-[72%]"
+                        ? "bg-emerald-600 text-white rounded max-w-[72%]  px-4 py-2 "
                         : "bg-emerald-500 text-white rounded max-w-[72%]"
                       : darkMode
                       ? " text-white"
