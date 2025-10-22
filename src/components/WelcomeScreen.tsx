@@ -147,19 +147,19 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-8 overflow-hidden bg-gradient-to-b from-emerald-900 via-emerald-950 to-black">
+    <div className="relative min-h-screen flex items-center justify-center p-8 overflow-hidden bg-zinc-50">
       {/* Main content */}
       <div className="no-scrollbar max-w-md text-center text-white relative z-20">
         <div className="mb-12">
           <h1
             ref={titleRef}
-            className="text-4xl font-medium kavoon mb-4  bg-white bg-clip-text text-transparent font-sans leading-tight"
+            className="text-4xl font-medium kavoon mb-4 text-transparent  bg-gradient-to-b from-emerald-400  to-emerald-500 bg-clip-text  font-sans leading-tight"
           >
             Welcome to Stelar
           </h1>
           <p
             ref={subtitleRef}
-            className="text-lg leading-relaxed geist  text-white/90 min-h-[4rem]"
+            className="text-lg leading-relaxed geist  text-zinc-500 min-h-[4rem]"
           >
             {/* Text will be animated in via GSAP */}
           </p>
@@ -179,7 +179,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
             {/* Gradient border */}
             <div className="absolute inset-0 bg-gradient-to-b from-emerald-400 via-emerald-600 to-emerald-800 rounded-full p-[2px]"></div>
             {/* Button background */}
-            <div className="absolute inset-[2px] bg-emerald-950 rounded-full group-hover:bg-emerald-900 transition-colors duration-300"></div>
+            <div className="absolute inset-[2px] bg-emerald-900 rounded-full group-hover:bg-emerald-900 transition-colors duration-300"></div>
             {/* Text */}
             <span className="relative z-10 text-lg  bg-white bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(16,185,129,0.4)] tracking-tighter flex items-center justify-center h-full">
               Let's talk

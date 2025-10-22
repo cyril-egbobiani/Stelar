@@ -19,6 +19,34 @@ function Navbar() {
     );
   }, []);
 
+  // Handle window resize to reset mobile menu state
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && open) {
+        // Reset mobile menu when switching to desktop
+        setOpen(false);
+        setIsAnimating(false);
+        if (linksRef.current) {
+          gsap.set(linksRef.current, {
+            display: "",
+            flexDirection: "",
+            alignItems: "",
+            position: "",
+            top: "",
+            left: "",
+            width: "",
+            opacity: 1,
+            scale: 1,
+            y: 0,
+          });
+        }
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [open]);
+
   // Spring animation for mobile nav links when menu opens
   useEffect(() => {
     // Only animate on mobile
@@ -68,7 +96,7 @@ function Navbar() {
   }, [open]);
 
   return (
-    <nav className="fixed my-4 left-1/2 transform -translate-x-1/2 w-fit z-50 bg-white/10 backdrop-blur-md px-4 rounded-full border-1 border-white/20 py-3 flex gap-10 md:px-8 items-center justify-between">
+    <nav className="fixed my-4 left-1/2 transform -translate-x-1/2 w-fit z-50 bg-emerald-700/70 backdrop-blur-md px-4 rounded-full border-1 border-emerald-600/5 py-3 flex gap-10 md:px-8 items-center justify-between">
       {/* Logo/Brand */}
       <div className="flex items-center gap-2">
         <img src="/StelarLogo.svg" alt="Stelar Logo" className="h-8 w-8" />
@@ -103,9 +131,16 @@ function Navbar() {
       {/* Navigation Links */}
       <div
         ref={linksRef}
-        className={`gap-4 md:gap-8 mt-2 md:mt-0 text-lg kavoon md:items-center px-6 rounded-3xl bg-emerald-950 border-3  shadow-emerald-700 border-emerald-500 backdrop-blur-md p-6 ${
-          !isAnimating && !open ? "hidden" : ""
-        } md:flex md:static md:w-auto  md:border-0 md:shadow-none md:p-0 md:flex-row md:bg-none`}
+        className={`
+          gap-4 md:gap-8 mt-2 md:mt-0 text-lg font-kavoon md:items-center kavoon
+          ${!isAnimating && !open ? "hidden" : ""}
+          ${
+            open
+              ? "flex flex-col items-center absolute top-full left-0 w-full px-6 rounded-3xl bg-emerald-950 border-3 shadow-emerald-700 border-emerald-500 backdrop-blur-md p-6"
+              : ""
+          }
+          md:flex md:static md:w-auto md:bg-transparent md:border-0 md:shadow-none md:p-0 md:flex-row md:mt-0
+        `}
       >
         <a
           href="/"
