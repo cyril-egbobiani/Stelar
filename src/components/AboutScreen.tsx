@@ -8,7 +8,7 @@ function AboutScreen() {
   return (
     <div
       ref={containerRef}
-      className="no-scrollbar min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-b from-slate-950 from- via-emerald-950 via- to-slate-900 to-"
+      className="no-scrollbar min-h-screen flex flex-col items-center justify-center p-8 bg-black"
     >
       <h1 className="text-4xl kavoon font-md text-white mb-4">About Stelar</h1>
       <p className="text-lg text-white/90 max-w-xl text-center mb-8">
