@@ -21,6 +21,9 @@ function ChatScreen({
   const [animating, setAnimating] = useState(false);
   const [iconState, setIconState] = useState(darkMode ? "sun" : "moon");
 
+  const [isSessionComplete, setIsSessionComplete] = useState(false);
+  const [messageCount, setMessageCount] = useState(0);
+
   const greetings = [
     "Hey there! What's on your mind today?",
     "Hi! How's your day going so far?",
@@ -55,6 +58,22 @@ function ChatScreen({
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [conversationData]);
+
+  useEffect(() => {
+    setMessageCount(conversationData.length);
+  }, [conversationData]);
+
+  useEffect(() => {
+    if (
+      messageCount >= 10 ||
+      conversationData.some(
+        (msg) =>
+          msg.text.includes("done") || msg.text.includes("finished")
+      )
+    ) {
+      setIsSessionComplete(true);
+    }
+  }, [conversationData, messageCount]);
 
   const handleSend = async () => {
     if (input.trim()) {
@@ -204,8 +223,8 @@ function ChatScreen({
                   className={`w-fit  break-wordsrounded-2xl ${
                     msg.sender === "user"
                       ? darkMode
-                        ? "bg-emerald-600 text-white rounded max-w-[72%]  px-4 py-2 "
-                        : "bg-emerald-500 text-white rounded max-w-[72%]"
+                        ? "bg-emerald-600 text-white rounded-2xl max-w-[72%]  px-4 py-2 "
+                        : "bg-emerald-500 text-white rounded-2xl max-w-[72%]"
                       : darkMode
                       ? " text-white"
                       : " text-black"
@@ -257,6 +276,15 @@ function ChatScreen({
             Send
           </button>
         </div>
+        {/* Add this button to generate report */}
+        {isSessionComplete && (
+          <button
+            onClick={() => onNavigate("report")}
+            className="mt-4 px-6 py-3 bg-emerald-500 text-white rounded-full"
+          >
+            Generate My Report
+          </button>
+        )}
       </div>
     </div>
   );

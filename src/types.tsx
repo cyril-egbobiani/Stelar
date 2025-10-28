@@ -8,5 +8,5 @@ export interface Message {
 export interface Report {
   summary: string;
   reasons: string[];
-  insights: string;
+insights: string[];
 }
