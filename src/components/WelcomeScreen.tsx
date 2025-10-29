@@ -43,17 +43,18 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
       ease: "power4.out",
     });
 
-    if (subtitleRef.current) {
-      const subtitleText =
-        "Your personal welfare helper, designed to listen, understand, and support your wellbeing journey.";
-      subtitleRef.current.textContent = subtitleText;
-
-      timeline.fromTo(
-        subtitleRef.current,
-        { filter: "blur(8px)", opacity: 0, y: 0, scale: 1 },
-        { filter: "blur(0px)", opacity: 1, duration: 1.2, ease: "power4.out" }
-      );
-    }
+    timeline.to(
+      subtitleRef.current,
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.6,
+        ease: "power4.out",
+      },
+      "-=0.4"
+    );
 
     timeline.to(
       buttonsContainerRef.current,
@@ -147,44 +148,103 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-8 overflow-hidden bg-zinc-50">
-      {/* Main content */}
-      <div className="no-scrollbar max-w-md text-center text-white relative z-20">
-        <div className="mb-12">
+    <div className="relative min-h-screen flex items-center justify-center bg-white">
+      {/* Hero section */}
+      <div className="flex flex-col items-center padding px-8 md:px-48 py-32 gap-16 w-full max-w-7xl relative">
+        {/* Container */}
+        <div className="flex flex-col  items-center gap-6 w-full max-w-2xl">
+            
+
+          {/* Heading */}
           <h1
             ref={titleRef}
-            className="text-4xl geist mb-4 font-medium text-transparent  bg-gradient-to-b from-emerald-400  to-emerald-500 bg-clip-text  font-sans leading-tight"
+            className="text-4xl md:text-5xl mt-8 text-center  font-medium text-black leading-tight tracking-tight"
           >
-            Welcome to Stelar
+            Unlock your potential 💪 with AI-powered wellbeing insights
           </h1>
+
+          {/* Buttons */}
+          <div
+            ref={buttonsContainerRef}
+            className="flex flex-row items-center gap-2"
+          >
+            <button
+              ref={primaryButtonRef}
+              className="flex flex-row justify-center items-center px-5 py-2.5 bg-gray-900 rounded-full hover:bg-gray-800 transition-colors"
+              onClick={handleLetsTalk}
+            >
+              <span className="text-base font-medium text-white tracking-tight">
+                Begin Journey
+              </span>
+            </button>
+
+            <button
+              ref={secondaryButtonRef}
+              className="flex flex-row justify-center items-center px-5 py-2.5 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
+              onClick={() => onNavigate("about")}
+            >
+              <span className="text-base font-medium text-gray-900 tracking-tight">
+                Discover More
+              </span>
+            </button>
+          </div>
+
+          {/* Value Props */}
+          <div className="flex flex-row items-start gap-4">
+            <div className="flex flex-row items-center gap-1">
+              <svg
+                className="w-3.5 h-3.5 text-gray-900"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="text-sm font-normal text-gray-600 tracking-tight">
+                100% private & secure
+              </span>
+            </div>
+
+            <div className="flex flex-row items-center gap-1">
+              <svg
+                className="w-3.5 h-3.5 text-gray-900"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="text-sm font-normal text-gray-600 tracking-tight">
+                Personal growth focused
+              </span>
+            </div>
+          </div>
+
+          {/* Subtitle */}
           <p
             ref={subtitleRef}
-            className="text-lg leading-relaxed  text-zinc-500 min-h-[4rem]"
+            className="text-lg text-center  leading-relaxed text-gray-600 max-w-xl"
           >
-            {/* Text will be animated in via GSAP */}
+            Discover your strengths, build resilience, and optimize your daily 
+            wellbeing through personalized AI conversations. Unlock insights that 
+            help you thrive, not just survive.
           </p>
         </div>
 
-        <div
-          ref={buttonsContainerRef}
-          className="flex gap-6 kavoon justify-center"
-        >
-          {/* Let's talk (primary/emerald) button */}
-          <button
-            ref={secondaryButtonRef}
-            aria-label="Let's talk"
-            className="relative h-12 px-8 rounded-full overflow-hidden group transition-all duration-300 shadow-lg hover:shadow-xl"
-            onClick={handleLetsTalk}
-          >
-            {/* Soft gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-500 rounded-full opacity-90 group-hover:opacity-100 transition-opacity duration-300"></div>
-  
-            {/* Text */}
-            <span className="relative z-10 text-lg font-medium text-emerald-50 group-hover:text-emerald-100 tracking-wide flex items-center justify-center h-full transition-colors duration-300">
-              Let's talk
-            </span>
-          </button>
-        </div>
+        {/* Image placeholder */}
+        {/* <div className="w-full h-96 md:h-[500px] bg-gray-100 rounded-3xl flex items-center justify-center mt-8">
+          <div className="flex items-center gap-4 text-gray-400">
+            <div className="w-14 h-14 bg-gray-200 rounded-full"></div>
+            <div className="w-16 h-14 bg-gray-200 rounded-lg"></div>
+            <div className="w-14 h-14 bg-gray-200 rounded"></div>
+          </div>
+        </div> */}
       </div>
     </div>
   );

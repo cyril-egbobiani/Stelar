@@ -3,19 +3,22 @@ import WelcomeScreen from "./components/WelcomeScreen";
 import AboutScreen from "./components/AboutScreen";
 import ChatScreen from "./components/ChatScreen";
 import ReportScreen from "./components/ReportScreen";
+import ReceiptScreen from "./components/ReceiptScreen";
 import ConclusionScreen from "./components/ConclusionScreen";
 import Navbar from "./components/Navbar";
-import type { Message, Report } from "./types";
+import type { Message, WellbeingReport } from "./types";
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<
-    "welcome" | "about" | "chat" | "report" | "conclusion"
+    "welcome" | "about" | "chat" | "report" | "receipt" | "conclusion"
   >("welcome");
   const [conversationData, setConversationData] = useState<Message[]>([]);
-  const [report, setReport] = useState<Report | null>(null);
+  const [wellbeingReport, setWellbeingReport] =
+    useState<WellbeingReport | null>(null);
+  const [conversationId, setConversationId] = useState<string | null>(null);
 
   const handleNavigation = (
-    screen: "welcome" | "about" | "chat" | "report" | "conclusion"
+    screen: "welcome" | "about" | "chat" | "report" | "receipt" | "conclusion"
   ) => {
     setCurrentScreen(screen);
   };
@@ -38,6 +41,9 @@ function App() {
             onNavigate={handleNavigation}
             setConversationData={setConversationData}
             conversationData={conversationData}
+            conversationId={conversationId}
+            setConversationId={setConversationId}
+            setReport={setWellbeingReport}
           />
         );
       case "report":
@@ -45,12 +51,24 @@ function App() {
           <ReportScreen
             onNavigate={handleNavigation}
             conversationData={conversationData}
-            setReport={setReport}
+            setWellbeingReport={setWellbeingReport}
+            conversationId={conversationId}
           />
         );
+      case "receipt":
+        return wellbeingReport ? (
+          <ReceiptScreen
+            report={wellbeingReport}
+            onBack={() => handleNavigation("report")}
+            onNext={() => handleNavigation("conclusion")}
+          />
+        ) : null;
       case "conclusion":
-        return report ? (
-          <ConclusionScreen onNavigate={handleNavigation} report={report} />
+        return wellbeingReport ? (
+          <ConclusionScreen
+            onNavigate={handleNavigation}
+            report={wellbeingReport}
+          />
         ) : null;
       default:
         return <WelcomeScreen onNavigate={handleNavigation} />;

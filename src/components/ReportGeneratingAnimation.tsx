@@ -57,7 +57,7 @@ function ReportGeneratingAnimation() {
       <div className="relative mb-8">
         <div
           ref={spinnerRef}
-          className="w-20 h-20 border-4 border-transparent border-t-emerald-300 border-r-emerald-400 rounded-full"
+          className="w-20 h-20 border-4 border-transparent border-t-indigo-300 border-r-indigo-400 rounded-full"
         ></div>
         <div
           className="absolute inset-2 border-2 border-transparent border-b-cyan-300 border-l-cyan-400 rounded-full animate-spin"
@@ -73,28 +73,28 @@ function ReportGeneratingAnimation() {
       {/* Subtext */}
       <p
         ref={subtextRef}
-        className="text-emerald-200 text-center max-w-md leading-relaxed"
+        className="text-indigo-200 text-center max-w-md leading-relaxed"
       >
         Our AI is carefully reviewing your responses to provide personalized
         insights and recommendations for your wellbeing journey.
       </p>
 
       {/* Progress Steps */}
-      <div className="mt-8 space-y-3 text-sm text-emerald-100">
+      <div className="mt-8 space-y-3 text-sm text-indigo-100">
         <div className="flex items-center">
-          <div className="w-2 h-2 bg-emerald-300 rounded-full mr-3 animate-pulse"></div>
+          <div className="w-2 h-2 bg-indigo-300 rounded-full mr-3 animate-pulse"></div>
           Processing conversation data
         </div>
         <div className="flex items-center">
           <div
-            className="w-2 h-2 bg-emerald-300 rounded-full mr-3 animate-pulse"
+            className="w-2 h-2 bg-indigo-300 rounded-full mr-3 animate-pulse"
             style={{ animationDelay: "0.5s" }}
           ></div>
           Analyzing emotional patterns
         </div>
         <div className="flex items-center">
           <div
-            className="w-2 h-2 bg-emerald-300 rounded-full mr-3 animate-pulse"
+            className="w-2 h-2 bg-indigo-300 rounded-full mr-3 animate-pulse"
             style={{ animationDelay: "1s" }}
           ></div>
           Generating personalized insights

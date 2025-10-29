@@ -1,17 +1,4 @@
-export interface ConversationMessage {
-  type: "user" | "assistant";
-  content: string;
-  timestamp?: Date;
-}
-
-export interface WellbeingReport {
-  wellbeingScore: number;
-  keyInsights: string[];
-  recommendations: string[];
-  conversationSummary: string;
-  emotionalState: string;
-  riskLevel: "low" | "medium" | "high";
-}
+import type { ConversationMessage, WellbeingReport } from "../types";
 
 export const calculateWellbeingScore = (
   conversationData: ConversationMessage[]

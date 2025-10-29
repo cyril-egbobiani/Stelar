@@ -6,39 +6,102 @@ function Navbar() {
   const [isAnimating, setIsAnimating] = useState(false);
 
   // Refs for animation targets
-  const brandRef = useRef<HTMLSpanElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
 
+  // Initial navbar animation
   useEffect(() => {
     const tl = gsap.timeline();
-    tl.fromTo(
-      brandRef.current,
-      { opacity: 0, x: -20 },
-      { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" },
-      "-=0.3"
-    );
+
+    // Set initial states
+    gsap.set([logoRef.current, linksRef.current, hamburgerRef.current], {
+      opacity: 0,
+      y: -20,
+    });
+
+    // Animate navbar entrance
+    tl.to(navRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: "power3.out",
+    })
+      .to(
+        logoRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          ease: "back.out(1.2)",
+        },
+        "-=0.3"
+      )
+      .to(
+        linksRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        "-=0.2"
+      )
+      .to(
+        hamburgerRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out",
+        },
+        "-=0.2"
+      );
+  }, []);
+
+  // Logo hover animation
+  useEffect(() => {
+    const logo = logoRef.current;
+    if (!logo) return;
+
+    const handleMouseEnter = () => {
+      gsap.to(logo, {
+        scale: 1.05,
+        rotation: 5,
+        duration: 0.3,
+        ease: "back.out(1.5)",
+      });
+    };
+
+    const handleMouseLeave = () => {
+      gsap.to(logo, {
+        scale: 1,
+        rotation: 0,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    };
+
+    logo.addEventListener("mouseenter", handleMouseEnter);
+    logo.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      logo.removeEventListener("mouseenter", handleMouseEnter);
+      logo.removeEventListener("mouseleave", handleMouseLeave);
+    };
   }, []);
 
   // Handle window resize to reset mobile menu state
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768 && open) {
-        // Reset mobile menu when switching to desktop
         setOpen(false);
         setIsAnimating(false);
-        if (linksRef.current) {
-          gsap.set(linksRef.current, {
-            display: "",
-            flexDirection: "",
-            alignItems: "",
-            position: "",
-            top: "",
-            left: "",
-            width: "",
-            opacity: 1,
-            scale: 1,
-            y: 0,
-          });
+        if (mobileMenuRef.current) {
+          mobileMenuRef.current.classList.add("hidden");
+          mobileMenuRef.current.classList.remove("flex");
         }
       }
     };
@@ -47,115 +110,246 @@ function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, [open]);
 
-  // Spring animation for mobile nav links when menu opens
+  // Mobile menu animation
   useEffect(() => {
-    // Only animate on mobile
-    if (linksRef.current && window.innerWidth < 768) {
-      if (open) {
-        setIsAnimating(true);
-        gsap.set(linksRef.current, {
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          position: "absolute",
-          top: "100%",
-          left: "0",
-          width: "100%",
-        });
-        gsap.fromTo(
-          linksRef.current,
+    if (!mobileMenuRef.current) return;
+
+    if (open) {
+      setIsAnimating(true);
+      if (mobileMenuRef.current) {
+        mobileMenuRef.current.classList.remove("hidden");
+        mobileMenuRef.current.classList.add("flex");
+      }
+
+      const tl = gsap.timeline();
+      tl.fromTo(
+        mobileMenuRef.current,
+        {
+          opacity: 0,
+          y: -20,
+          scale: 0.9,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.4,
+          ease: "back.out(1.4)",
+        }
+      );
+
+      // Stagger animate menu items
+      const menuItems = mobileMenuRef.current?.querySelectorAll("a");
+      if (menuItems) {
+        tl.fromTo(
+          menuItems,
           {
             opacity: 0,
-            scale: 0.8,
-            y: -20,
+            y: -10,
           },
           {
             opacity: 1,
-            scale: 1,
             y: 0,
-            duration: 0.4,
-            ease: "back.out(1.7)",
+            duration: 0.3,
+            stagger: 0.1,
+            ease: "power2.out",
             onComplete: () => setIsAnimating(false),
-          }
-        );
-      } else {
-        setIsAnimating(true);
-        gsap.to(linksRef.current, {
-          opacity: 0,
-          scale: 0.6,
-          y: -40,
-          duration: 0.2,
-          ease: "back.in(1.7)",
-          onComplete: () => {
-            gsap.set(linksRef.current, { display: "none" });
-            setIsAnimating(false);
           },
-        });
+          "-=0.2"
+        );
       }
+    } else if (
+      mobileMenuRef.current &&
+      !mobileMenuRef.current.classList.contains("hidden")
+    ) {
+      setIsAnimating(true);
+      gsap.to(mobileMenuRef.current, {
+        opacity: 0,
+        y: -20,
+        scale: 0.9,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => {
+          if (mobileMenuRef.current) {
+            mobileMenuRef.current.classList.add("hidden");
+            mobileMenuRef.current.classList.remove("flex");
+          }
+          setIsAnimating(false);
+        },
+      });
     }
   }, [open]);
 
+  // Hamburger animation
+  const toggleMenu = () => {
+    if (isAnimating) return;
+
+    // Animate hamburger icon
+    gsap.to(hamburgerRef.current, {
+      rotation: open ? 0 : 180,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+
+    setOpen(!open);
+  };
+
   return (
-    <nav className="fixed my-4 left-1/2 transform -translate-x-1/2 w-fit z-50 bg-emerald-700/70 backdrop-blur-md px-4 rounded-full border-1 border-emerald-600/5 py-3 flex gap-10 md:px-8 items-center justify-between">
-      {/* Logo/Brand */}
-      <div className="flex items-center gap-2">
-        <img src="/StelarLogo.svg" alt="Stelar Logo" className="h-8 w-8" />
+    <>
+      {/* Navbar Container with Max Width and Centering */}
+      <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
+        <nav
+          ref={navRef}
+          className="relative w-full max-w-4xl bg-emerald-500 backdrop-blur-lg rounded shadow-xl shadow-emerald-900/10 hover:shadow-emerald-900/20 transition-all duration-300 overflow-hidden"
+        >
+          {/* Corner borders - Top Left */}
+          <div className="absolute top-0 left-0 w-6 h-6 border-t-3 border-l-3 border-emerald-600 rounded-tl"></div>
+          {/* Corner borders - Top Right */}
+          <div className="absolute top-0 right-0 w-6 h-6 border-t-3 border-r-3 border-emerald-600 rounded-tr"></div>
+          {/* Corner borders - Bottom Left */}
+          <div className="absolute bottom-0 left-0 w-6 h-6 border-b-3 border-l-3 border-emerald-600 rounded-bl"></div>
+          {/* Corner borders - Bottom Right */}
+          <div className="absolute bottom-0 right-0 w-6 h-6 border-b-3 border-r-3 border-emerald-600 rounded-br"></div>
+
+          <div className="flex items-center justify-between px-5 md:px-6 py-4 gap-2">
+            {/* Logo Section */}
+            <div
+              ref={logoRef}
+              className="flex items-center gap-3 cursor-pointer"
+            >
+              <div className="relative">
+                <img
+                  src="/StelarLogo.svg"
+                  alt="Stelar Logo"
+                  className="h-7 w-7 md:h-8 md:w-8"
+                />
+                <div className="absolute inset-0 bg-emerald-400  rounded-full opacity-0 hover:opacity-30 transition-opacity duration-300"></div>
+              </div>
+              <span className="text-xl md:text-2xl font-semibold  bg-clip-text text-white">
+                Stelar
+              </span>
+            </div>
+
+            {/* Desktop Navigation Links & CTA */}
+            <div ref={linksRef} className="hidden md:flex items-center gap-8">
+              {/* Navigation Links */}
+              <div className="flex items-center gap-8">
+                <div className="flex items-center gap-2"></div>
+                <a
+                  href="/features"
+                  className="relative text-emerald-700 hover:text-emerald-900 font-medium text-sm transition-colors duration-200 group tracking-tight"
+                >
+                  Features
+                </a>
+                <a
+                  href="/insights"
+                  className="relative text-emerald-700 hover:text-emerald-900 font-medium text-sm transition-colors duration-200 group tracking-tight"
+                >
+                  Insights
+                </a>
+                <a
+                  href="/help"
+                  className="relative text-emerald-700 hover:text-emerald-900 font-medium text-sm transition-colors duration-200 group tracking-tight"
+                >
+                  Help
+                </a>
+              </div>
+
+              {/* CTA Button */}
+              <button
+                type="button"
+                className="flex items-center justify-center px-5 py-2.5 gap-1 bg-emerald-800 hover:bg-emerald-900 text-white font-medium text-base rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-emerald-900/20 tracking-tight"
+              >
+                Start Journey
+                <svg
+                  className="w-5 h-5 ml-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              ref={hamburgerRef}
+              type="button"
+              className="md:hidden p-2 text-white hover:text-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50 rounded-lg transition-colors duration-200"
+              onClick={toggleMenu}
+              aria-label="Toggle navigation"
+              aria-expanded={open ? "true" : "false"}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d={open ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                />
+              </svg>
+            </button>
+          </div>
+        </nav>
       </div>
 
-      {/* Divider - only visible on mobile */}
-      <div className="md:hidden h-6 w-px bg-white/30"></div>
-
-      {/* Hamburger Icon (mobile) */}
-      <button
-        className="md:hidden text-white focus:outline-none"
-        onClick={() => setOpen(!open)}
-        aria-label="Toggle navigation"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d={open ? "M6 18L18 6M6 6l12 12" : "M4 8h16M4 16h16"}
-          />
-        </svg>
-      </button>
-
-      {/* Navigation Links */}
-      <div
-        ref={linksRef}
-        className={`
-          gap-4 md:gap-8 mt-2 md:mt-0 text-lg font-kavoon md:items-center kavoon
-          ${!isAnimating && !open ? "hidden" : ""}
-          ${
-            open
-              ? "flex flex-col items-center absolute top-full left-0 w-full px-6 rounded-3xl bg-emerald-950 border-3 shadow-emerald-700 border-emerald-500 backdrop-blur-md p-6"
-              : ""
-          }
-          md:flex md:static md:w-auto md:bg-transparent md:border-0 md:shadow-none md:p-0 md:flex-row md:mt-0
-        `}
-      >
-        <a
-          href="/"
-          className="text-white hover:text-emerald-300 transition py-2"
-        >
-          Home
-        </a>
-        <a
-          href="/about"
-          className="text-white hover:text-emerald-300 transition py-2"
-        >
-          About
-        </a>
+      {/* Mobile Menu Overlay */}
+      <div className="fixed  top-24 left-0 right-0 z-50 md:hidden flex justify-center item-center px-4">
+        <div ref={mobileMenuRef} className="w-full  max-w-4xl hidden">
+          <div className="relative bg-emerald-500/20 backdrop-blur-lg rounded shadow-xl  w-full shadow-emerald-900/10 px-5 py-6 overflow-hidden">
+            {/* Corner borders - Top Left */}
+            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-emerald-300/60 rounded-tl"></div>
+            {/* Corner borders - Top Right */}
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-emerald-300/60 rounded-tr"></div>
+            {/* Corner borders - Bottom Left */}
+            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-emerald-300/60 rounded-bl"></div>
+            {/* Corner borders - Bottom Right */}
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-emerald-300/60 rounded-br"></div>
+            <div className="flex flex-col items-center gap-4">
+              <a
+                href="/features"
+                className="text-emerald-700 hover:text-emerald-900 font-medium  py-3 px-4 rounded-xl hover:bg-emerald-50/50 transition-all duration-200"
+                onClick={() => setOpen(false)}
+              >
+                Features
+              </a>
+              <a
+                href="/insights"
+                className="text-emerald-700 hover:text-emerald-900 font-medium py-3 px-4 rounded-xl hover:bg-emerald-50/50 transition-all duration-200"
+                onClick={() => setOpen(false)}
+              >
+                Insights
+              </a>
+              <a
+                href="/help"
+                className="text-emerald-700 hover:text-emerald-900 font-medium py-3 px-4 rounded-xl hover:bg-emerald-50/50 transition-all duration-200"
+                onClick={() => setOpen(false)}
+              >
+                Help
+              </a>
+              {/* Mobile CTA */}
+              <button
+                type="button"
+                className="mt-2 flex items-center justify-center px-5 py-3 bg-emerald-800 hover:bg-emerald-900 text-white font-medium rounded-xl transition-all duration-200"
+              >
+                Start Journey
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </nav>
+    </>
   );
 }
 

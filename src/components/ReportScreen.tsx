@@ -1,47 +1,90 @@
-import { useEffect, useState } from "react";
-import type { Message, Report } from "../types";
+import { useEffect, useState, useCallback } from "react";
+import type { Message, WellbeingReport } from "../types";
 import {
   calculateWellbeingScore,
   extractKeyInsights,
   generateRecommendations,
   summarizeConversation,
-  type WellbeingReport,
 } from "../utils/conversationAnalysis";
 import ReportGeneratingAnimation from "./ReportGeneratingAnimation";
 import ReportDisplay from "./ReportDisplay";
 
 interface ReportScreenProps {
   onNavigate: (
-    screen: "welcome" | "about" | "chat" | "report" | "conclusion"
+    screen: "welcome" | "about" | "chat" | "report" | "receipt" | "conclusion"
   ) => void;
   conversationData: Message[];
-  setReport: (report: Report) => void;
+  setWellbeingReport: (report: WellbeingReport) => void;
+  conversationId: string | null;
 }
 
 function ReportScreen({
   onNavigate,
   conversationData,
-  setReport,
+  setWellbeingReport,
+  conversationId,
 }: ReportScreenProps) {
   const [isGenerating, setIsGenerating] = useState(true);
   const [generatedReport, setGeneratedReport] =
     useState<WellbeingReport | null>(null);
 
-  useEffect(() => {
-    generateReport();
-  }, []);
-
-  const generateReport = async () => {
+  const generateReport = useCallback(async () => {
     setIsGenerating(true);
 
-    // Simulate processing time
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    try {
+      if (conversationId) {
+        // Use backend analysis for proper AI-powered analysis
+        const analysisResponse = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/analysis/generate`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ conversationId }),
+          }
+        );
 
-    const report = analyzeConversation(conversationData);
-    setGeneratedReport(report);
-    setReport(convertToReport(report));
+        if (analysisResponse.ok) {
+          const analysisData = await analysisResponse.json();
+
+          if (analysisData.success) {
+            // Convert backend analysis to frontend format
+            const backendReport: WellbeingReport = {
+              wellbeingScore: analysisData.analysis.wellbeingScore,
+              keyInsights: analysisData.analysis.keyInsights,
+              recommendations: analysisData.analysis.recommendations,
+              conversationSummary: `Analysis of your conversation reveals insights about your current wellbeing state.`,
+              emotionalState: analysisData.analysis.emotionalState,
+              riskLevel: analysisData.analysis.riskLevel,
+            };
+
+            setGeneratedReport(backendReport);
+            setWellbeingReport(backendReport);
+            setIsGenerating(false);
+            return;
+          }
+        }
+      }
+
+      // Fallback to local analysis if backend fails or no conversationId
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      const report = analyzeConversation(conversationData);
+      setGeneratedReport(report);
+      setWellbeingReport(report);
+    } catch (error) {
+      console.error("Report generation error:", error);
+      // Fallback to local analysis
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      const report = analyzeConversation(conversationData);
+      setGeneratedReport(report);
+      setWellbeingReport(report);
+    }
+
     setIsGenerating(false);
-  };
+  }, [conversationId, conversationData, setWellbeingReport]);
+
+  useEffect(() => {
+    generateReport();
+  }, [generateReport]);
 
   const analyzeConversation = (data: Message[]): WellbeingReport => {
     // Convert Message[] to ConversationMessage[] format
@@ -62,22 +105,14 @@ function ReportScreen({
     };
   };
 
-  const convertToReport = (wellbeingReport: WellbeingReport): Report => {
-    return {
-      summary: wellbeingReport.conversationSummary,
-      reasons: wellbeingReport.keyInsights,
-      insights: wellbeingReport.recommendations, // No need to join
-    };
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-cyan-900 to-emerald-950 p-8">
+    <div className="min-h-screen bg-gradient-to-b from-cyan-900 to-indigo-950 p-8">
       {isGenerating ? (
         <ReportGeneratingAnimation />
       ) : generatedReport ? (
         <ReportDisplay
           report={generatedReport}
-          onNext={() => onNavigate("conclusion")}
+          onNext={() => onNavigate("receipt")}
         />
       ) : null}
     </div>

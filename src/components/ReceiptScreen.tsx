@@ -1,0 +1,474 @@
+import { useEffect, useState } from "react";
+import type { WellbeingReport } from "../types";
+
+interface ReceiptScreenProps {
+  report: WellbeingReport;
+  onBack: () => void;
+  onNext: () => void;
+}
+
+function ReceiptScreen({ report, onBack, onNext }: ReceiptScreenProps) {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const getCurrentDate = () => {
+    return new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const generateReceiptId = () => {
+    return `SWR-${Date.now().toString(36).toUpperCase()}`;
+  };
+
+  const getScoreColor = (score: number) => {
+    if (score >= 70) return "text-indigo-400";
+    if (score >= 40) return "text-yellow-400";
+    return "text-red-400";
+  };
+
+  const getRiskBadgeColor = (riskLevel: string) => {
+    switch (riskLevel) {
+      case "low":
+        return "bg-indigo-500/20 text-indigo-300 border-indigo-400";
+      case "medium":
+        return "bg-yellow-500/20 text-yellow-300 border-yellow-400";
+      case "high":
+        return "bg-red-500/20 text-red-300 border-red-400";
+      default:
+        return "bg-indigo-500/20 text-indigo-300 border-indigo-400";
+    }
+  };
+
+  const handleDownload = async () => {
+    setIsDownloading(true);
+
+    try {
+      // Create receipt content
+      const receiptContent = generateReceiptContent();
+
+      // Create and download file
+      const blob = new Blob([receiptContent], { type: "text/plain" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Stelar-Wellbeing-Receipt-${generateReceiptId()}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      // Show success feedback
+      setTimeout(() => setIsDownloading(false), 1000);
+    } catch (error) {
+      console.error("Download failed:", error);
+      setIsDownloading(false);
+    }
+  };
+
+  const handleShare = async () => {
+    setIsSharing(true);
+
+    try {
+      const receiptContent = generateShareContent();
+
+      if (navigator.share) {
+        // Use native sharing if available
+        await navigator.share({
+          title: "My Stelar Wellbeing Receipt",
+          text: receiptContent,
+        });
+      } else {
+        // Fallback to clipboard
+        await navigator.clipboard.writeText(receiptContent);
+        alert("Receipt copied to clipboard! You can now paste it anywhere.");
+      }
+
+      setTimeout(() => setIsSharing(false), 1000);
+    } catch (error) {
+      console.error("Sharing failed:", error);
+      setIsSharing(false);
+    }
+  };
+
+  const generateReceiptContent = () => {
+    return `
+╔══════════════════════════════════════╗
+║           STELAR WELLBEING           ║
+║            RECEIPT SUMMARY           ║
+╚══════════════════════════════════════╝
+
+Receipt ID: ${generateReceiptId()}
+Date: ${getCurrentDate()}
+
+═══════════════════════════════════════
+
+WELLBEING ASSESSMENT RESULTS
+═══════════════════════════════════════
+
+Overall Score: ${report.wellbeingScore}/100
+Risk Level: ${report.riskLevel.toUpperCase()}
+Emotional State: ${report.emotionalState}
+
+═══════════════════════════════════════
+
+KEY INSIGHTS (${report.keyInsights.length} items)
+═══════════════════════════════════════
+
+${report.keyInsights
+  .map((insight: string, idx: number) => `${idx + 1}. ${insight}`)
+  .join("\n")}
+
+═══════════════════════════════════════
+
+RECOMMENDATIONS (${report.recommendations.length} items)
+═══════════════════════════════════════
+
+${report.recommendations
+  .map((rec: string, idx: number) => `${idx + 1}. ${rec}`)
+  .join("\n")}
+
+═══════════════════════════════════════
+
+SESSION SUMMARY
+═══════════════════════════════════════
+
+"${report.conversationSummary}"
+
+═══════════════════════════════════════
+
+Generated by Stelar AI Wellbeing Assistant
+For support: support@stelar.ai
+Learn more: www.stelar.ai
+
+This receipt contains personalized wellbeing 
+recommendations based on your conversation.
+Please consult healthcare professionals for 
+serious concerns.
+
+═══════════════════════════════════════
+    `;
+  };
+
+  const generateShareContent = () => {
+    return `🌟 My Stelar Wellbeing Receipt
+
+📊 Wellbeing Score: ${report.wellbeingScore}/100
+⚡ Risk Level: ${report.riskLevel.toUpperCase()}
+😊 Emotional State: ${report.emotionalState}
+
+🎯 Key Recommendations:
+${report.recommendations
+  .slice(0, 3)
+  .map((rec: string, idx: number) => `${idx + 1}. ${rec}`)
+  .join("\n")}
+
+Generated by Stelar AI Wellbeing Assistant
+#WellbeingJourney #MentalHealth #StelarAI`;
+  };
+
+  return (
+    <div
+      className={`max-w-2xl mx-auto text-white p-4 sm:p-6 transition-all duration-1000 ${
+        isVisible
+          ? "opacity-100 transform translate-y-0"
+          : "opacity-0 transform translate-y-8"
+      }`}
+    >
+      {/* Header */}
+      <div className="text-center mb-8 stagger-item">
+        <div className="flex items-center justify-center mb-4">
+          <div className="w-12 h-12 bg-gradient-to-r from-indigo-400 to-cyan-400 rounded-full flex items-center justify-center mr-3">
+            <svg
+              className="w-6 h-6 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-200 to-cyan-200 bg-clip-text text-transparent">
+            Wellbeing Receipt
+          </h1>
+        </div>
+        <p className="text-indigo-100 text-sm sm:text-base opacity-80">
+          Your personalized recommendations summary
+        </p>
+      </div>
+
+      {/* Receipt Card */}
+      <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 overflow-hidden stagger-item">
+        {/* Receipt Header */}
+        <div className="bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 p-4 sm:p-6 border-b border-white/20">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <h2 className="text-lg sm:text-xl font-bold text-white">
+                Stelar Wellbeing Receipt
+              </h2>
+              <p className="text-indigo-200 text-sm">
+                Receipt ID: {generateReceiptId()}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-indigo-200 text-sm">Generated</p>
+              <p className="text-white font-medium text-sm">
+                {getCurrentDate()}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Receipt Body */}
+        <div className="p-4 sm:p-6 space-y-6">
+          {/* Summary Stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-white/5 rounded-xl p-4 text-center">
+              <div
+                className={`text-2xl font-bold ${getScoreColor(
+                  report.wellbeingScore
+                )}`}
+              >
+                {report.wellbeingScore}
+              </div>
+              <div className="text-indigo-200 text-sm">Wellbeing Score</div>
+            </div>
+            <div className="bg-white/5 rounded-xl p-4 text-center">
+              <div
+                className={`inline-block px-3 py-1 rounded-full text-sm font-medium border ${getRiskBadgeColor(
+                  report.riskLevel
+                )}`}
+              >
+                {report.riskLevel.toUpperCase()}
+              </div>
+              <div className="text-indigo-200 text-sm mt-2">Risk Level</div>
+            </div>
+            <div className="bg-white/5 rounded-xl p-4 text-center">
+              <div className="text-white font-medium capitalize">
+                {report.emotionalState}
+              </div>
+              <div className="text-indigo-200 text-sm">Emotional State</div>
+            </div>
+          </div>
+
+          {/* Key Insights */}
+          <div>
+            <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
+              <span className="mr-2">💡</span>
+              Key Insights ({report.keyInsights.length})
+            </h3>
+            <div className="space-y-2">
+              {report.keyInsights.map((insight: string, idx: number) => (
+                <div
+                  key={idx}
+                  className="flex items-start bg-white/5 rounded-lg p-3"
+                >
+                  <span className="flex-shrink-0 w-6 h-6 bg-indigo-500 text-white rounded-full text-xs font-bold flex items-center justify-center mr-3">
+                    {idx + 1}
+                  </span>
+                  <p className="text-indigo-100 text-sm leading-relaxed">
+                    {insight}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Recommendations */}
+          <div>
+            <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
+              <span className="mr-2">🌟</span>
+              Recommendations ({report.recommendations.length})
+            </h3>
+            <div className="space-y-2">
+              {report.recommendations.map(
+                (recommendation: string, idx: number) => (
+                  <div
+                    key={idx}
+                    className="flex items-start bg-white/5 rounded-lg p-3"
+                  >
+                    <span className="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full text-xs font-bold flex items-center justify-center mr-3">
+                      {idx + 1}
+                    </span>
+                    <p className="text-indigo-100 text-sm leading-relaxed">
+                      {recommendation}
+                    </p>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+
+          {/* Session Summary */}
+          <div className="bg-gradient-to-r from-indigo-500/10 to-cyan-500/10 rounded-xl p-4 border-l-4 border-indigo-400">
+            <h3 className="text-lg font-semibold text-white mb-2 flex items-center">
+              <span className="mr-2">📝</span>
+              Session Summary
+            </h3>
+            <p className="text-indigo-100 text-sm leading-relaxed italic">
+              "{report.conversationSummary}"
+            </p>
+          </div>
+        </div>
+
+        {/* Receipt Footer */}
+        <div className="bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 p-4 border-t border-white/20">
+          <div className="text-center">
+            <p className="text-indigo-200 text-xs">
+              Generated by Stelar AI Wellbeing Assistant
+            </p>
+            <p className="text-indigo-300 text-xs mt-1">
+              For support: support@stelar.ai | Learn more: www.stelar.ai
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="mt-8 space-y-4 stagger-item">
+        {/* Download and Share Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button
+            onClick={handleDownload}
+            disabled={isDownloading}
+            className={`flex items-center justify-center px-6 py-3 rounded-2xl font-semibold transition-all duration-300 ${
+              isDownloading
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-lg hover:shadow-xl transform hover:scale-105"
+            } text-white`}
+          >
+            {isDownloading ? (
+              <div className="typing-dots scale-75">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            ) : (
+              <>
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                Download Receipt
+              </>
+            )}
+          </button>
+
+          <button
+            onClick={handleShare}
+            disabled={isSharing}
+            className={`flex items-center justify-center px-6 py-3 rounded-2xl font-semibold transition-all duration-300 ${
+              isSharing
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 shadow-lg hover:shadow-xl transform hover:scale-105"
+            } text-white`}
+          >
+            {isSharing ? (
+              <div className="typing-dots scale-75">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            ) : (
+              <>
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                  />
+                </svg>
+                Share Receipt
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button
+            onClick={onBack}
+            className="flex items-center justify-center px-6 py-3 rounded-2xl font-semibold bg-white/10 text-white hover:bg-white/20 transition-all duration-300 border border-white/20"
+          >
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M11 17l-5-5m0 0l5-5m-5 5h12"
+              />
+            </svg>
+            Back to Report
+          </button>
+
+          <button
+            onClick={onNext}
+            className="flex items-center justify-center px-6 py-3 rounded-2xl font-semibold bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+          >
+            Continue
+            <svg
+              className="w-5 h-5 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Disclaimer */}
+      <div className="mt-6 p-4 bg-white/5 rounded-xl border border-white/10 stagger-item">
+        <p className="text-indigo-200 text-xs text-center leading-relaxed">
+          <span className="font-semibold">Disclaimer:</span> This receipt
+          contains personalized wellbeing recommendations based on your
+          conversation with Stelar AI. Please consult healthcare professionals
+          for serious mental health concerns. This tool is for guidance and
+          support only.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default ReceiptScreen;
