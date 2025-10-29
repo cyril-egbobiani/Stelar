@@ -158,7 +158,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
           {/* Heading */}
           <h1
             ref={titleRef}
-            className="text-4xl md:text-5xl mt-8 text-center  font-medium text-black leading-tight tracking-tight"
+            className="text-4xl md:text-5xl mt-4 text-center  font-medium text-black leading-tight tracking-tight"
           >
             Unlock your potential 💪 with AI-powered wellbeing insights
           </h1>
@@ -190,7 +190,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
           </div>
 
           {/* Value Props */}
-          <div className="flex flex-row items-start gap-4">
+          <div className="flex flex-row items-center gap-4">
             <div className="flex flex-row items-center gap-1">
               <svg
                 className="w-3.5 h-3.5 text-gray-900"
@@ -203,7 +203,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="text-sm font-normal text-gray-600 tracking-tight">
+              <span className="text-sm text-center font-normal text-gray-600 tracking-tight">
                 100% private & secure
               </span>
             </div>
@@ -220,7 +220,7 @@ function WelcomeScreen({ onNavigate }: WelcomeScreenProps) {
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="text-sm font-normal text-gray-600 tracking-tight">
+              <span className="text-sm text-center font-normal text-gray-600 tracking-tight">
                 Personal growth focused
               </span>
             </div>
