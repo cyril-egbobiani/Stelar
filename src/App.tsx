@@ -1,5 +1,4 @@
 import { useState } from "react";
-import WelcomeScreen from "./components/WelcomeScreen";
 import AboutScreen from "./components/AboutScreen";
 import ChatScreen from "./components/ChatScreen";
 import ReportScreen from "./components/ReportScreen";
@@ -7,7 +6,8 @@ import ReceiptScreen from "./components/ReceiptScreen";
 import ConclusionScreen from "./components/ConclusionScreen";
 import Navbar from "./components/Navbar";
 import type { Message, WellbeingReport } from "./types";
-
+import WelcomeScreen from "./components/WelcomeScreen";
+ 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<
     "welcome" | "about" | "chat" | "report" | "receipt" | "conclusion"
@@ -30,7 +30,8 @@ function App() {
           <>
             <Navbar />
             <WelcomeScreen onNavigate={handleNavigation} />
-            <AboutScreen />
+            {/* <WelcomeScreen onNavigate={handleNavigation} /> */}
+            {/* <AboutScreen /> */}
           </>
         );
       case "about":

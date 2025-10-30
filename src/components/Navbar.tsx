@@ -197,10 +197,10 @@ function Navbar() {
   return (
     <>
       {/* Navbar Container with Max Width and Centering */}
-      <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
+      <div className="relative top-0  left-0 right-0 z-50 flex justify-center ">
         <nav
           ref={navRef}
-          className="relative w-full max-w-4xl bg-emerald-500 backdrop-blur-lg rounded shadow-xl shadow-emerald-900/10 hover:shadow-emerald-900/20 transition-all duration-300 overflow-hidden"
+          className="relative w-full  bg-emerald-500 backdrop-blur-lg rounded shadow-xl shadow-emerald-900/10 hover:shadow-emerald-900/20 transition-all duration-300 overflow-hidden"
         >
           {/* Corner borders - Top Left */}
           <div className="absolute top-0 left-0 w-6 h-6 border-t-3 border-l-3 border-emerald-600 rounded-tl"></div>
@@ -305,9 +305,9 @@ function Navbar() {
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div className="fixed  top-24 left-0 right-0 z-50 md:hidden flex justify-center item-center px-4">
-        <div ref={mobileMenuRef} className="w-full  max-w-4xl hidden">
-          <div className="relative bg-emerald-500/20 backdrop-blur-lg rounded shadow-xl  w-full shadow-emerald-900/10 px-5 py-6 overflow-hidden">
+      <div className="relative left-0 right-0 z-50 md:hidden flex justify-center px-4">
+        <div ref={mobileMenuRef} className="w-full   hidden">
+          <div className="relative bg-emerald-500/20 backdrop-blur-lg rounded-2xl shadow-xl shadow-emerald-900/10 px-5 py-6 overflow-hidden">
             {/* Corner borders - Top Left */}
             <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-emerald-300/60 rounded-tl"></div>
             {/* Corner borders - Top Right */}
