@@ -1,9 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
+import { useTheme } from "../contexts/ThemeContext";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const {
+    theme,
+    isDarkMode,
+    handleToggleDarkMode,
+    animating,
+    iconRef,
+    iconState,
+  } = useTheme();
 
   // Refs for animation targets
   const navRef = useRef<HTMLElement>(null);
@@ -11,74 +20,81 @@ function Navbar() {
   const linksRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const themeButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Initial navbar animation
+  // Initial navbar animation - Jonathan Ive style entrance
   useEffect(() => {
     const tl = gsap.timeline();
 
     // Set initial states
-    gsap.set([logoRef.current, linksRef.current, hamburgerRef.current], {
-      opacity: 0,
-      y: -20,
-    });
+    gsap.set(
+      [
+        logoRef.current,
+        linksRef.current,
+        hamburgerRef.current,
+        themeButtonRef.current,
+      ],
+      {
+        opacity: 0,
+        y: -10,
+      }
+    );
 
-    // Animate navbar entrance
+    // Clean, purposeful entrance animation
     tl.to(navRef.current, {
       opacity: 1,
-      y: 0,
-      duration: 0.6,
-      ease: "power3.out",
+      duration: 0.8,
+      ease: "power2.out",
     })
       .to(
         logoRef.current,
         {
           opacity: 1,
           y: 0,
-          duration: 0.4,
-          ease: "back.out(1.2)",
+          duration: 0.6,
+          ease: "power2.out",
         },
-        "-=0.3"
+        "-=0.4"
       )
       .to(
         linksRef.current,
         {
           opacity: 1,
           y: 0,
-          duration: 0.4,
+          duration: 0.6,
           ease: "power2.out",
         },
-        "-=0.2"
+        "-=0.4"
       )
       .to(
-        hamburgerRef.current,
+        [hamburgerRef.current, themeButtonRef.current],
         {
           opacity: 1,
           y: 0,
-          duration: 0.3,
+          duration: 0.6,
           ease: "power2.out",
+          stagger: 0.1,
         },
-        "-=0.2"
+        "-=0.5"
       );
   }, []);
 
-  // Logo hover animation
+  // Refined logo hover interaction
   useEffect(() => {
     const logo = logoRef.current;
     if (!logo) return;
 
     const handleMouseEnter = () => {
       gsap.to(logo, {
-        scale: 1.05,
-        rotation: 5,
+        scale: 1.02,
         duration: 0.3,
-        ease: "back.out(1.5)",
+        ease: "power2.out",
       });
     };
 
     const handleMouseLeave = () => {
       gsap.to(logo, {
         scale: 1,
-        rotation: 0,
         duration: 0.3,
         ease: "power2.out",
       });
@@ -126,48 +142,47 @@ function Navbar() {
         mobileMenuRef.current,
         {
           opacity: 0,
-          y: -20,
-          scale: 0.9,
+          y: -10,
+          scale: 0.98,
         },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 0.4,
-          ease: "back.out(1.4)",
+          duration: 0.3,
+          ease: "power2.out",
         }
       );
 
       // Stagger animate menu items
-      const menuItems = mobileMenuRef.current?.querySelectorAll("a");
+      const menuItems = mobileMenuRef.current?.querySelectorAll("a, button");
       if (menuItems) {
         tl.fromTo(
           menuItems,
           {
             opacity: 0,
-            y: -10,
+            y: -5,
           },
           {
             opacity: 1,
             y: 0,
-            duration: 0.3,
-            stagger: 0.1,
+            duration: 0.2,
+            stagger: 0.05,
             ease: "power2.out",
-            onComplete: () => setIsAnimating(false),
           },
           "-=0.2"
         );
       }
-    } else if (
-      mobileMenuRef.current &&
-      !mobileMenuRef.current.classList.contains("hidden")
-    ) {
+
+      tl.call(() => setIsAnimating(false));
+    } else if (mobileMenuRef.current && !isAnimating) {
       setIsAnimating(true);
-      gsap.to(mobileMenuRef.current, {
+      const tl = gsap.timeline();
+      tl.to(mobileMenuRef.current, {
         opacity: 0,
-        y: -20,
-        scale: 0.9,
-        duration: 0.3,
+        y: -10,
+        scale: 0.98,
+        duration: 0.2,
         ease: "power2.in",
         onComplete: () => {
           if (mobileMenuRef.current) {
@@ -178,41 +193,28 @@ function Navbar() {
         },
       });
     }
-  }, [open]);
+  }, [open, isAnimating]);
 
-  // Hamburger animation
-  const toggleMenu = () => {
-    if (isAnimating) return;
-
-    // Animate hamburger icon
-    gsap.to(hamburgerRef.current, {
-      rotation: open ? 0 : 180,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-
-    setOpen(!open);
+  const toggleMobileMenu = () => {
+    if (!isAnimating) {
+      setOpen(!open);
+    }
   };
 
   return (
     <>
-      {/* Navbar Container with Max Width and Centering */}
-      <div className="relative top-0  left-0 right-0 z-50 flex justify-center ">
+      {/* Clean, minimal navbar - Jonathan Ive inspired */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4">
         <nav
           ref={navRef}
-          className="relative w-full  bg-emerald-500 backdrop-blur-lg rounded shadow-xl shadow-emerald-900/10 hover:shadow-emerald-900/20 transition-all duration-300 overflow-hidden"
+          className={`w-full max-w-7xl backdrop-blur-xl border rounded-2xl shadow-lg transition-all duration-300 ${
+            isDarkMode
+              ? "bg-gray-950/80 border-gray-800/50 shadow-gray-900/20"
+              : "bg-white/80 border-gray-200/50 shadow-gray-900/5"
+          }`}
         >
-          {/* Corner borders - Top Left */}
-          <div className="absolute top-0 left-0 w-6 h-6 border-t-3 border-l-3 border-emerald-600 rounded-tl"></div>
-          {/* Corner borders - Top Right */}
-          <div className="absolute top-0 right-0 w-6 h-6 border-t-3 border-r-3 border-emerald-600 rounded-tr"></div>
-          {/* Corner borders - Bottom Left */}
-          <div className="absolute bottom-0 left-0 w-6 h-6 border-b-3 border-l-3 border-emerald-600 rounded-bl"></div>
-          {/* Corner borders - Bottom Right */}
-          <div className="absolute bottom-0 right-0 w-6 h-6 border-b-3 border-r-3 border-emerald-600 rounded-br"></div>
-
-          <div className="flex items-center justify-between px-5 md:px-6 py-4 gap-2">
-            {/* Logo Section */}
+          <div className="flex items-center justify-between px-6 py-4">
+            {/* Logo Section - Clean & Purposeful */}
             <div
               ref={logoRef}
               className="flex items-center gap-3 cursor-pointer"
@@ -221,119 +223,150 @@ function Navbar() {
                 <img
                   src="/StelarLogo.svg"
                   alt="Stelar Logo"
-                  className="h-7 w-7 md:h-8 md:w-8"
+                  className="h-8 w-8"
                 />
-                <div className="absolute inset-0 bg-emerald-400  rounded-full opacity-0 hover:opacity-30 transition-opacity duration-300"></div>
               </div>
-              <span className="text-xl md:text-2xl font-semibold  bg-clip-text text-white">
+              <span className="text-xl font-semibold text-gray-900 dark:text-white">
                 Stelar
               </span>
             </div>
 
-            {/* Desktop Navigation Links & CTA */}
+            {/* Desktop Navigation - Minimal & Clear */}
             <div ref={linksRef} className="hidden md:flex items-center gap-8">
               {/* Navigation Links */}
-              <div className="flex items-center gap-8">
-                <div className="flex items-center gap-2"></div>
+              <div className="flex items-center gap-6">
                 <a
                   href="/features"
-                  className="relative text-emerald-700 hover:text-emerald-900 font-medium text-sm transition-colors duration-200 group tracking-tight"
+                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium text-sm transition-colors duration-200"
                 >
                   Features
                 </a>
                 <a
                   href="/insights"
-                  className="relative text-emerald-700 hover:text-emerald-900 font-medium text-sm transition-colors duration-200 group tracking-tight"
+                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium text-sm transition-colors duration-200"
                 >
                   Insights
                 </a>
                 <a
                   href="/help"
-                  className="relative text-emerald-700 hover:text-emerald-900 font-medium text-sm transition-colors duration-200 group tracking-tight"
+                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium text-sm transition-colors duration-200"
                 >
                   Help
                 </a>
               </div>
 
-              {/* CTA Button */}
+              {/* Theme Toggle Button */}
+              <button
+                ref={themeButtonRef}
+                onClick={handleToggleDarkMode}
+                disabled={animating}
+                className={`p-2 rounded-full font-semibold ${
+                  isDarkMode
+                    ? "text-white hover:bg-gray-800 transition duration-180 ease-in"
+                    : "text-black hover:bg-gray-200 transition duration-180 ease-in"
+                } transition`}
+                title={`Current theme: ${theme}`}
+              >
+                <div ref={iconRef}>
+                  {iconState === "sun" ? (
+                    <img width={24} src="/Sun.svg" alt="Light mode" />
+                  ) : (
+                    <img width={24} src="/Solar.svg" alt="Dark mode" />
+                  )}
+                </div>
+              </button>
+
+              {/* CTA Button - Single accent color */}
               <button
                 type="button"
-                className="flex items-center justify-center px-5 py-2.5 gap-1 bg-emerald-800 hover:bg-emerald-900 text-white font-medium text-base rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-emerald-900/20 tracking-tight"
+                className="px-6 py-2.5 bg-emerald-600 dark:bg-emerald-500 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-medium text-sm rounded-full transition-all duration-200 hover:shadow-lg"
               >
                 Start Journey
+              </button>
+            </div>
+
+            {/* Mobile Controls - Theme Toggle & Menu */}
+            <div className="md:hidden flex items-center gap-2">
+              {/* Mobile Theme Toggle */}
+              <button
+                onClick={handleToggleDarkMode}
+                disabled={animating}
+                className={`p-2 rounded-full font-semibold ${
+                  isDarkMode
+                    ? "text-white hover:bg-gray-800 transition duration-180 ease-in"
+                    : "text-black hover:bg-gray-200 transition duration-180 ease-in"
+                } transition`}
+                title={`Current theme: ${theme}`}
+              >
+                <div>
+                  {iconState === "sun" ? (
+                    <img width={20} src="/Sun.svg" alt="Light mode" />
+                  ) : (
+                    <img width={20} src="/Solar.svg" alt="Dark mode" />
+                  )}
+                </div>
+              </button>
+
+              {/* Mobile Menu Button */}
+              <button
+                ref={hamburgerRef}
+                type="button"
+                className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+                onClick={toggleMobileMenu}
+                aria-label="Toggle mobile menu"
+              >
                 <svg
-                  className="w-5 h-5 ml-1"
+                  className={`w-6 h-6 transition-transform duration-200 ${
+                    open ? "rotate-90" : ""
+                  }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
+                  {open ? (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  ) : (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  )}
                 </svg>
               </button>
             </div>
-
-            {/* Mobile Hamburger Button */}
-            <button
-              ref={hamburgerRef}
-              type="button"
-              className="md:hidden p-2 text-white hover:text-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50 rounded-lg transition-colors duration-200"
-              onClick={toggleMenu}
-              aria-label="Toggle navigation"
-              aria-expanded={open ? "true" : "false"}
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d={open ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-                />
-              </svg>
-            </button>
           </div>
         </nav>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      <div className="relative left-0 right-0 z-50 md:hidden flex justify-center px-4">
-        <div ref={mobileMenuRef} className="w-full   hidden">
-          <div className="relative bg-emerald-500/20 backdrop-blur-lg rounded-2xl shadow-xl shadow-emerald-900/10 px-5 py-6 overflow-hidden">
-            {/* Corner borders - Top Left */}
-            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-emerald-300/60 rounded-tl"></div>
-            {/* Corner borders - Top Right */}
-            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-emerald-300/60 rounded-tr"></div>
-            {/* Corner borders - Bottom Left */}
-            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-emerald-300/60 rounded-bl"></div>
-            {/* Corner borders - Bottom Right */}
-            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-emerald-300/60 rounded-br"></div>
-            <div className="flex flex-col items-center gap-4">
+      {/* Mobile Menu - Clean overlay */}
+      <div className="fixed top-20 left-0 right-0 z-40 md:hidden flex justify-center px-4">
+        <div ref={mobileMenuRef} className="w-full max-w-sm hidden">
+          <div className="bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-800/50 rounded-2xl shadow-lg shadow-gray-900/10 dark:shadow-gray-900/30 px-6 py-6">
+            <div className="flex flex-col gap-4">
               <a
                 href="/features"
-                className="text-emerald-700 hover:text-emerald-900 font-medium  py-3 px-4 rounded-xl hover:bg-emerald-50/50 transition-all duration-200"
+                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-200 text-center"
                 onClick={() => setOpen(false)}
               >
                 Features
               </a>
               <a
                 href="/insights"
-                className="text-emerald-700 hover:text-emerald-900 font-medium py-3 px-4 rounded-xl hover:bg-emerald-50/50 transition-all duration-200"
+                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-200 text-center"
                 onClick={() => setOpen(false)}
               >
                 Insights
               </a>
               <a
                 href="/help"
-                className="text-emerald-700 hover:text-emerald-900 font-medium py-3 px-4 rounded-xl hover:bg-emerald-50/50 transition-all duration-200"
+                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-200 text-center"
                 onClick={() => setOpen(false)}
               >
                 Help
@@ -341,7 +374,8 @@ function Navbar() {
               {/* Mobile CTA */}
               <button
                 type="button"
-                className="mt-2 flex items-center justify-center px-5 py-3 bg-emerald-800 hover:bg-emerald-900 text-white font-medium rounded-xl transition-all duration-200"
+                className="mt-2 px-6 py-3 bg-emerald-600 dark:bg-emerald-500 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-medium rounded-xl transition-all duration-200"
+                onClick={() => setOpen(false)}
               >
                 Start Journey
               </button>

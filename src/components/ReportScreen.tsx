@@ -5,6 +5,7 @@ import {
   extractKeyInsights,
   generateRecommendations,
   summarizeConversation,
+  generateMentalHealthFingerprint,
 } from "../utils/conversationAnalysis";
 import ReportGeneratingAnimation from "./ReportGeneratingAnimation";
 import ReportDisplay from "./ReportDisplay";
@@ -102,6 +103,8 @@ function ReportScreen({
       conversationSummary: summarizeConversation(conversationData),
       emotionalState: "neutral", // Add missing property
       riskLevel: "low", // Add missing property
+      mentalHealthFingerprint:
+        generateMentalHealthFingerprint(conversationData),
     };
   };
 

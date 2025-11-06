@@ -1,12 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "class",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
         kavoon: ["Kavoon", "cursive"],
         geist: ["Geist", "sans-serif"], // Keep Geist
-      
       },
       animation: {
         "fade-in-up": "fadeInUp 180ms ease-out forwards",

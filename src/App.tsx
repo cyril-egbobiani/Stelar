@@ -7,7 +7,8 @@ import ConclusionScreen from "./components/ConclusionScreen";
 import Navbar from "./components/Navbar";
 import type { Message, WellbeingReport } from "./types";
 import WelcomeScreen from "./components/WelcomeScreen";
- 
+import { ThemeProvider } from "./contexts/ThemeContext";
+
 function App() {
   const [currentScreen, setCurrentScreen] = useState<
     "welcome" | "about" | "chat" | "report" | "receipt" | "conclusion"
@@ -29,54 +30,76 @@ function App() {
         return (
           <>
             <Navbar />
-            <WelcomeScreen onNavigate={handleNavigation} />
+            <WelcomeScreen
+              onStartQuestionnaire={() => handleNavigation("chat")}
+            />
             {/* <WelcomeScreen onNavigate={handleNavigation} /> */}
             {/* <AboutScreen /> */}
           </>
         );
       case "about":
-        return <AboutScreen />;
+        return (
+          <>
+            <Navbar />
+            <AboutScreen />
+          </>
+        );
       case "chat":
         return (
-          <ChatScreen
-            onNavigate={handleNavigation}
-            setConversationData={setConversationData}
-            conversationData={conversationData}
-            conversationId={conversationId}
-            setConversationId={setConversationId}
-            setReport={setWellbeingReport}
-          />
+          <>
+             <ChatScreen
+              onNavigate={handleNavigation}
+              setConversationData={setConversationData}
+              conversationData={conversationData}
+              conversationId={conversationId}
+              setConversationId={setConversationId}
+              setReport={setWellbeingReport}
+            />
+          </>
         );
       case "report":
         return (
-          <ReportScreen
-            onNavigate={handleNavigation}
-            conversationData={conversationData}
-            setWellbeingReport={setWellbeingReport}
-            conversationId={conversationId}
-          />
+          <>
+            <Navbar />
+            <ReportScreen
+              onNavigate={handleNavigation}
+              conversationData={conversationData}
+              setWellbeingReport={setWellbeingReport}
+              conversationId={conversationId}
+            />
+          </>
         );
       case "receipt":
         return wellbeingReport ? (
-          <ReceiptScreen
-            report={wellbeingReport}
-            onBack={() => handleNavigation("report")}
-            onNext={() => handleNavigation("conclusion")}
-          />
+          <>
+            <Navbar />
+            <ReceiptScreen
+              report={wellbeingReport}
+              onBack={() => handleNavigation("report")}
+              onNext={() => handleNavigation("conclusion")}
+            />
+          </>
         ) : null;
       case "conclusion":
         return wellbeingReport ? (
-          <ConclusionScreen
-            onNavigate={handleNavigation}
-            report={wellbeingReport}
-          />
+          <>
+            <Navbar />
+            <ConclusionScreen
+              onNavigate={handleNavigation}
+              report={wellbeingReport}
+            />
+          </>
         ) : null;
       default:
-        return <WelcomeScreen onNavigate={handleNavigation} />;
+        return (
+          <WelcomeScreen
+            onStartQuestionnaire={() => handleNavigation("chat")}
+          />
+        );
     }
   };
 
-  return <>{renderScreen()}</>;
+  return <ThemeProvider>{renderScreen()}</ThemeProvider>;
 }
 
 export default App;

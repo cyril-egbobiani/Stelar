@@ -73,28 +73,28 @@ function ReportGeneratingAnimation() {
       {/* Subtext */}
       <p
         ref={subtextRef}
-        className="text-indigo-200 text-center max-w-md leading-relaxed"
+        className="text-emerald-200 text-center max-w-md leading-relaxed"
       >
         Our AI is carefully reviewing your responses to provide personalized
         insights and recommendations for your wellbeing journey.
       </p>
 
       {/* Progress Steps */}
-      <div className="mt-8 space-y-3 text-sm text-indigo-100">
+      <div className="mt-8 space-y-3 text-sm text-emerald-100">
         <div className="flex items-center">
-          <div className="w-2 h-2 bg-indigo-300 rounded-full mr-3 animate-pulse"></div>
+          <div className="w-2 h-2 bg-emerald-300 rounded-full mr-3 animate-pulse"></div>
           Processing conversation data
         </div>
         <div className="flex items-center">
           <div
-            className="w-2 h-2 bg-indigo-300 rounded-full mr-3 animate-pulse"
+            className="w-2 h-2 bg-emerald-300 rounded-full mr-3 animate-pulse"
             style={{ animationDelay: "0.5s" }}
           ></div>
           Analyzing emotional patterns
         </div>
         <div className="flex items-center">
           <div
-            className="w-2 h-2 bg-indigo-300 rounded-full mr-3 animate-pulse"
+            className="w-2 h-2 bg-emerald-300 rounded-full mr-3 animate-pulse"
             style={{ animationDelay: "1s" }}
           ></div>
           Generating personalized insights
