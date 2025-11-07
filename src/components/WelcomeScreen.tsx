@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { TextPlugin } from "gsap/TextPlugin";
+import Footer from "./Footer";
 
 gsap.registerPlugin(TextPlugin);
 
@@ -195,7 +196,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             </div>
 
             {/* Main Hero Title */}
-            <h1 className="hero-title text-[56px] leading-[72px] font-normal mb-6 tracking-tight">
+            <h1 className="text-3xl md:text-5xl font-normal mb-6 leadiing-14  tracking-tight">
               <span className="text-[#EEEEEE]">Understand Your Mind</span>
               <br />
               <span className="text-[#EEEEEE]">Through </span>
@@ -205,11 +206,9 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             </h1>
 
             {/* Hero Subtitle */}
-            <p className="hero-subtitle text-xl text-[#AAAAAA] max-w-4xl mx-auto leading-relaxed mb-12">
-              Advanced AI analyzes your conversation patterns to provide
-              personalized insights into your mental wellness journey. Discover
-              patterns, gain clarity, and take meaningful steps toward better
-              mental health.
+            <p className="hero-subtitle text-xl text-[#AAAAAA] max-w-xl mx-auto leading-relaxed mb-12">
+              AI-powered conversation analysis reveals your unique mental health
+              patterns and provides personalized insights for better wellness.
             </p>
 
             {/* Stelar Folder Visual Element */}
@@ -274,7 +273,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                     />
                   </svg>
                 </div>
-                <h3 className="text-lg  geist-mono uppercase mb-4 text-[#ECECED]">
+                <h3 className="text-md font-medium  geist-mono uppercase mb-4 text-[#ECECED]">
                   Personalized AI Analysis
                 </h3>
                 <p className="text-[#737373] leading-relaxed">
@@ -303,7 +302,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                     />
                   </svg>
                 </div>
-                <h3 className="text-lg geist-mono uppercase  mb-4 text-[#ECECED]">
+                <h3 className="text-md font-medium  geist-mono geist-mono uppercase  mb-4 text-[#ECECED]">
                   Real-time Insights
                 </h3>
                 <p className="text-[#737373] leading-relaxed">
@@ -332,7 +331,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                     />
                   </svg>
                 </div>
-                <h3 className="text-lg  mb-4  geist-mono uppercase  text-[#ECECED]">
+                <h3 className="text-md font-medium  geist-mono  mb-4  geist-mono uppercase  text-[#ECECED]">
                   Complete Privacy
                 </h3>
                 <p className="text-[#737373] leading-relaxed">
@@ -408,7 +407,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                <span>Completely anonymous & secure</span>
+                <span className="text-left">Completely anonymous & secure</span>
               </div>
               <div className="flex items-center gap-2">
                 <svg
@@ -424,7 +423,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                <span>No signup required</span>
+                <span className="text-left">No signup required</span>
               </div>
               <div className="flex items-center gap-2">
                 <svg
@@ -440,12 +439,15 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                <span>Results in ~10 minutes</span>
+                <span className="text-left">Results in ~10 minutes</span>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <Footer />
 
       {/* Bottom gradient fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#121212] to-transparent pointer-events-none" />
