@@ -6,8 +6,7 @@ function Navbar() {
   const [open, setOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { isDarkMode, handleToggleDarkMode, animating, iconRef, iconState } =
-    useTheme();
+  const { handleToggleDarkMode, animating, iconRef, iconState } = useTheme();
 
   // Refs for animation targets
   const navRef = useRef<HTMLElement>(null);
@@ -229,7 +228,7 @@ function Navbar() {
             >
               <div className="logo-icon relative">
                 <div className="w-8 h-8 bg-transparent rounded-xl flex items-center justify-center ">
-                 <img src="/StelarLogo.svg" alt="s" />
+                  <img src="/StelarLogo.svg" alt="s" />
                 </div>
               </div>
               <span className="font-semibold geist-mono text-[#E6E6E6] tracking-wide">
