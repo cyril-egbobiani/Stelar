@@ -22,7 +22,7 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
   -ms-overflow-style: none; /* IE and Edge */
 }
-
+/* 
 h1,
 h2,
 h3,
@@ -35,7 +35,7 @@ div {
   font-family: "Geist", ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
     sans-serif !important;
-}
+} */
 
 .kavoon {
   font-family: "Kavoon", serif;
@@ -45,6 +45,10 @@ div {
 
 .geist {
   font-family: "Geist", serif;
+}
+
+.geist-mono {
+  font-family: "Geist Mono", monospace;
 }
 
 /* Chat message animations */

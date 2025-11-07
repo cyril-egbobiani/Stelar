@@ -7,6 +7,7 @@ export default {
       fontFamily: {
         kavoon: ["Kavoon", "cursive"],
         geist: ["Geist", "sans-serif"], // Keep Geist
+        mono: ["Geist Mono", "monospace"], // Add Geist Mono
       },
       animation: {
         "fade-in-up": "fadeInUp 180ms ease-out forwards",

@@ -5,14 +5,9 @@ import { useTheme } from "../contexts/ThemeContext";
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const {
-    theme,
-    isDarkMode,
-    handleToggleDarkMode,
-    animating,
-    iconRef,
-    iconState,
-  } = useTheme();
+  const [scrolled, setScrolled] = useState(false);
+  const { isDarkMode, handleToggleDarkMode, animating, iconRef, iconState } =
+    useTheme();
 
   // Refs for animation targets
   const navRef = useRef<HTMLElement>(null);
@@ -22,7 +17,18 @@ function Navbar() {
   const hamburgerRef = useRef<HTMLButtonElement>(null);
   const themeButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Initial navbar animation - Jonathan Ive style entrance
+  // Scroll detection for navbar background
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Initial navbar animation
   useEffect(() => {
     const tl = gsap.timeline();
 
@@ -36,15 +42,15 @@ function Navbar() {
       ],
       {
         opacity: 0,
-        y: -10,
+        y: -20,
       }
     );
 
-    // Clean, purposeful entrance animation
+    // Sophisticated entrance animation
     tl.to(navRef.current, {
       opacity: 1,
       duration: 0.8,
-      ease: "power2.out",
+      ease: "power3.out",
     })
       .to(
         logoRef.current,
@@ -79,22 +85,24 @@ function Navbar() {
       );
   }, []);
 
-  // Refined logo hover interaction
+  // Logo hover interaction
   useEffect(() => {
     const logo = logoRef.current;
     if (!logo) return;
 
     const handleMouseEnter = () => {
-      gsap.to(logo, {
-        scale: 1.02,
+      gsap.to(logo.querySelector(".logo-icon"), {
+        scale: 1.1,
+        rotate: 5,
         duration: 0.3,
         ease: "power2.out",
       });
     };
 
     const handleMouseLeave = () => {
-      gsap.to(logo, {
+      gsap.to(logo.querySelector(".logo-icon"), {
         scale: 1,
+        rotate: 0,
         duration: 0.3,
         ease: "power2.out",
       });
@@ -142,15 +150,15 @@ function Navbar() {
         mobileMenuRef.current,
         {
           opacity: 0,
-          y: -10,
-          scale: 0.98,
+          y: -20,
+          scale: 0.95,
         },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 0.3,
-          ease: "power2.out",
+          duration: 0.4,
+          ease: "power3.out",
         }
       );
 
@@ -161,13 +169,13 @@ function Navbar() {
           menuItems,
           {
             opacity: 0,
-            y: -5,
+            y: -10,
           },
           {
             opacity: 1,
             y: 0,
-            duration: 0.2,
-            stagger: 0.05,
+            duration: 0.3,
+            stagger: 0.1,
             ease: "power2.out",
           },
           "-=0.2"
@@ -180,9 +188,9 @@ function Navbar() {
       const tl = gsap.timeline();
       tl.to(mobileMenuRef.current, {
         opacity: 0,
-        y: -10,
-        scale: 0.98,
-        duration: 0.2,
+        y: -20,
+        scale: 0.95,
+        duration: 0.3,
         ease: "power2.in",
         onComplete: () => {
           if (mobileMenuRef.current) {
@@ -203,106 +211,150 @@ function Navbar() {
 
   return (
     <>
-      {/* Clean, minimal navbar - Jonathan Ive inspired */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4">
+      {/* Modern Navbar with sophisticated design */}
+      <div className="fixed top-0 left-0 right-0 z-50 ">
         <nav
           ref={navRef}
-          className={`w-full max-w-7xl backdrop-blur-xl border rounded-2xl shadow-lg transition-all duration-300 ${
-            isDarkMode
-              ? "bg-gray-950/80 border-gray-800/50 shadow-gray-900/20"
-              : "bg-white/80 border-gray-200/50 shadow-gray-900/5"
-          }`}
+          className={`max-w-7xl mx-auto transition-all duration-500 ease-out ${
+            scrolled
+              ? "bg-[#141414]/95 backdrop-blur-xl border border-b-[#282828] shadow-2xl shadow-black/20"
+              : "bg-[#141414]/80 backdrop-blur-md border border-b-[#282828]/50"
+          } `}
         >
-          <div className="flex items-center justify-between px-6 py-4">
-            {/* Logo Section - Clean & Purposeful */}
+          <div className="flex items-center justify-between px-6 lg:px-8 py-4">
+            {/* Logo Section */}
             <div
               ref={logoRef}
-              className="flex items-center gap-3 cursor-pointer"
+              className="flex items-center gap-3 cursor-pointer group"
             >
-              <div className="relative">
-                <img
-                  src="/StelarLogo.svg"
-                  alt="Stelar Logo"
-                  className="h-8 w-8"
-                />
+              <div className="logo-icon relative">
+                <div className="w-8 h-8 bg-transparent rounded-xl flex items-center justify-center ">
+                 <img src="/StelarLogo.svg" alt="s" />
+                </div>
               </div>
-              <span className="text-xl font-semibold text-gray-900 dark:text-white">
-                Stelar
+              <span className="font-semibold geist-mono text-[#E6E6E6] tracking-wide">
+                STELAR
               </span>
             </div>
 
-            {/* Desktop Navigation - Minimal & Clear */}
-            <div ref={linksRef} className="hidden md:flex items-center gap-8">
+            {/* Desktop Navigation */}
+            <div ref={linksRef} className="hidden lg:flex items-center gap-8">
               {/* Navigation Links */}
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-8">
                 <a
                   href="/features"
-                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium text-sm transition-colors duration-200"
+                  className="text-[#E6E6E6] hover:text-emerald-400 font-medium text-sm tracking-wide uppercase transition-all duration-300 relative group geist-mono"
                 >
-                  Features
+                  <span>Features</span>
+                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full" />
                 </a>
                 <a
                   href="/insights"
-                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium text-sm transition-colors duration-200"
+                  className="text-[#E6E6E6] hover:text-emerald-400 font-medium text-sm tracking-wide uppercase transition-all duration-300 relative group geist-mono"
                 >
-                  Insights
+                  <span>Insights</span>
+                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full" />
                 </a>
                 <a
                   href="/help"
-                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium text-sm transition-colors duration-200"
+                  className="text-[#E6E6E6] hover:text-emerald-400 font-medium text-sm tracking-wide uppercase transition-all duration-300 relative group geist-mono"
                 >
-                  Help
+                  <span>Help</span>
+                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-400 transition-all duration-300 group-hover:w-full" />
                 </a>
               </div>
 
-              {/* Theme Toggle Button */}
-              <button
-                ref={themeButtonRef}
-                onClick={handleToggleDarkMode}
-                disabled={animating}
-                className={`p-2 rounded-full font-semibold ${
-                  isDarkMode
-                    ? "text-white hover:bg-gray-800 transition duration-180 ease-in"
-                    : "text-black hover:bg-gray-200 transition duration-180 ease-in"
-                } transition`}
-                title={`Current theme: ${theme}`}
-              >
-                <div ref={iconRef}>
-                  {iconState === "sun" ? (
-                    <img width={24} src="/Sun.svg" alt="Light mode" />
-                  ) : (
-                    <img width={24} src="/Solar.svg" alt="Dark mode" />
-                  )}
-                </div>
-              </button>
+              {/* Right Controls */}
+              <div className="flex items-center gap-4">
+                {/* Theme Toggle Button */}
+                <button
+                  ref={themeButtonRef}
+                  onClick={handleToggleDarkMode}
+                  disabled={animating}
+                  className="w-10 h-10 bg-[#292929] hover:bg-[#353535] rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105"
+                  title="Toggle theme"
+                >
+                  <div ref={iconRef} className="w-5 h-5">
+                    {iconState === "sun" ? (
+                      <svg
+                        className="w-5 h-5 text-[#E6E6E6]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        className="w-5 h-5 text-[#E6E6E6]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                </button>
 
-              {/* CTA Button - Single accent color */}
-              <button
-                type="button"
-                className="px-6 py-2.5 bg-emerald-600 dark:bg-emerald-500 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-medium text-sm rounded-full transition-all duration-200 hover:shadow-lg"
-              >
-                Start Journey
-              </button>
+                {/* CTA Button */}
+                <button
+                  type="button"
+                  className="px-6 py-3 geist-mono rounded-4xl bg-emerald-400 hover:bg-emerald-500 text-black font-semibold text-sm tracking-wide uppercase  transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/20"
+                >
+                  Start Journey
+                </button>
+              </div>
             </div>
 
-            {/* Mobile Controls - Theme Toggle & Menu */}
-            <div className="md:hidden flex items-center gap-2">
+            {/* Mobile Controls */}
+            <div className="lg:hidden flex items-center gap-3">
               {/* Mobile Theme Toggle */}
               <button
                 onClick={handleToggleDarkMode}
                 disabled={animating}
-                className={`p-2 rounded-full font-semibold ${
-                  isDarkMode
-                    ? "text-white hover:bg-gray-800 transition duration-180 ease-in"
-                    : "text-black hover:bg-gray-200 transition duration-180 ease-in"
-                } transition`}
-                title={`Current theme: ${theme}`}
+                className="w-9 h-9 bg-[#292929] hover:bg-[#353535] rounded-lg flex items-center justify-center transition-all duration-300"
+                title="Toggle theme"
               >
-                <div>
+                <div className="w-4 h-4">
                   {iconState === "sun" ? (
-                    <img width={20} src="/Sun.svg" alt="Light mode" />
+                    <svg
+                      className="w-4 h-4 text-[#E6E6E6]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                      />
+                    </svg>
                   ) : (
-                    <img width={20} src="/Solar.svg" alt="Dark mode" />
+                    <svg
+                      className="w-4 h-4 text-[#E6E6E6]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                      />
+                    </svg>
                   )}
                 </div>
               </button>
@@ -311,70 +363,67 @@ function Navbar() {
               <button
                 ref={hamburgerRef}
                 type="button"
-                className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+                className="w-9 h-9 bg-[#292929] hover:bg-[#353535] rounded-lg flex items-center justify-center transition-all duration-300"
                 onClick={toggleMobileMenu}
                 aria-label="Toggle mobile menu"
               >
-                <svg
-                  className={`w-6 h-6 transition-transform duration-200 ${
-                    open ? "rotate-90" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  {open ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
-                </svg>
+                <div className="w-5 h-5 flex flex-col justify-center items-center">
+                  <span
+                    className={`block h-0.5 w-5 bg-[#E6E6E6] transition-all duration-300 ${
+                      open ? "rotate-45 translate-y-0.5" : ""
+                    }`}
+                  />
+                  <span
+                    className={`block h-0.5 w-5 bg-[#E6E6E6] transition-all duration-300 my-1 ${
+                      open ? "opacity-0" : ""
+                    }`}
+                  />
+                  <span
+                    className={`block h-0.5 w-5 bg-[#E6E6E6] transition-all duration-300 ${
+                      open ? "-rotate-45 -translate-y-1.5" : ""
+                    }`}
+                  />
+                </div>
               </button>
             </div>
           </div>
         </nav>
       </div>
 
-      {/* Mobile Menu - Clean overlay */}
-      <div className="fixed top-20 left-0 right-0 z-40 md:hidden flex justify-center px-4">
-        <div ref={mobileMenuRef} className="w-full max-w-sm hidden">
-          <div className="bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-800/50 rounded-2xl shadow-lg shadow-gray-900/10 dark:shadow-gray-900/30 px-6 py-6">
-            <div className="flex flex-col gap-4">
-              <a
-                href="/features"
-                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-200 text-center"
-                onClick={() => setOpen(false)}
-              >
-                Features
-              </a>
-              <a
-                href="/insights"
-                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-200 text-center"
-                onClick={() => setOpen(false)}
-              >
-                Insights
-              </a>
-              <a
-                href="/help"
-                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium py-3 px-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-200 text-center"
-                onClick={() => setOpen(false)}
-              >
-                Help
-              </a>
+      {/* Mobile Menu Overlay */}
+      <div className="fixed top-20 left-0 right-0 z-40 lg:hidden px-4">
+        <div ref={mobileMenuRef} className="hidden">
+          <div className="max-w-sm mx-auto bg-[#121212]/95 backdrop-blur-xl border border-[#292929] rounded-2xl shadow-2xl shadow-black/30 overflow-hidden">
+            <div className="p-6">
+              {/* Mobile Navigation Links */}
+              <div className="space-y-4 mb-6">
+                <a
+                  href="/features"
+                  className="block text-[#E6E6E6] hover:text-emerald-400 font-medium text-base tracking-wide uppercase py-3 px-4 rounded-xl hover:bg-[#292929]/50 transition-all duration-300 geist-mono"
+                  onClick={() => setOpen(false)}
+                >
+                  Features
+                </a>
+                <a
+                  href="/insights"
+                  className="block text-[#E6E6E6] hover:text-emerald-400 font-medium text-base tracking-wide uppercase py-3 px-4 rounded-xl hover:bg-[#292929]/50 transition-all duration-300 geist-mono"
+                  onClick={() => setOpen(false)}
+                >
+                  Insights
+                </a>
+                <a
+                  href="/help"
+                  className="block text-[#E6E6E6] hover:text-emerald-400 font-medium text-base tracking-wide uppercase py-3 px-4 rounded-xl hover:bg-[#292929]/50 transition-all duration-300 geist-mono"
+                  onClick={() => setOpen(false)}
+                >
+                  Help
+                </a>
+              </div>
+
               {/* Mobile CTA */}
               <button
                 type="button"
-                className="mt-2 px-6 py-3 bg-emerald-600 dark:bg-emerald-500 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-medium rounded-xl transition-all duration-200"
+                className="w-full px-6 py-4 bg-emerald-400 hover:bg-emerald-500 text-black font-semibold text-base tracking-wide uppercase rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-emerald-400/20 geist-mono"
                 onClick={() => setOpen(false)}
               >
                 Start Journey
@@ -383,6 +432,14 @@ function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Backdrop */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"
+          onClick={() => setOpen(false)}
+        />
+      )}
     </>
   );
 }
