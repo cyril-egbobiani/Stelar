@@ -30,7 +30,6 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="footer-container relative bg-gradient-to-t from-[#0A0A0A] to-[#121212] border-t border-[#292929]/50">
-
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Section */}
@@ -44,8 +43,9 @@ const Footer: React.FC = () => {
               </span>
             </div>
             <p className="text-[#B8B8B8] leading-relaxed mb-6 max-w-md">
-              AI-powered mental health analysis that transforms your conversations 
-              into personalized insights and actionable wellbeing reports.
+              AI-powered mental health analysis that transforms your
+              conversations into personalized insights and actionable wellbeing
+              reports.
             </p>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-emerald-400">
@@ -144,7 +144,7 @@ const Footer: React.FC = () => {
             <div className="text-[#787878] text-sm">
               © 2025 Stelar. All rights reserved.
             </div>
-            
+
             {/* Security Badge */}
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-2 px-3 py-1 bg-[#1A1A1A] border border-[#292929] rounded-lg">
@@ -161,7 +161,9 @@ const Footer: React.FC = () => {
                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                   />
                 </svg>
-                <span className="text-xs text-[#B8B8B8] geist-mono">End-to-End Encrypted</span>
+                <span className="text-xs text-[#B8B8B8] geist-mono">
+                  End-to-End Encrypted
+                </span>
               </div>
             </div>
           </div>
