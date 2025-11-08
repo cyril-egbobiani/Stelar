@@ -181,22 +181,22 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
       <div className="relative z-10">
         {/* Main Content Container */}
-        <div className="max-w-7xl mx-auto px-6 pt-40 pb-16">
+        <div className="max-w-7xl mx-auto px-6 pt-32 pb-16">
           {/* Hero Section */}
           <div className="text-center mb-20">
             {/* New Product Badge */}
             <div className="hero-badge inline-flex items-center gap-2 px-4 py-2 mb-8 bg-[#171717] border border-[#282828] rounded-full">
               <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-              <span className="text-sm text-[#AAAAAA] font-medium tracking-wide geist-mono">
-                NEW
+              <span className="text-sm text-[#AAAAAA] font-medium tracking-wide ">
+                New
               </span>
-              <span className="text-sm text-[#F2F2F2] font-medium geist-mono">
-                AI MENTAL HEALTH ANALYSIS
+              <span className="text-sm text-[#F2F2F2] font-medium ">
+                AI Mental Health Analysis
               </span>
             </div>
 
             {/* Main Hero Title */}
-            <h1 className="text-3xl md:text-5xl font-normal mb-6 leadiing-14  tracking-tight">
+            <h1 className="text-3xl md:text-5xl mb-6 leadiing-14  tracking-tight">
               <span className="text-[#EEEEEE]">Understand Your Mind</span>
               <br />
               <span className="text-[#EEEEEE]">Through </span>
@@ -206,7 +206,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             </h1>
 
             {/* Hero Subtitle */}
-            <p className="hero-subtitle text-xl text-[#AAAAAA] max-w-xl mx-auto leading-relaxed mb-12">
+            <p className="hero-subtitle text-lg text-[#AAAAAA] max-w-xl mx-auto leading-relaxed mb-12">
               AI-powered conversation analysis reveals your unique mental health
               patterns and provides personalized insights for better wellness.
             </p>

@@ -55,8 +55,7 @@ function ChatScreen({
   setReport,
 }: ChatScreenProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const progressRef = useRef<HTMLDivElement>(null);
-  const [darkMode, setDarkMode] = useState(true);
+   const [darkMode, setDarkMode] = useState(true);
   const iconRef = useRef<HTMLDivElement>(null);
   const [animating, setAnimating] = useState(false);
   const [iconState, setIconState] = useState(darkMode ? "sun" : "moon");
@@ -447,7 +446,7 @@ function ChatScreen({
 
       <div className="relative z-10">
         {/* Header */}
-        <div className="w-full flex justify-between items-center p-6 h-fit">
+        <div className="w-full flex justify-between items-center px-1 py-4 h-fit">
           <button
             className="px-6 py-3 geist-mono bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-emerald-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10"
             onClick={() => onNavigate("welcome")}
@@ -469,162 +468,27 @@ function ChatScreen({
           </button>
         </div>
 
-        {/* Enhanced Progress & Guidance with welcome screen design */}
+        {/* Minimal Progress Indicator */}
         {conversationData.length > 0 && (
-          <div
-            ref={progressRef}
-            className="w-full md:max-w-3xl px-6 mb-8 animate-in slide-in-from-bottom-2"
-            style={{ animationDelay: "200ms" }}
-          >
-            <div className="bg-[#121212] border border-[#292929] rounded-2xl p-8 hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  {/* AI Analysis Icon */}
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                      />
-                    </svg>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-md font-medium geist-mono uppercase text-[#ECECED]">
-                        Mental Health Analysis
-                      </span>
-                      <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                    </div>
-                    <div className="text-sm text-[#737373]">
-                      {conversationData.length}/8+ exchanges •
-                      <span className="text-emerald-400 ml-1">
-                        {Math.round((conversationData.length / 8) * 100)}%
-                        analyzed
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Analysis status badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#171717] border border-[#282828] rounded-full">
-                  <div
-                    className={`w-2 h-2 rounded-full ${
-                      conversationData.length >= 8
-                        ? "bg-emerald-400 animate-pulse"
-                        : "bg-amber-400 animate-pulse"
-                    }`}
-                  />
-                  <span
-                    className={`text-sm font-medium tracking-wide geist-mono ${
-                      conversationData.length >= 8
-                        ? "text-emerald-400"
-                        : "text-amber-400"
-                    }`}
-                  >
-                    {conversationData.length >= 8 ? "READY" : "ANALYZING"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Enhanced Progress Bar */}
-              <div className="mb-6">
-                <div className="relative w-full bg-[#171717] rounded-full h-3 overflow-hidden border border-[#282828]">
-                  <div
-                    className="bg-gradient-to-r from-emerald-400 to-emerald-500 h-3 rounded-full transition-all duration-1000 ease-out"
-                    style={{
-                      width: `${Math.min(
-                        (conversationData.length / 8) * 100,
-                        100
-                      )}%`,
-                    }}
-                  />
-                </div>
-
-                {/* Progress milestones */}
-                <div className="flex justify-between mt-3 text-xs text-[#737373] geist-mono">
-                  <span>START</span>
-                  <span>BUILDING RAPPORT</span>
-                  <span>DEEP ANALYSIS</span>
-                  <span>READY</span>
-                </div>
-              </div>
-
-              {/* Dynamic Guidance */}
-              <div className="flex items-start text-sm">
-                {conversationData.length < 3 ? (
-                  <>
-                    <div className="flex-shrink-0 w-8 h-8 bg-emerald-500/20 rounded-xl flex items-center justify-center mr-4">
-                      <span className="text-lg">🌱</span>
-                    </div>
-                    <div>
-                      <span className="text-[#ECECED] font-medium block mb-1 geist-mono">
-                        GETTING TO KNOW YOU
-                      </span>
-                      <span className="text-[#737373]">
-                        Building rapport and understanding your communication
-                        style...
-                      </span>
-                    </div>
-                  </>
-                ) : conversationData.length < 6 ? (
-                  <>
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-500/20 rounded-xl flex items-center justify-center mr-4">
-                      <span className="text-lg">🔍</span>
-                    </div>
-                    <div>
-                      <span className="text-[#ECECED] font-medium block mb-1 geist-mono">
-                        ANALYZING PATTERNS
-                      </span>
-                      <span className="text-[#737373]">
-                        Examining thinking patterns and emotional expressions...
-                      </span>
-                    </div>
-                  </>
-                ) : conversationData.length < 8 ? (
-                  <>
-                    <div className="flex-shrink-0 w-8 h-8 bg-amber-500/20 rounded-xl flex items-center justify-center mr-4">
-                      <span className="text-lg">⚡</span>
-                    </div>
-                    <div>
-                      <span className="text-[#ECECED] font-medium block mb-1 geist-mono">
-                        DEEP INSIGHTS FORMING
-                      </span>
-                      <span className="text-[#737373]">
-                        Mapping your unique mental health fingerprint...
-                      </span>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="flex-shrink-0 w-8 h-8 bg-emerald-500/20 rounded-xl flex items-center justify-center mr-4">
-                      <span className="text-lg">✨</span>
-                    </div>
-                    <div>
-                      <span className="text-emerald-400 font-medium block mb-1 geist-mono">
-                        ANALYSIS COMPLETE!
-                      </span>
-                      <span className="text-[#737373]">
-                        Your unique mental health profile is ready for insights.
-                      </span>
-                    </div>
-                  </>
-                )}
-              </div>
+          <div className="w-full flex justify-center mb-6">
+            <div className="flex items-center gap-2 text-sm text-[#737373]">
+              <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+              <span className="geist-mono">
+                {conversationData.length < 3
+                  ? "listening"
+                  : conversationData.length < 6
+                  ? "analyzing patterns"
+                  : conversationData.length < 8
+                  ? "forming insights"
+                  : "ready to generate report"}
+              </span>
             </div>
           </div>
         )}
 
         {/* Chat Interface with welcome screen design */}
-        <div className="flex flex-col items-center w-full px-6">
-          <div className="bg-[#121212] border border-[#292929] rounded-2xl w-full md:max-w-3xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+        <div className="flex flex-col items-center w-full px-1">
+          <div className="bg-black border border-[#292929] rounded-2xl w-full md:max-w-3xl overflow-hidden">
             {/* Messages Area */}
             <div
               className="no-scrollbar flex-1 overflow-y-auto px-8 py-8 space-y-6 max-h-[500px] messages-scroll"
@@ -663,11 +527,11 @@ function ChatScreen({
 
                             {/* Typing indicator */}
                             {isTypingThis && (
-                              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
+                              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full"></div>
                             )}
                             {/* Completion glow */}
                             {isCompleted && isLatestMessage && (
-                              <div className="absolute inset-0 bg-emerald-400/20 rounded-full animate-ping"></div>
+                              <div className="absolute inset-0"></div>
                             )}
                           </div>
                         </div>
@@ -727,7 +591,7 @@ function ChatScreen({
                         {!isUser && isLatestMessage && (
                           <div className="absolute -bottom-1 -right-1">
                             {isTypingThis && (
-                              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                              <div className="w-2 h-2 bg-emerald-400 rounded-full "></div>
                             )}
                             {isCompleted && (
                               <div className="w-2 h-2 bg-emerald-400 rounded-full opacity-60"></div>
@@ -764,8 +628,8 @@ function ChatScreen({
                           />
                         </div>
                         {/* Thinking indicator rings */}
-                        <div className="absolute inset-0 rounded-full border-2 border-emerald-400/30 animate-ping"></div>
-                        <div className="absolute inset-0 rounded-full border border-emerald-400/50 animate-pulse"></div>
+                        <div className="absolute inset-0 rounded-full border-2 border-emerald-400/30"></div>
+                        <div className="absolute inset-0 rounded-full border border-emerald-400/50"></div>
                       </div>
                     </div>
 
@@ -776,11 +640,7 @@ function ChatScreen({
                       } shadow-lg hover:shadow-xl transition-all duration-300`}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-1">
-                          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce"></div>
-                        </div>
+                       
                         <span className="text-sm opacity-80 font-medium">
                           Stelar is analyzing...
                         </span>
@@ -794,7 +654,7 @@ function ChatScreen({
               )}
               <div ref={messagesEndRef} />
             </div>
-            
+
             {/* Intelligent Report Offer */}
             {showReportOffer && !isGeneratingReport && (
               <div className="px-4 pb-4 user-fade-in">
@@ -833,11 +693,11 @@ function ChatScreen({
               </div>
             )}
 
-             <div className="p-6 border-t border-[#282828]">
+            <div className="p-2 border-t border-[#282828]">
               <div className="flex items-center gap-4">
                 <div className="flex-1 relative">
                   <input
-                    className="w-full px-6 py-4 bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] placeholder-[#737373] focus:outline-none focus:border-emerald-500/50 transition-all duration-300 geist-mono"
+                    className="w-full px-6 py-4 bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] placeholder-[#737373] focus:outline-none focus:border-emerald-500/50 transition-all duration-300"
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
