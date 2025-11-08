@@ -96,27 +96,17 @@ function Navbar() {
               </span>
             </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-8">
+             <div className="lg:flex items-center gap-8">
               {/* CTA Button */}
               <button
                 type="button"
-                className="navbar-cta px-6 py-3  rounded-xl bg-rose-400 hover:bg-rose-500 text-black font-semibold text-sm tracking-wide   transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20"
+                className="navbar-cta px-6 py-3   rounded-xl bg-rose-400 hover:bg-rose-500 text-black font-semibold text-sm tracking-wide   transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20"
               >
                 Start Journey
               </button>
             </div>
 
-            {/* Mobile Controls */}
-            <div className="lg:hidden flex items-center gap-3">
-              {/* Mobile CTA Button */}
-              <button
-                type="button"
-                className="navbar-cta px-4 py-2 geist-mono rounded-4xl bg-rose-400 hover:bg-rose-500 text-black font-semibold text-sm tracking-wide uppercase transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20"
-              >
-                Start Journey
-              </button>
-            </div>
+            
           </div>
         </nav>
       </div>
