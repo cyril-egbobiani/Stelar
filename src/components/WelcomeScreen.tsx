@@ -148,7 +148,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
       <div className="absolute inset-0">
         {/* Ambient background elements */}
         <div
-          className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-emerald-500/5 to-transparent rounded-full blur-3xl"
+          className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-rose-500/5 to-transparent rounded-full blur-3xl"
           style={{
             transform: `translate(${mousePosition.x * 0.3}px, ${
               mousePosition.y * 0.3
@@ -156,7 +156,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           }}
         />
         <div
-          className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-emerald-400/3 to-transparent rounded-full blur-3xl"
+          className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-rose-400/3 to-transparent rounded-full blur-3xl"
           style={{
             transform: `translate(${-mousePosition.x * 0.2}px, ${
               -mousePosition.y * 0.2
@@ -186,7 +186,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           <div className="text-center mb-20">
             {/* New Product Badge */}
             <div className="hero-badge inline-flex items-center gap-2 px-4 py-2 mb-8 bg-[#171717] border border-[#282828] rounded-full">
-              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-rose-400 rounded-full animate-pulse" />
               <span className="text-sm text-[#AAAAAA] font-medium tracking-wide ">
                 New
               </span>
@@ -200,7 +200,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               <span className="text-[#EEEEEE]">Understand Your Mind</span>
               <br />
               <span className="text-[#EEEEEE]">Through </span>
-              <span className="bg-gradient-to-r from-emerald-400 to-emerald-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-rose-400 to-rose-500 bg-clip-text text-transparent">
                 Conversation
               </span>
             </h1>
@@ -222,13 +222,13 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                 <div className="absolute inset-4 bg-[#1A1A1A] rounded-xl border border-[#353535] p-6">
                   {/* Floating Analysis Cards */}
                   <div className="relative h-full">
-                    <div className="absolute top-2 left-4 w-20 h-12 bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 rounded-lg border border-emerald-500/20 transform rotate-3" />
-                    <div className="absolute top-6 right-4 w-20 h-12 bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-lg border border-blue-500/20 transform -rotate-2" />
+                    <div className="absolute top-2 left-4 w-20 h-12 bg-gradient-to-br from-rose-500/20 to-rose-600/10 rounded-lg border border-rose-500/20 transform rotate-3" />
+                    <div className="absolute top-6 right-4 w-20 h-12 bg-gradient-to-br from-rose-500/20 to-rose-600/10 rounded-lg border border-rose-500/20 transform -rotate-2" />
                     <div className="absolute bottom-4 left-6 w-20 h-12 bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-lg border border-purple-500/20 transform rotate-1" />
 
                     {/* Central AI Brain Icon */}
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                      <div className="w-12 h-12 bg-gradient-to-br from-rose-400 to-rose-600 rounded-xl flex items-center justify-center shadow-lg">
                         <svg
                           className="w-6 h-6 text-white"
                           fill="none"
@@ -257,8 +257,8 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
             {/* AI Analysis Feature */}
             <div className="feature-card group">
-              <div className="bg-[#121212] border border-[#292929] rounded-2xl p-8 h-full hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6">
+              <div className="bg-[#121212] border border-[#292929] rounded-2xl p-8 h-full hover:border-rose-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/10">
+                <div className="w-12 h-12 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl flex items-center justify-center mb-6">
                   <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -273,7 +273,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                     />
                   </svg>
                 </div>
-                <h3 className="text-md font-medium  geist-mono uppercase mb-4 text-[#ECECED]">
+                <h3 className="text-md font-medium    uppercase mb-4 text-[#ECECED]">
                   Personalized AI Analysis
                 </h3>
                 <p className="text-[#737373] leading-relaxed">
@@ -286,8 +286,8 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
             {/* Real-time Insights */}
             <div className="feature-card group">
-              <div className="bg-[#121212] border border-[#292929] rounded-2xl p-8 h-full hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6">
+              <div className="bg-[#121212] border border-[#292929] rounded-2xl p-8 h-full hover:border-rose-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/10">
+                <div className="w-12 h-12 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl flex items-center justify-center mb-6">
                   <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -302,7 +302,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                     />
                   </svg>
                 </div>
-                <h3 className="text-md font-medium  geist-mono geist-mono uppercase  mb-4 text-[#ECECED]">
+                <h3 className="text-md font-medium      uppercase  mb-4 text-[#ECECED]">
                   Real-time Insights
                 </h3>
                 <p className="text-[#737373] leading-relaxed">
@@ -315,7 +315,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
             {/* Privacy & Security */}
             <div className="feature-card group">
-              <div className="bg-[#121212] border border-[#292929] rounded-2xl p-8 h-full hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10">
+              <div className="bg-[#121212] border border-[#292929] rounded-2xl p-8 h-full hover:border-rose-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/10">
                 <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6">
                   <svg
                     className="w-6 h-6 text-white"
@@ -331,7 +331,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                     />
                   </svg>
                 </div>
-                <h3 className="text-md font-medium  geist-mono  mb-4  geist-mono uppercase  text-[#ECECED]">
+                <h3 className="text-md font-medium     mb-4    uppercase  text-[#ECECED]">
                   Complete Privacy
                 </h3>
                 <p className="text-[#737373] leading-relaxed">
@@ -348,8 +348,8 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             <div className="max-w-4xl mx-auto bg-[#0F0F0F] border border-[#282828] rounded-2xl p-8">
               <div className="flex items-center justify-center mb-6">
                 <div className="flex -space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full border-2 border-[#0F0F0F]" />
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full border-2 border-[#0F0F0F]" />
+                  <div className="w-8 h-8 bg-gradient-to-br from-rose-400 to-rose-600 rounded-full border-2 border-[#0F0F0F]" />
+                  <div className="w-8 h-8 bg-gradient-to-br from-rose-400 to-rose-600 rounded-full border-2 border-[#0F0F0F]" />
                   <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full border-2 border-[#0F0F0F]" />
                 </div>
                 <span className="ml-4 text-[#737373] text-sm font-medium">
@@ -371,9 +371,9 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           <div className="text-center">
             <button
               onClick={handleGetStarted}
-              className="group relative px-8 py-4 text-lg font-semibold text-black bg-emerald-400 hover:bg-emerald-500 rounded-4xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/20 mb-6"
+              className="group relative px-8 py-4 text-lg font-medium text-black bg-rose-400 hover:bg-rose-500 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20 mb-6"
             >
-              <span className="flex items-center uppercase gap-3 geist-mono">
+              <span className="flex items-center gap-3  ">
                 <span>Start Your Analysis</span>
                 <svg
                   className="w-5 h-5 group-hover:translate-x-1 transition-transform"
@@ -392,10 +392,10 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             </button>
 
             {/* Feature checkmarks */}
-            <div className="cta-features flex items-center justify-center gap-8 text-sm text-[#F2F2F2] geist-mono">
+            <div className="cta-features flex items-center justify-center gap-8 text-sm text-[#F2F2F2]  ">
               <div className="flex items-center gap-2">
                 <svg
-                  className="w-4 h-4 text-emerald-400"
+                  className="w-4 h-4 text-rose-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -411,7 +411,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               </div>
               <div className="flex items-center gap-2">
                 <svg
-                  className="w-4 h-4 text-emerald-400"
+                  className="w-4 h-4 text-rose-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -427,7 +427,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               </div>
               <div className="flex items-center gap-2">
                 <svg
-                  className="w-4 h-4 text-emerald-400"
+                  className="w-4 h-4 text-rose-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

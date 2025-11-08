@@ -101,7 +101,7 @@ function Navbar() {
               {/* CTA Button */}
               <button
                 type="button"
-                className="navbar-cta px-6 py-3 geist-mono rounded-4xl bg-emerald-400 hover:bg-emerald-500 text-black font-semibold text-sm tracking-wide uppercase transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/20"
+                className="navbar-cta px-6 py-3  rounded-xl bg-rose-400 hover:bg-rose-500 text-black font-semibold text-sm tracking-wide   transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20"
               >
                 Start Journey
               </button>
@@ -112,7 +112,7 @@ function Navbar() {
               {/* Mobile CTA Button */}
               <button
                 type="button"
-                className="navbar-cta px-4 py-2 geist-mono rounded-4xl bg-emerald-400 hover:bg-emerald-500 text-black font-semibold text-sm tracking-wide uppercase transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/20"
+                className="navbar-cta px-4 py-2 geist-mono rounded-4xl bg-rose-400 hover:bg-rose-500 text-black font-semibold text-sm tracking-wide uppercase transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20"
               >
                 Start Journey
               </button>

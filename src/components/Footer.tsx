@@ -48,8 +48,8 @@ const Footer: React.FC = () => {
               reports.
             </p>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-emerald-400">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+              <div className="flex items-center gap-2 text-rose-400">
+                <div className="w-2 h-2 bg-rose-400 rounded-full animate-pulse"></div>
                 <span className="text-sm geist-mono">Available 24/7</span>
               </div>
             </div>
@@ -64,7 +64,7 @@ const Footer: React.FC = () => {
               <li>
                 <a
                   href="#how-it-works"
-                  className="text-[#B8B8B8] hover:text-emerald-400 transition-colors duration-300 text-sm"
+                  className="text-[#B8B8B8] hover:text-rose-400 transition-colors duration-300 text-sm"
                 >
                   How It Works
                 </a>
@@ -72,7 +72,7 @@ const Footer: React.FC = () => {
               <li>
                 <a
                   href="#features"
-                  className="text-[#B8B8B8] hover:text-emerald-400 transition-colors duration-300 text-sm"
+                  className="text-[#B8B8B8] hover:text-rose-400 transition-colors duration-300 text-sm"
                 >
                   Features
                 </a>
@@ -80,7 +80,7 @@ const Footer: React.FC = () => {
               <li>
                 <a
                   href="#privacy"
-                  className="text-[#B8B8B8] hover:text-emerald-400 transition-colors duration-300 text-sm"
+                  className="text-[#B8B8B8] hover:text-rose-400 transition-colors duration-300 text-sm"
                 >
                   Privacy Policy
                 </a>
@@ -88,7 +88,7 @@ const Footer: React.FC = () => {
               <li>
                 <a
                   href="#terms"
-                  className="text-[#B8B8B8] hover:text-emerald-400 transition-colors duration-300 text-sm"
+                  className="text-[#B8B8B8] hover:text-rose-400 transition-colors duration-300 text-sm"
                 >
                   Terms of Service
                 </a>
@@ -105,7 +105,7 @@ const Footer: React.FC = () => {
               <li>
                 <a
                   href="#help"
-                  className="text-[#B8B8B8] hover:text-emerald-400 transition-colors duration-300 text-sm"
+                  className="text-[#B8B8B8] hover:text-rose-400 transition-colors duration-300 text-sm"
                 >
                   Help Center
                 </a>
@@ -113,7 +113,7 @@ const Footer: React.FC = () => {
               <li>
                 <a
                   href="#contact"
-                  className="text-[#B8B8B8] hover:text-emerald-400 transition-colors duration-300 text-sm"
+                  className="text-[#B8B8B8] hover:text-rose-400 transition-colors duration-300 text-sm"
                 >
                   Contact Us
                 </a>
@@ -121,7 +121,7 @@ const Footer: React.FC = () => {
               <li>
                 <a
                   href="#faq"
-                  className="text-[#B8B8B8] hover:text-emerald-400 transition-colors duration-300 text-sm"
+                  className="text-[#B8B8B8] hover:text-rose-400 transition-colors duration-300 text-sm"
                 >
                   FAQ
                 </a>
@@ -129,7 +129,7 @@ const Footer: React.FC = () => {
               <li>
                 <a
                   href="#crisis"
-                  className="text-[#B8B8B8] hover:text-emerald-400 transition-colors duration-300 text-sm"
+                  className="text-[#B8B8B8] hover:text-rose-400 transition-colors duration-300 text-sm"
                 >
                   Crisis Resources
                 </a>
@@ -149,7 +149,7 @@ const Footer: React.FC = () => {
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-2 px-3 py-1 bg-[#1A1A1A] border border-[#292929] rounded-lg">
                 <svg
-                  className="w-4 h-4 text-emerald-400"
+                  className="w-4 h-4 text-rose-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -171,7 +171,7 @@ const Footer: React.FC = () => {
       </div>
 
       {/* Subtle glow effect */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/20 to-transparent"></div>
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-rose-400/20 to-transparent"></div>
     </footer>
   );
 };

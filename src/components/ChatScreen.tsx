@@ -424,37 +424,25 @@ function ChatScreen({
       className="min-h-screen bg-gradient-to-b from-[#0E0E0E] to-[#121212] text-white overflow-hidden relative"
     >
       {/* Background texture and atmosphere - same as welcome screen */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 bg-black">
         {/* Ambient background elements */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-emerald-500/5 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-emerald-400/3 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-rose-500/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-rose-400/3 to-transparent rounded-full blur-3xl" />
 
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-[0.08]">
-          <div
-            className="w-full h-full"
-            style={{
-              backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-            `,
-              backgroundSize: "50px 50px",
-            }}
-          />
-        </div>
+         
       </div>
 
       <div className="relative z-10">
         {/* Header */}
         <div className="w-full flex justify-between items-center px-1 py-4 h-fit">
           <button
-            className="px-6 py-3 geist-mono bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-emerald-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10"
+            className="px-6 py-3 geist-mono bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-rose-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-rose-500/10"
             onClick={() => onNavigate("welcome")}
           >
             ← Back
           </button>
           <button
-            className="p-3 bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-emerald-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10"
+            className="p-3 bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-rose-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-rose-500/10"
             onClick={handleToggleDarkMode}
             disabled={animating}
           >
@@ -472,7 +460,7 @@ function ChatScreen({
         {conversationData.length > 0 && (
           <div className="w-full flex justify-center mb-6">
             <div className="flex items-center gap-2 text-sm text-[#737373]">
-              <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+              <div className="w-1.5 h-1.5 bg-rose-400 rounded-full" />
               <span className="geist-mono">
                 {conversationData.length < 3
                   ? "listening"
@@ -488,10 +476,10 @@ function ChatScreen({
 
         {/* Chat Interface with welcome screen design */}
         <div className="flex flex-col items-center w-full px-1">
-          <div className="bg-black border border-[#292929] rounded-2xl w-full md:max-w-3xl overflow-hidden">
+          <div className="bg-black border border-zinc-900 rounded-2xl w-full md:max-w-3xl overflow-hidden">
             {/* Messages Area */}
             <div
-              className="no-scrollbar flex-1 overflow-y-auto px-8 py-8 space-y-6 max-h-[500px] messages-scroll"
+              className="no-scrollbar flex-1 overflow-y-auto px-4 py-8 space-y-6 max-h-[500px] messages-scroll"
               id="messages-container"
             >
               {conversationData.map((msg, idx) => {
@@ -527,7 +515,7 @@ function ChatScreen({
 
                             {/* Typing indicator */}
                             {isTypingThis && (
-                              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full"></div>
+                              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-rose-400 rounded-full"></div>
                             )}
                             {/* Completion glow */}
                             {isCompleted && isLatestMessage && (
@@ -546,8 +534,8 @@ function ChatScreen({
                         } ${
                           isUser
                             ? darkMode
-                              ? "bg-gradient-to-br from-emerald-600 to-emerald-700 text-white border border-emerald-500/30"
-                              : "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white border border-emerald-400/30"
+                              ? "bg-gradient-to-br from-rose-600 to-rose-700 text-white border border-rose-500/30"
+                              : "bg-gradient-to-br from-rose-500 to-rose-600 text-white border border-rose-400/30"
                             : darkMode
                             ? "  text-white"
                             : "  text-gray-900  "
@@ -591,10 +579,10 @@ function ChatScreen({
                         {!isUser && isLatestMessage && (
                           <div className="absolute -bottom-1 -right-1">
                             {isTypingThis && (
-                              <div className="w-2 h-2 bg-emerald-400 rounded-full "></div>
+                              <div className="w-2 h-2 bg-rose-400 rounded-full "></div>
                             )}
                             {isCompleted && (
-                              <div className="w-2 h-2 bg-emerald-400 rounded-full opacity-60"></div>
+                              <div className="w-2 h-2 bg-rose-400 rounded-full opacity-60"></div>
                             )}
                           </div>
                         )}
@@ -606,7 +594,7 @@ function ChatScreen({
                           } opacity-0 group-hover/bubble:opacity-100 transition-opacity duration-300 pointer-events-none ${
                             isUser
                               ? "bg-gradient-to-t from-white/10 to-transparent"
-                              : "bg-gradient-to-t from-emerald-400/5 to-transparent"
+                              : "bg-gradient-to-t from-rose-400/5 to-transparent"
                           }`}
                         ></div>
                       </div>
@@ -620,7 +608,7 @@ function ChatScreen({
                     {/* AI Avatar with pulsing effect */}
                     <div className="flex-shrink-0 w-9 h-9 mr-3 mt-1">
                       <div className="relative">
-                        <div className="w-9 h-9 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">
+                        <div className="w-9 h-9 bg-gradient-to-br from-rose-400 to-rose-600 rounded-full flex items-center justify-center shadow-lg">
                           <img
                             src="/StelarLogo.svg"
                             alt="Stelar"
@@ -628,8 +616,8 @@ function ChatScreen({
                           />
                         </div>
                         {/* Thinking indicator rings */}
-                        <div className="absolute inset-0 rounded-full border-2 border-emerald-400/30"></div>
-                        <div className="absolute inset-0 rounded-full border border-emerald-400/50"></div>
+                        <div className="absolute inset-0 rounded-full border-2 border-rose-400/30"></div>
+                        <div className="absolute inset-0 rounded-full border border-rose-400/50"></div>
                       </div>
                     </div>
 
@@ -647,7 +635,7 @@ function ChatScreen({
                       </div>
 
                       {/* Shimmer effect */}
-                      <div className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-emerald-400/5 to-transparent opacity-0 animate-[shimmer_2s_ease-in-out_infinite] rounded-3xl rounded-bl-lg"></div>
+                      <div className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-rose-400/5 to-transparent opacity-0 animate-[shimmer_2s_ease-in-out_infinite] rounded-3xl rounded-bl-lg"></div>
                     </div>
                   </div>
                 </div>
@@ -658,16 +646,16 @@ function ChatScreen({
             {/* Intelligent Report Offer */}
             {showReportOffer && !isGeneratingReport && (
               <div className="px-4 pb-4 user-fade-in">
-                <div className="mb-3 p-4 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 rounded-xl border border-emerald-400/30">
+                <div className="mb-3 p-4 bg-gradient-to-r from-rose-500/10 to-cyan-500/10 rounded-xl border border-rose-400/30">
                   <div className="flex items-start">
-                    <span className="text-emerald-300 mr-3 flex-shrink-0 text-xl">
+                    <span className="text-rose-300 mr-3 flex-shrink-0 text-xl">
                       🧠
                     </span>
                     <div>
-                      <h3 className="text-emerald-300 font-medium mb-2">
+                      <h3 className="text-rose-300 font-medium mb-2">
                         Your Mental Health Fingerprint is Ready!
                       </h3>
-                      <p className="text-emerald-100 text-sm mb-3">
+                      <p className="text-rose-100 text-sm mb-3">
                         I've analyzed your communication patterns, thinking
                         style, and emotional expressions. Your unique mental
                         health fingerprint reveals personalized insights about
@@ -676,7 +664,7 @@ function ChatScreen({
                       <div className="flex gap-3">
                         <button
                           onClick={handleNavigateToReport}
-                          className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white rounded-lg font-medium hover:from-emerald-600 hover:to-cyan-600 transition-all duration-200 text-sm"
+                          className="px-4 py-2 bg-gradient-to-r from-rose-500 to-cyan-500 text-white rounded-lg font-medium hover:from-rose-600 hover:to-cyan-600 transition-all duration-200 text-sm"
                         >
                           View My Fingerprint 🧬
                         </button>
@@ -693,11 +681,11 @@ function ChatScreen({
               </div>
             )}
 
-            <div className="p-2 border-t border-[#282828]">
+            <div className="p-2 border-t border-zinc-900">
               <div className="flex items-center gap-4">
                 <div className="flex-1 relative">
                   <input
-                    className="w-full px-6 py-4 bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] placeholder-[#737373] focus:outline-none focus:border-emerald-500/50 transition-all duration-300"
+                    className="w-full px-4 py-4 bg-black border border-[#282828] rounded-xl text-[#E6E6E6] placeholder-[#737373] focus:outline-none focus:border-rose-500/50 transition-all duration-300"
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -719,7 +707,7 @@ function ChatScreen({
                 <button
                   className={`p-4 rounded-xl font-semibold transition-all duration-300 geist-mono ${
                     input.trim() && !isTyping
-                      ? "bg-emerald-400 hover:bg-emerald-500 text-black hover:scale-105 hover:shadow-lg hover:shadow-emerald-400/20"
+                      ? "bg-rose-400 hover:bg-rose-500 text-black hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20"
                       : "bg-[#171717] border border-[#282828] text-[#737373] cursor-not-allowed"
                   }`}
                   onClick={handleSend}
@@ -759,7 +747,7 @@ function ChatScreen({
                         <button
                           key={idx}
                           onClick={() => setInput(suggestion)}
-                          className="flex-shrink-0 px-4 py-2 bg-[#171717] border border-[#282828] text-[#737373] text-sm rounded-lg hover:bg-[#1F1F1F] hover:border-emerald-500/30 hover:text-emerald-400 transition-all duration-300 geist-mono"
+                          className="flex-shrink-0 px-4 py-2 bg-[#171717] border border-[#282828] text-[#737373] text-sm rounded-lg hover:bg-[#1F1F1F] hover:border-rose-500/30 hover:text-rose-400 transition-all duration-300 geist-mono"
                         >
                           {suggestion}
                         </button>
@@ -774,15 +762,15 @@ function ChatScreen({
         {/* Auto-generation notification */}
         {isGeneratingReport && (
           <div className="px-6 pb-6">
-            <div className="bg-[#121212] border border-emerald-500/30 rounded-2xl p-6 text-center max-w-md mx-auto">
-              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <div className="bg-[#121212] border border-rose-500/30 rounded-2xl p-6 text-center max-w-md mx-auto">
+              <div className="w-12 h-12 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <div className="flex items-center space-x-1">
                   <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                   <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
                   <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce"></div>
                 </div>
               </div>
-              <h3 className="text-lg font-medium geist-mono uppercase text-emerald-400 mb-2">
+              <h3 className="text-lg font-medium geist-mono uppercase text-rose-400 mb-2">
                 Creating Your Report
               </h3>
               <p className="text-[#737373]">
