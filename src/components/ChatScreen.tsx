@@ -32,7 +32,14 @@ const TypewriterText = ({
     }
   }, [currentIndex, text, delay, onComplete]);
 
-  return <span>{displayText}</span>;
+  return (
+    <span>
+      {displayText}
+      {currentIndex < text.length && (
+        <span className="inline-block w-0.5 h-4 bg-rose-400 ml-0.5 animate-pulse"></span>
+      )}
+    </span>
+  );
 };
 
 interface ChatScreenProps {
@@ -44,6 +51,7 @@ interface ChatScreenProps {
   conversationId: string | null;
   setConversationId: React.Dispatch<React.SetStateAction<string | null>>;
   setReport: (report: WellbeingReport) => void;
+  userName: string;
 }
 
 function ChatScreen({
@@ -53,9 +61,10 @@ function ChatScreen({
   conversationId,
   setConversationId,
   setReport,
+  userName,
 }: ChatScreenProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-   const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(true);
   const iconRef = useRef<HTMLDivElement>(null);
   const [animating, setAnimating] = useState(false);
   const [iconState, setIconState] = useState(darkMode ? "sun" : "moon");
@@ -103,34 +112,72 @@ function ChatScreen({
 
   const startNewConversation = async () => {
     try {
+      console.log("🚀 Starting new conversation with:", {
+        userId,
+        userName: userName || "there",
+        url: `${import.meta.env.VITE_BACKEND_URL}/api/conversations/start`,
+      });
+
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/conversations/start`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId }),
+          body: JSON.stringify({
+            userId,
+            userName: userName || "there", // fallback if somehow no name
+          }),
         }
       );
 
+      console.log("📡 Start conversation response status:", response.status);
+      console.log("📡 Start conversation response ok:", response.ok);
+
       if (response.ok) {
         const data = await response.json();
+        console.log("📋 Start conversation response data:", data);
         setConversationId(data.conversation.id);
 
-        // Only add backend greeting if provided
-        if (data.greeting) {
-          setConversationData([
-            {
-              id: generateUniqueId(),
-              text: data.greeting,
-              sender: "stelar",
-              timestamp: Date.now(),
-            },
-          ]);
-        }
+        // Add personalized greeting
+        const personalizedGreeting = data.greeting
+          ? data.greeting
+          : `Hi ${
+              userName || "there"
+            }! I'm Stelar, your AI mental health companion. I'm here to listen and help you understand your thoughts and feelings better. How are you doing today?`;
+
+        console.log("💬 Setting initial greeting:", personalizedGreeting);
+
+        setConversationData([
+          {
+            id: generateUniqueId(),
+            text: personalizedGreeting,
+            sender: "stelar",
+            timestamp: Date.now(),
+          },
+        ]);
+      } else {
+        console.error(
+          "❌ Failed to start conversation, status:",
+          response.status
+        );
       }
     } catch (error) {
       console.error("Failed to start conversation:", error);
-      // No fallback greeting - wait for user to initiate
+      // Fallback personalized greeting even if backend fails
+      const fallbackGreeting = `Hi ${
+        userName || "there"
+      }! I'm Stelar, your AI mental health companion. I'm here to listen and help you understand your thoughts and feelings better. How are you doing today?`;
+
+      console.log("🔄 Using fallback greeting:", fallbackGreeting);
+
+      setConversationData([
+        {
+          id: generateUniqueId(),
+          text: fallbackGreeting,
+          sender: "stelar",
+          timestamp: Date.now(),
+        },
+      ]);
     }
   };
 
@@ -277,9 +324,16 @@ function ChatScreen({
 
       try {
         let response;
-
         if (conversationId) {
           // Use new conversation endpoint
+          console.log("📤 Sending to conversation endpoint:", {
+            conversationId,
+            message: input,
+            url: `${
+              import.meta.env.VITE_BACKEND_URL
+            }/api/conversations/message`,
+          });
+
           response = await fetch(
             `${import.meta.env.VITE_BACKEND_URL}/api/conversations/message`,
             {
@@ -293,6 +347,11 @@ function ChatScreen({
           );
         } else {
           // Fallback to legacy chat endpoint
+          console.log("📤 Sending to legacy chat endpoint:", {
+            message: input,
+            url: `${import.meta.env.VITE_BACKEND_URL}/chat`,
+          });
+
           response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/chat`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -300,10 +359,19 @@ function ChatScreen({
           });
         }
 
+        console.log("📡 Backend response status:", response.status);
+        console.log("📡 Backend response ok:", response.ok);
+
         const data = await response.json();
+        console.log("📋 Backend response data:", data);
 
         if (data.success && data.assistantMessage) {
           // New format from conversation endpoint
+          console.log(
+            "✅ Processing conversation endpoint response:",
+            data.assistantMessage
+          );
+
           const replyMessage: Message = {
             id: data.assistantMessage.id,
             timestamp: data.assistantMessage.timestamp,
@@ -311,11 +379,14 @@ function ChatScreen({
             sender: "stelar",
           };
 
+          console.log("➕ Adding reply message:", replyMessage);
+
           // Mark as typing for typewriter effect
           setTypingMessageIds((prev) => new Set([...prev, replyMessage.id]));
           setConversationData((msgs) => [...msgs, replyMessage]);
 
           if (data.nextQuestion) {
+            console.log("❓ Adding follow-up question:", data.nextQuestion);
             const questionMessage: Message = {
               id: generateUniqueId(),
               timestamp: Date.now(),
@@ -332,6 +403,11 @@ function ChatScreen({
           }
         } else if (data.reply) {
           // Legacy format from chat endpoint
+          console.log(
+            "✅ Processing legacy chat endpoint response:",
+            data.reply
+          );
+
           const replyMessage: Message = {
             id: generateUniqueId(),
             timestamp: Date.now(),
@@ -339,11 +415,17 @@ function ChatScreen({
             sender: "stelar",
           };
 
+          console.log("➕ Adding legacy reply message:", replyMessage);
+
           // Mark as typing for typewriter effect
           setTypingMessageIds((prev) => new Set([...prev, replyMessage.id]));
           setConversationData((msgs) => [...msgs, replyMessage]);
 
           if (data.nextQuestion) {
+            console.log(
+              "❓ Adding legacy follow-up question:",
+              data.nextQuestion
+            );
             const questionMessage: Message = {
               id: generateUniqueId(),
               timestamp: Date.now(),
@@ -358,6 +440,8 @@ function ChatScreen({
               setConversationData((msgs) => [...msgs, questionMessage]);
             }, data.reply.length * 25 + 500);
           }
+        } else {
+          console.warn("❌ No valid response format found:", data);
         }
       } catch (error) {
         console.error("Chat error:", error);
@@ -428,21 +512,19 @@ function ChatScreen({
         {/* Ambient background elements */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-rose-500/5 to-transparent rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-rose-400/3 to-transparent rounded-full blur-3xl" />
-
-         
       </div>
 
       <div className="relative z-10">
         {/* Header */}
-        <div className="w-full flex justify-between items-center px-1 py-4 h-fit">
+        <div className="w-full flex justify-between items-center px-2 py-4 h-fit">
           <button
-            className="px-6 py-3 geist-mono bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-rose-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-rose-500/10"
+            className="pr-6 pl-5 py-3 geist-mono bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-rose-500/30 transition-all duration-300 ease-out hover:shadow-lg hover:shadow-rose-500/10 hover:scale-105 active:scale-95"
             onClick={() => onNavigate("welcome")}
           >
             ← Back
           </button>
           <button
-            className="p-3 bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-rose-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-rose-500/10"
+            className="p-3 bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-rose-500/30 transition-all duration-300 ease-out hover:shadow-lg hover:shadow-rose-500/10 hover:scale-105 active:scale-95"
             onClick={handleToggleDarkMode}
             disabled={animating}
           >
@@ -460,22 +542,22 @@ function ChatScreen({
         {conversationData.length > 0 && (
           <div className="w-full flex justify-center mb-6">
             <div className="flex items-center gap-2 text-sm text-[#737373]">
-              <div className="w-1.5 h-1.5 bg-rose-400 rounded-full" />
-              <span className="geist-mono">
+              <div className="w-1.5 h-1.5 bg-rose-400 rounded-full gentle-pulse" />
+              <span className="geist-mono transition-all duration-300 hover:text-rose-300">
                 {conversationData.length < 3
-                  ? "listening"
+                  ? `listening to ${userName}`
                   : conversationData.length < 6
-                  ? "analyzing patterns"
+                  ? `analyzing ${userName}'s patterns`
                   : conversationData.length < 8
-                  ? "forming insights"
-                  : "ready to generate report"}
+                  ? `forming insights about ${userName}`
+                  : `${userName}'s report ready`}
               </span>
             </div>
           </div>
         )}
 
         {/* Chat Interface with welcome screen design */}
-        <div className="flex flex-col items-center w-full px-1">
+        <div className="flex flex-col items-center w-full px-2">
           <div className="bg-black border border-zinc-900 rounded-2xl w-full md:max-w-3xl overflow-hidden">
             {/* Messages Area */}
             <div
@@ -493,10 +575,7 @@ function ChatScreen({
                     key={msg.id}
                     className={`flex ${
                       isUser ? "justify-end" : "justify-start"
-                    } animate-in slide-in-from-bottom-4 duration-500 ease-out`}
-                    style={{
-                      animationDelay: `${idx * 100}ms`,
-                    }}
+                    } message-enter`}
                   >
                     <div
                       className={`flex items-start max-w-[85%] group ${
@@ -515,7 +594,7 @@ function ChatScreen({
 
                             {/* Typing indicator */}
                             {isTypingThis && (
-                              <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-rose-400 rounded-full"></div>
+                              <div className="absolute -bottom-1 -right-1 w-2 h-2 bg-rose-400 rounded-full"></div>
                             )}
                             {/* Completion glow */}
                             {isCompleted && isLatestMessage && (
@@ -529,8 +608,8 @@ function ChatScreen({
                       <div
                         className={`relative group/bubble ${
                           isUser
-                            ? "px-4 py-3 rounded-3xl rounded-br-lg shadow-lg hover:shadow-xl transition-all duration-300"
-                            : "rounded-3xl rounded-bl-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                            ? "px-4 py-3 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300"
+                            : "rounded-3xl  shadow-lg hover:shadow-xl transition-all duration-300"
                         } ${
                           isUser
                             ? darkMode
@@ -539,7 +618,7 @@ function ChatScreen({
                             : darkMode
                             ? "  text-white"
                             : "  text-gray-900  "
-                        } hover:scale-[1.02] transform-gpu`}
+                        } hover:scale-[1.02] hover:shadow-xl transform-gpu transition-all duration-300 ease-out`}
                       >
                         {/* Message content with typewriter for AI */}
                         <div className="leading-relaxed">
@@ -575,18 +654,8 @@ function ChatScreen({
                           })}
                         </div>
 
-                        {/* Message state indicators */}
-                        {!isUser && isLatestMessage && (
-                          <div className="absolute -bottom-1 -right-1">
-                            {isTypingThis && (
-                              <div className="w-2 h-2 bg-rose-400 rounded-full "></div>
-                            )}
-                            {isCompleted && (
-                              <div className="w-2 h-2 bg-rose-400 rounded-full opacity-60"></div>
-                            )}
-                          </div>
-                        )}
-
+                      
+ 
                         {/* Subtle gradient overlay on hover */}
                         <div
                           className={`absolute inset-0 rounded-3xl ${
@@ -616,8 +685,8 @@ function ChatScreen({
                           />
                         </div>
                         {/* Thinking indicator rings */}
-                        <div className="absolute inset-0 rounded-full border-2 border-rose-400/30"></div>
-                        <div className="absolute inset-0 rounded-full border border-rose-400/50"></div>
+                        <div className="absolute inset-0 rounded-full border-2 border-rose-400/30 gentle-pulse"></div>
+                        <div className="absolute inset-0 rounded-full border border-rose-400/50 gentle-pulse-delayed"></div>
                       </div>
                     </div>
 
@@ -628,14 +697,13 @@ function ChatScreen({
                       } shadow-lg hover:shadow-xl transition-all duration-300`}
                     >
                       <div className="flex items-center space-x-3">
-                       
                         <span className="text-sm opacity-80 font-medium">
-                          Stelar is analyzing...
+                          Listening...
                         </span>
                       </div>
 
                       {/* Shimmer effect */}
-                      <div className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-rose-400/5 to-transparent opacity-0 animate-[shimmer_2s_ease-in-out_infinite] rounded-3xl rounded-bl-lg"></div>
+                      <div className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-rose-400/5 to-transparent shimmer-effect rounded-3xl rounded-bl-lg"></div>
                     </div>
                   </div>
                 </div>
@@ -685,18 +753,18 @@ function ChatScreen({
               <div className="flex items-center gap-4">
                 <div className="flex-1 relative">
                   <input
-                    className="w-full px-4 py-4 bg-black border border-[#282828] rounded-xl text-[#E6E6E6] placeholder-[#737373] focus:outline-none focus:border-rose-500/50 transition-all duration-300"
+                    className="w-full px-4 py-4 bg-black border border-[#282828] rounded-xl text-[#E6E6E6] placeholder-[#737373] focus:outline-none focus:border-rose-500/50 focus:shadow-lg focus:shadow-rose-500/10 transition-all duration-300 ease-out"
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={
                       conversationData.length === 0
-                        ? "Start your mental health journey..."
+                        ? `Hi ${userName}! Tell me what's on your mind...`
                         : conversationData.length < 4
-                        ? "Share what's on your mind today..."
+                        ? `${userName}, share what you're feeling today...`
                         : conversationData.length < 8
-                        ? "How do you handle challenges?"
-                        : "What patterns do you notice about yourself?"
+                        ? `How do you handle challenges, ${userName}?`
+                        : `${userName}, what patterns do you notice about yourself?`
                     }
                     onKeyDown={(e) => e.key === "Enter" && handleSend()}
                     disabled={isTyping}
@@ -705,9 +773,9 @@ function ChatScreen({
 
                 {/* Send Button */}
                 <button
-                  className={`p-4 rounded-xl font-semibold transition-all duration-300 geist-mono ${
+                  className={`p-4 rounded-xl font-semibold transition-all duration-300 ease-out geist-mono ${
                     input.trim() && !isTyping
-                      ? "bg-rose-400 hover:bg-rose-500 text-black hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20"
+                      ? "bg-rose-400 hover:bg-rose-500 text-black hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20 active:scale-95"
                       : "bg-[#171717] border border-[#282828] text-[#737373] cursor-not-allowed"
                   }`}
                   onClick={handleSend}
@@ -715,9 +783,9 @@ function ChatScreen({
                 >
                   {isTyping ? (
                     <div className="flex items-center space-x-1">
-                      <div className="w-1.5 h-1.5 bg-current rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                      <div className="w-1.5 h-1.5 bg-current rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                      <div className="w-1.5 h-1.5 bg-current rounded-full animate-bounce"></div>
+                      <div className="w-1.5 h-1.5 bg-current rounded-full smooth-bounce-1"></div>
+                      <div className="w-1.5 h-1.5 bg-current rounded-full smooth-bounce-2"></div>
+                      <div className="w-1.5 h-1.5 bg-current rounded-full smooth-bounce-3"></div>
                     </div>
                   ) : (
                     <svg
@@ -747,7 +815,7 @@ function ChatScreen({
                         <button
                           key={idx}
                           onClick={() => setInput(suggestion)}
-                          className="flex-shrink-0 px-4 py-2 bg-[#171717] border border-[#282828] text-[#737373] text-sm rounded-lg hover:bg-[#1F1F1F] hover:border-rose-500/30 hover:text-rose-400 transition-all duration-300 geist-mono"
+                          className="flex-shrink-0 px-4 py-2 bg-[#171717] border border-[#282828] text-[#737373] text-sm rounded-lg hover:bg-[#1F1F1F] hover:border-rose-500/30 hover:text-rose-400 transition-all duration-300 ease-out geist-mono"
                         >
                           {suggestion}
                         </button>
@@ -763,11 +831,11 @@ function ChatScreen({
         {isGeneratingReport && (
           <div className="px-6 pb-6">
             <div className="bg-[#121212] border border-rose-500/30 rounded-2xl p-6 text-center max-w-md mx-auto">
-              <div className="w-12 h-12 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl flex items-center justify-center mx-auto mb-4 float-gentle">
                 <div className="flex items-center space-x-1">
-                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce"></div>
+                  <div className="w-1.5 h-1.5 bg-white rounded-full smooth-bounce-1"></div>
+                  <div className="w-1.5 h-1.5 bg-white rounded-full smooth-bounce-2"></div>
+                  <div className="w-1.5 h-1.5 bg-white rounded-full smooth-bounce-3"></div>
                 </div>
               </div>
               <h3 className="text-lg font-medium geist-mono uppercase text-rose-400 mb-2">

@@ -5,23 +5,46 @@ import ReportScreen from "./components/ReportScreen";
 import ReceiptScreen from "./components/ReceiptScreen";
 import ConclusionScreen from "./components/ConclusionScreen";
 import Navbar from "./components/Navbar";
+import UserDetailsScreen from "./components/UserDetailsScreen";
 import type { Message, WellbeingReport } from "./types";
 import WelcomeScreen from "./components/WelcomeScreen";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<
-    "welcome" | "about" | "chat" | "report" | "receipt" | "conclusion"
+    | "welcome"
+    | "about"
+    | "userDetails"
+    | "chat"
+    | "report"
+    | "receipt"
+    | "conclusion"
   >("welcome");
   const [conversationData, setConversationData] = useState<Message[]>([]);
   const [wellbeingReport, setWellbeingReport] =
     useState<WellbeingReport | null>(null);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>(() => {
+    // Check if user name already exists in localStorage
+    return localStorage.getItem("stelar_user_name") || "";
+  });
 
   const handleNavigation = (
-    screen: "welcome" | "about" | "chat" | "report" | "receipt" | "conclusion"
+    screen:
+      | "welcome"
+      | "about"
+      | "userDetails"
+      | "chat"
+      | "report"
+      | "receipt"
+      | "conclusion"
   ) => {
     setCurrentScreen(screen);
+  };
+
+  const handleUserNameSubmit = (name: string) => {
+    setUserName(name);
+    handleNavigation("chat");
   };
 
   const renderScreen = () => {
@@ -31,7 +54,14 @@ function App() {
           <>
             <Navbar />
             <WelcomeScreen
-              onStartQuestionnaire={() => handleNavigation("chat")}
+              onStartQuestionnaire={() => {
+                // Skip user details if name already exists
+                if (userName) {
+                  handleNavigation("chat");
+                } else {
+                  handleNavigation("userDetails");
+                }
+              }}
             />
             {/* <WelcomeScreen onNavigate={handleNavigation} /> */}
             {/* <AboutScreen /> */}
@@ -44,16 +74,24 @@ function App() {
             <AboutScreen />
           </>
         );
+      case "userDetails":
+        return (
+          <UserDetailsScreen
+            onSubmit={handleUserNameSubmit}
+            onBack={() => handleNavigation("welcome")}
+          />
+        );
       case "chat":
         return (
           <>
-             <ChatScreen
+            <ChatScreen
               onNavigate={handleNavigation}
               setConversationData={setConversationData}
               conversationData={conversationData}
               conversationId={conversationId}
               setConversationId={setConversationId}
               setReport={setWellbeingReport}
+              userName={userName}
             />
           </>
         );

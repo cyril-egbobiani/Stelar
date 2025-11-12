@@ -105,8 +105,6 @@ function Navbar() {
                 Start Journey
               </button>
             </div>
-
-            
           </div>
         </nav>
       </div>
