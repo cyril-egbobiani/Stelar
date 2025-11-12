@@ -100,7 +100,7 @@ function Navbar() {
               {/* CTA Button */}
               <button
                 type="button"
-                className="navbar-cta px-6 py-3   rounded-xl bg-rose-400 hover:bg-rose-500 text-black font-semibold text-sm tracking-wide   transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20"
+                className="navbar-cta px-6 py-3   rounded-xl bg-black border border-rose-800 hover:bg-rose-500 text-white font-semibold text-sm tracking-wide   transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20"
               >
                 Start Journey
               </button>

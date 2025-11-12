@@ -210,7 +210,27 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               AI-powered conversation analysis reveals your unique mental health
               patterns and provides personalized insights for better wellness.
             </p>
-
+            <button
+              onClick={handleGetStarted}
+              className="group relative px-8 py-4 text-lg font-medium text-black bg-rose-400 hover:bg-rose-500 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20 mb-12"
+            >
+              <span className="flex items-center gap-3  ">
+                <span>Start Your Analysis</span>
+                <svg
+                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </span>
+            </button>
             {/* Stelar Folder Visual Element */}
             <div className="stelar-folder relative mx-auto mb-16 w-[400px] h-[280px]">
               {/* Folder Base */}
