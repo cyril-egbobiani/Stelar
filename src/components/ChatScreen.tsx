@@ -1,46 +1,15 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import gsap from "gsap";
 import type { Message, WellbeingReport } from "../types";
 import {
   analyzeConversationReadiness,
   shouldAutoGenerateReport,
   shouldOfferReport,
 } from "../utils/conversationReadiness";
-
-// Typewriter effect component for AI messages
-const TypewriterText = ({
-  text,
-  delay = 20,
-  onComplete,
-}: {
-  text: string;
-  delay?: number;
-  onComplete?: () => void;
-}) => {
-  const [displayText, setDisplayText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    if (currentIndex < text.length) {
-      const timer = setTimeout(() => {
-        setDisplayText((prev) => prev + text[currentIndex]);
-        setCurrentIndex((prev) => prev + 1);
-      }, delay);
-      return () => clearTimeout(timer);
-    } else if (onComplete) {
-      onComplete();
-    }
-  }, [currentIndex, text, delay, onComplete]);
-
-  return (
-    <span>
-      {displayText}
-      {currentIndex < text.length && (
-        <span className="inline-block w-0.5 h-4 bg-rose-400 ml-0.5 animate-pulse"></span>
-      )}
-    </span>
-  );
-};
+import ChatHeader from "./ChatScreen/ChatHeader";
+import ChatMessages from "./ChatScreen/ChatMessages";
+import ChatInput from "./ChatScreen/ChatInput";
+import ChatSuggestions from "./ChatScreen/ChatSuggestions";
+import ChatReportNotification from "./ChatScreen/ChatReportNotification";
 
 interface ChatScreenProps {
   onNavigate: (
@@ -64,12 +33,8 @@ function ChatScreen({
   userName,
 }: ChatScreenProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [darkMode, setDarkMode] = useState(true);
-  const iconRef = useRef<HTMLDivElement>(null);
-  const [animating, setAnimating] = useState(false);
-  const [iconState, setIconState] = useState(darkMode ? "sun" : "moon");
-
   // Enhanced interaction states
+  // messagesEndRef is already declared above, remove duplicate
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const [showReportOffer, setShowReportOffer] = useState(false);
   const [hasOfferedReport, setHasOfferedReport] = useState(false);
@@ -107,7 +72,14 @@ function ChatScreen({
     if (conversationData.length === 0 && !conversationId) {
       startNewConversation();
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversationData, conversationId]);
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, [conversationData]);
 
   const startNewConversation = async () => {
@@ -458,50 +430,6 @@ function ChatScreen({
     }
   };
 
-  const handleToggleDarkMode = () => {
-    if (animating) return;
-    setAnimating(true);
-
-    // Apple-inspired sophisticated toggle animation
-    const masterToggle = gsap.timeline({
-      onComplete: () => setAnimating(false),
-    });
-
-    // Enhanced animation sequence with 3D transforms
-    masterToggle
-      .to(iconRef.current, {
-        scale: 0.5,
-        rotationY: 180,
-        filter: "blur(8px) brightness(0.5)",
-        duration: 0.25,
-        ease: "power2.in",
-      })
-      .call(() => {
-        setDarkMode((prev) => !prev);
-        setIconState((prev) => (prev === "sun" ? "moon" : "sun"));
-      })
-      .to(iconRef.current, {
-        scale: 1.1,
-        rotationY: 360,
-        filter: "blur(0px) brightness(1.2)",
-        duration: 0.3,
-        ease: "back.out(1.7)",
-      })
-      .to(iconRef.current, {
-        scale: 1,
-        filter: "brightness(1)",
-        duration: 0.15,
-        ease: "power2.out",
-      });
-
-    // Animate container background with smooth transition
-    gsap.to(containerRef.current, {
-      backgroundColor: darkMode ? "#f9fafb" : "#000000",
-      duration: 0.5,
-      ease: "power2.out",
-    });
-  };
-
   return (
     <div
       ref={containerRef}
@@ -516,312 +444,77 @@ function ChatScreen({
 
       <div className="relative z-10">
         {/* Header */}
-        <div className="w-full flex justify-between items-center px-2 py-4 h-fit">
-          <button
-            className="pr-6 pl-5 py-3 geist-mono bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-rose-500/30 transition-all duration-300 ease-out hover:shadow-lg hover:shadow-rose-500/10 hover:scale-105 active:scale-95"
-            onClick={() => onNavigate("welcome")}
-          >
-            ← Back
-          </button>
-          <button
-            className="p-3 bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-rose-500/30 transition-all duration-300 ease-out hover:shadow-lg hover:shadow-rose-500/10 hover:scale-105 active:scale-95"
-            onClick={handleToggleDarkMode}
-            disabled={animating}
-          >
-            <div ref={iconRef}>
-              {iconState === "sun" ? (
-                <img width={24} src="/Sun.svg" alt="Light mode" />
-              ) : (
-                <img width={24} src="/Solar.svg" alt="Dark mode" />
-              )}
-            </div>
-          </button>
-        </div>
-
-        {/* Minimal Progress Indicator */}
-        {conversationData.length > 0 && (
-          <div className="w-full flex justify-center mb-6">
-            <div className="flex items-center gap-2 text-sm text-[#737373]">
-              <div className="w-1.5 h-1.5 bg-rose-400 rounded-full gentle-pulse" />
-              <span className="geist-mono transition-all duration-300 hover:text-rose-300">
-                {conversationData.length < 3
-                  ? `listening to ${userName}`
-                  : conversationData.length < 6
-                  ? `analyzing ${userName}'s patterns`
-                  : conversationData.length < 8
-                  ? `forming insights about ${userName}`
-                  : `${userName}'s report ready`}
-              </span>
-            </div>
-          </div>
-        )}
+        <ChatHeader
+          onNavigate={onNavigate}
+          conversationData={conversationData}
+          userName={userName}
+        />
 
         {/* Chat Interface with welcome screen design */}
         <div className="flex flex-col items-center w-full px-2">
           <div className="bg-black border border-zinc-900 rounded-2xl w-full md:max-w-3xl overflow-hidden">
             {/* Messages Area */}
-            <div
-              className="no-scrollbar flex-1 overflow-y-auto px-4 py-8 space-y-6 max-h-[500px] messages-scroll"
-              id="messages-container"
-            >
-              {conversationData.map((msg, idx) => {
-                const isLatestMessage = idx === conversationData.length - 1;
-                const isUser = msg.sender === "user";
-                const isTypingThis = typingMessageIds.has(msg.id);
-                const isCompleted = completedMessageIds.has(msg.id);
-
-                return (
-                  <div
-                    key={msg.id}
-                    className={`flex ${
-                      isUser ? "justify-end" : "justify-start"
-                    } message-enter`}
-                  >
-                    <div
-                      className={`flex items-start max-w-[85%] group ${
-                        isUser ? "flex-row-reverse" : "flex-row"
-                      }`}
-                    >
-                      {/* Avatar with micro-interactions */}
-                      {!isUser && (
-                        <div className="flex-shrink-0 w-9 h-9 mr-3 mt-1">
-                          <div className="relative">
-                            <img
-                              src="/StelarLogo.svg"
-                              alt="Stelar"
-                              className="w-5 h-5 group-hover:scale-110 transition-transform duration-200"
-                            />
-
-                            {/* Typing indicator */}
-                            {isTypingThis && (
-                              <div className="absolute -bottom-1 -right-1 w-2 h-2 bg-rose-400 rounded-full"></div>
-                            )}
-                            {/* Completion glow */}
-                            {isCompleted && isLatestMessage && (
-                              <div className="absolute inset-0"></div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Message Bubble with enhanced design */}
-                      <div
-                        className={`relative group/bubble ${
-                          isUser
-                            ? "px-4 py-3 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300"
-                            : "rounded-3xl  shadow-lg hover:shadow-xl transition-all duration-300"
-                        } ${
-                          isUser
-                            ? darkMode
-                              ? "bg-gradient-to-br from-rose-600 to-rose-700 text-white border border-rose-500/30"
-                              : "bg-gradient-to-br from-rose-500 to-rose-600 text-white border border-rose-400/30"
-                            : darkMode
-                            ? "  text-white"
-                            : "  text-gray-900  "
-                        } hover:scale-[1.02] hover:shadow-xl transform-gpu transition-all duration-300 ease-out`}
-                      >
-                        {/* Message content with typewriter for AI */}
-                        <div className="leading-relaxed">
-                          {!isUser && isLatestMessage && !isCompleted ? (
-                            <TypewriterText
-                              text={msg.text}
-                              delay={25}
-                              onComplete={() => {
-                                setCompletedMessageIds(
-                                  (prev) => new Set([...prev, msg.id])
-                                );
-                                setTypingMessageIds((prev) => {
-                                  const newSet = new Set(prev);
-                                  newSet.delete(msg.id);
-                                  return newSet;
-                                });
-                              }}
-                            />
-                          ) : (
-                            <span>{msg.text}</span>
-                          )}
-                        </div>
-
-                        {/* Timestamp with better positioning */}
-                        <div
-                          className={`text-xs mt-2 opacity-60 transition-opacity group-hover/bubble:opacity-80 ${
-                            isUser ? "text-right" : "text-left"
-                          }`}
-                        >
-                          {new Date(msg.timestamp).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </div>
-
-                      
- 
-                        {/* Subtle gradient overlay on hover */}
-                        <div
-                          className={`absolute inset-0 rounded-3xl ${
-                            isUser ? "rounded-br-lg" : "rounded-bl-lg"
-                          } opacity-0 group-hover/bubble:opacity-100 transition-opacity duration-300 pointer-events-none ${
-                            isUser
-                              ? "bg-gradient-to-t from-white/10 to-transparent"
-                              : "bg-gradient-to-t from-rose-400/5 to-transparent"
-                          }`}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-              {isTyping && (
-                <div className="flex justify-start animate-in slide-in-from-bottom-2 duration-300">
-                  <div className="flex items-start max-w-[85%] group">
-                    {/* AI Avatar with pulsing effect */}
-                    <div className="flex-shrink-0 w-9 h-9 mr-3 mt-1">
-                      <div className="relative">
-                        <div className="w-9 h-9 bg-gradient-to-br from-rose-400 to-rose-600 rounded-full flex items-center justify-center shadow-lg">
-                          <img
-                            src="/StelarLogo.svg"
-                            alt="Stelar"
-                            className="w-5 h-5"
-                          />
-                        </div>
-                        {/* Thinking indicator rings */}
-                        <div className="absolute inset-0 rounded-full border-2 border-rose-400/30 gentle-pulse"></div>
-                        <div className="absolute inset-0 rounded-full border border-rose-400/50 gentle-pulse-delayed"></div>
-                      </div>
-                    </div>
-
-                    {/* Enhanced Typing Bubble */}
-                    <div
-                      className={`px-5 py-4 rounded-3xl rounded-bl-lg relative backdrop-blur-xl ${
-                        darkMode ? "  text-white" : "  text-gray-900"
-                      } shadow-lg hover:shadow-xl transition-all duration-300`}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <span className="text-sm opacity-80 font-medium">
-                          Listening...
-                        </span>
-                      </div>
-
-                      {/* Shimmer effect */}
-                      <div className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-rose-400/5 to-transparent shimmer-effect rounded-3xl rounded-bl-lg"></div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
+            <ChatMessages
+              messages={conversationData}
+              typingMessageIds={typingMessageIds}
+              completedMessageIds={completedMessageIds}
+              setCompletedMessageIds={setCompletedMessageIds}
+              setTypingMessageIds={setTypingMessageIds}
+              messagesEndRef={messagesEndRef}
+            />
 
             {/* Intelligent Report Offer */}
             {showReportOffer && !isGeneratingReport && (
               <div className="px-4 pb-4 user-fade-in">
                 <div className="mb-3 p-4 bg-gradient-to-r from-rose-500/10 to-cyan-500/10 rounded-xl border border-rose-400/30">
-                  <div className="flex items-start">
-                    <span className="text-rose-300 mr-3 flex-shrink-0 text-xl">
-                      🧠
-                    </span>
-                    <div>
-                      <h3 className="text-rose-300 font-medium mb-2">
-                        Your Mental Health Fingerprint is Ready!
-                      </h3>
-                      <p className="text-rose-100 text-sm mb-3">
-                        I've analyzed your communication patterns, thinking
-                        style, and emotional expressions. Your unique mental
-                        health fingerprint reveals personalized insights about
-                        how you process thoughts and emotions.
-                      </p>
-                      <div className="flex gap-3">
-                        <button
-                          onClick={handleNavigateToReport}
-                          className="px-4 py-2 bg-gradient-to-r from-rose-500 to-cyan-500 text-white rounded-lg font-medium hover:from-rose-600 hover:to-cyan-600 transition-all duration-200 text-sm"
-                        >
-                          View My Fingerprint 🧬
-                        </button>
-                        <button
-                          onClick={() => setShowReportOffer(false)}
-                          className="px-4 py-2 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-all duration-200 text-sm"
-                        >
-                          Continue chatting
-                        </button>
-                      </div>
+                  <div>
+                    <h3 className="text-rose-300 font-medium mb-2">
+                      Your Mental Health Fingerprint is Ready!
+                    </h3>
+                    <p className="text-rose-100 text-sm mb-3">
+                      I've analyzed your communication patterns, thinking style,
+                      and emotional expressions. Your unique mental health
+                      fingerprint reveals personalized insights about how you
+                      process thoughts and emotions.
+                    </p>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={handleNavigateToReport}
+                        className="px-4 py-2 bg-gradient-to-r from-rose-500 to-cyan-500 text-white rounded-lg font-medium hover:from-rose-600 hover:to-cyan-600 transition-all duration-200 text-sm"
+                      >
+                        View My Fingerprint 🧬
+                      </button>
+                      <button
+                        onClick={() => setShowReportOffer(false)}
+                        className="px-4 py-2 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-all duration-200 text-sm"
+                      >
+                        Continue chatting
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             )}
 
+            {/* Chat Input and Suggestions always visible below messages */}
             <div className="p-2 border-t border-zinc-900">
-              <div className="flex items-center gap-4">
-                <div className="flex-1 relative">
-                  <input
-                    className="w-full px-4 py-4 bg-black border border-[#282828] rounded-xl text-[#E6E6E6] placeholder-[#737373] focus:outline-none focus:border-rose-500/50 focus:shadow-lg focus:shadow-rose-500/10 transition-all duration-300 ease-out"
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder={
-                      conversationData.length === 0
-                        ? `Hi ${userName}! Tell me what's on your mind...`
-                        : conversationData.length < 4
-                        ? `${userName}, share what you're feeling today...`
-                        : conversationData.length < 8
-                        ? `How do you handle challenges, ${userName}?`
-                        : `${userName}, what patterns do you notice about yourself?`
-                    }
-                    onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                    disabled={isTyping}
-                  />
-                </div>
-
-                {/* Send Button */}
-                <button
-                  className={`p-4 rounded-xl font-semibold transition-all duration-300 ease-out geist-mono ${
-                    input.trim() && !isTyping
-                      ? "bg-rose-400 hover:bg-rose-500 text-black hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20 active:scale-95"
-                      : "bg-[#171717] border border-[#282828] text-[#737373] cursor-not-allowed"
-                  }`}
-                  onClick={handleSend}
-                  disabled={!input.trim() || isTyping}
-                >
-                  {isTyping ? (
-                    <div className="flex items-center space-x-1">
-                      <div className="w-1.5 h-1.5 bg-current rounded-full smooth-bounce-1"></div>
-                      <div className="w-1.5 h-1.5 bg-current rounded-full smooth-bounce-2"></div>
-                      <div className="w-1.5 h-1.5 bg-current rounded-full smooth-bounce-3"></div>
-                    </div>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      viewBox="0 0 256 256"
-                    >
-                      <path d="M231.4,44.34s0,.1,0,.15l-58.2,191.94a15.88,15.88,0,0,1-14,11.51q-.69.06-1.38.06a15.86,15.86,0,0,1-14.42-9.15L107,164.15a4,4,0,0,1,.77-4.58l57.92-57.92a8,8,0,0,0-11.31-11.31L96.43,148.26a4,4,0,0,1-4.58.77L17.08,112.64a16,16,0,0,1,2.49-29.8l191.94-58.2.15,0A16,16,0,0,1,231.4,44.34Z"></path>
-                    </svg>
-                  )}
-                </button>
-              </div>
-
-              {/* Smart suggestions */}
+              <ChatInput
+                input={input}
+                setInput={setInput}
+                onSend={handleSend}
+                disabled={isTyping}
+              />
               {conversationData.length > 0 &&
                 conversationData.length < 3 &&
                 !isTyping && (
-                  <div className="mt-4">
-                    <div className="flex gap-2 overflow-x-auto">
-                      {[
-                        "Tell me about a recent challenge",
-                        "How was your day?",
-                        "What's been on your mind?",
-                      ].map((suggestion, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setInput(suggestion)}
-                          className="flex-shrink-0 px-4 py-2 bg-[#171717] border border-[#282828] text-[#737373] text-sm rounded-lg hover:bg-[#1F1F1F] hover:border-rose-500/30 hover:text-rose-400 transition-all duration-300 ease-out geist-mono"
-                        >
-                          {suggestion}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  <ChatSuggestions
+                    suggestions={[
+                      "Tell me about a recent challenge",
+                      "How was your day?",
+                      "What's been on your mind?",
+                    ]}
+                    setInput={setInput}
+                  />
                 )}
             </div>
           </div>
@@ -829,24 +522,10 @@ function ChatScreen({
 
         {/* Auto-generation notification */}
         {isGeneratingReport && (
-          <div className="px-6 pb-6">
-            <div className="bg-[#121212] border border-rose-500/30 rounded-2xl p-6 text-center max-w-md mx-auto">
-              <div className="w-12 h-12 bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl flex items-center justify-center mx-auto mb-4 float-gentle">
-                <div className="flex items-center space-x-1">
-                  <div className="w-1.5 h-1.5 bg-white rounded-full smooth-bounce-1"></div>
-                  <div className="w-1.5 h-1.5 bg-white rounded-full smooth-bounce-2"></div>
-                  <div className="w-1.5 h-1.5 bg-white rounded-full smooth-bounce-3"></div>
-                </div>
-              </div>
-              <h3 className="text-lg font-medium geist-mono uppercase text-rose-400 mb-2">
-                Creating Your Report
-              </h3>
-              <p className="text-[#737373]">
-                Analyzing communication patterns • Mapping thinking style •
-                Detecting emotional signature
-              </p>
-            </div>
-          </div>
+          <ChatReportNotification
+            onShowReport={handleNavigateToReport}
+            userName={userName}
+          />
         )}
       </div>
     </div>

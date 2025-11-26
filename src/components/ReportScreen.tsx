@@ -12,11 +12,18 @@ import ReportDisplay from "./ReportDisplay";
 
 interface ReportScreenProps {
   onNavigate: (
-    screen: "welcome" | "about" | "chat" | "report" | "receipt" | "conclusion"
+    screen:
+      | "welcome"
+      | "about"
+      | "userDetails"
+      | "chat"
+      | "report"
+      | "receipt"
+      | "conclusion"
   ) => void;
-  conversationData: Message[];
   setWellbeingReport: (report: WellbeingReport) => void;
-  conversationId: string | null;
+  conversationData?: Message[];
+  conversationId?: string | null;
 }
 
 function ReportScreen({
@@ -68,14 +75,14 @@ function ReportScreen({
 
       // Fallback to local analysis if backend fails or no conversationId
       await new Promise((resolve) => setTimeout(resolve, 3000));
-      const report = analyzeConversation(conversationData);
+      const report = analyzeConversation(conversationData ?? []);
       setGeneratedReport(report);
       setWellbeingReport(report);
     } catch (error) {
       console.error("Report generation error:", error);
       // Fallback to local analysis
       await new Promise((resolve) => setTimeout(resolve, 3000));
-      const report = analyzeConversation(conversationData);
+      const report = analyzeConversation(conversationData ?? []);
       setGeneratedReport(report);
       setWellbeingReport(report);
     }
