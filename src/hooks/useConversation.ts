@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import type { Message, WellbeingReport } from "../types";
+import { useState } from "react";
+import type { Message } from "../types";
 
 export function useConversation(initialMessages: Message[] = []) {
   const [conversationData, setConversationData] =
