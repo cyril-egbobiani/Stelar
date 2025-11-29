@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import UserDetailsScreen from "./components/UserDetailsScreen";
 import type { Message, WellbeingReport } from "./types";
 import WelcomeScreen from "./components/WelcomeScreen";
+import EngagementOptions from "./components/EngagementOptions";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
     | "report"
     | "receipt"
     | "conclusion"
+    | "engage"
   >("welcome");
   const [conversationData, setConversationData] = useState<Message[]>([]);
   const [wellbeingReport, setWellbeingReport] =
@@ -38,6 +40,7 @@ function App() {
       | "report"
       | "receipt"
       | "conclusion"
+      | "engage"
   ) => {
     setCurrentScreen(screen);
   };
@@ -55,16 +58,15 @@ function App() {
             <Navbar />
             <WelcomeScreen
               onStartQuestionnaire={() => {
-                // Skip user details if name already exists
-                if (userName) {
-                  handleNavigation("chat");
-                } else {
-                  handleNavigation("userDetails");
-                }
+                handleNavigation("engage");
               }}
             />
-            {/* <WelcomeScreen onNavigate={handleNavigation} /> */}
-            {/* <AboutScreen /> */}
+          </>
+        );
+      case "engage":
+        return (
+          <>
+             <EngagementOptions onNavigate={handleNavigation} />
           </>
         );
       case "about":
@@ -131,7 +133,7 @@ function App() {
       default:
         return (
           <WelcomeScreen
-            onStartQuestionnaire={() => handleNavigation("chat")}
+            onStartQuestionnaire={() => handleNavigation("engage")}
           />
         );
     }

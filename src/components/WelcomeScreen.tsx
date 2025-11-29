@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+// Removed shadcn/ui imports
 import { gsap } from "gsap";
 import { TextPlugin } from "gsap/TextPlugin";
 import Footer from "./Footer";
@@ -185,18 +186,18 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           {/* Hero Section */}
           <div className="text-center mb-20">
             {/* New Product Badge */}
-            <div className="hero-badge inline-flex items-center gap-2 px-4 py-2 mb-8 bg-[#171717] border border-[#282828] rounded-full">
+            <div className=" inline-flex items-center gap-2 px-4 py-2 mb-6 bg-[#171717] border border-[#282828] rounded-full">
               <div className="w-2 h-2 bg-rose-400 rounded-full animate-pulse" />
-              <span className="text-sm text-[#AAAAAA] font-medium tracking-wide ">
+              <span className="text-sm text-[#AAAAAA]   tracking-wide ">
                 New
               </span>
-              <span className="text-sm text-[#F2F2F2] font-medium ">
+              <span className="text-sm text-[#F2F2F2] ">
                 AI Mental Health Analysis
               </span>
             </div>
 
             {/* Main Hero Title */}
-            <h1 className="text-3xl md:text-5xl mb-6 leadiing-14  tracking-tight">
+            <h1 className="text-3xl md:text-5xl  mb-6 leadiing-14  tracking-tight">
               <span className="text-[#EEEEEE]">Understand Your Mind</span>
               <br />
               <span className="text-[#EEEEEE]">Through </span>
@@ -206,13 +207,14 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             </h1>
 
             {/* Hero Subtitle */}
-            <p className="hero-subtitle text-lg text-[#AAAAAA] max-w-xl mx-auto leading-relaxed mb-12">
+            <p className=" text-lg text-[#AAAAAA] max-w-xl mx-auto leading-relaxed mb-6">
               AI-powered conversation analysis reveals your unique mental health
               patterns and provides personalized insights for better wellness.
             </p>
+            {/* Call to Action Button */}
             <button
               onClick={handleGetStarted}
-              className="group relative px-8 py-4 text-lg font-medium text-black bg-rose-400 hover:bg-rose-500 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20 mb-12"
+              className="group relative px-8 py-4 text-md font-medium text-black bg-rose-400 hover:bg-rose-500 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20 mb-12"
             >
               <span className="flex items-center gap-3  ">
                 <span>Start Your Analysis</span>
@@ -231,6 +233,9 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                 </svg>
               </span>
             </button>
+
+            {/* Modal/Section for engagement options using shadcn/ui Dialog */}
+            {/* Engagement options modal removed; navigation now handled by page */}
             {/* Stelar Folder Visual Element */}
             <div className="stelar-folder relative mx-auto mb-16 w-[400px] h-[280px]">
               {/* Folder Base */}
@@ -389,9 +394,10 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
           {/* Call to Action Section */}
           <div className="text-center">
+            {/* Call to Action Button */}
             <button
               onClick={handleGetStarted}
-              className="group relative px-8 py-4 text-lg font-medium text-black bg-rose-400 hover:bg-rose-500 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20 mb-6"
+              className="group relative px-8 py-4 text-md font-medium text-black bg-rose-400 hover:bg-rose-500 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20 mb-12"
             >
               <span className="flex items-center gap-3  ">
                 <span>Start Your Analysis</span>
@@ -411,55 +417,77 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               </span>
             </button>
 
-            {/* Feature checkmarks */}
-            <div className="cta-features flex items-center justify-center gap-8 text-sm text-[#F2F2F2]  ">
-              <div className="flex items-center gap-2">
-                <svg
-                  className="w-4 h-4 text-rose-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                <span className="text-left">Completely anonymous & secure</span>
+            {/* Responsive feature tiles without checkmark */}
+            <div className="cta-features grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-center items-center text-sm text-[#F2F2F2] w-full max-w-2xl mx-auto">
+              {/* Tile 1: Anonymous & Secure */}
+              <div className="flex flex-col items-center bg-[#181818] border border-[#292929] rounded-xl px-5 py-4 w-full shadow-md hover:shadow-rose-400/10 transition-all">
+                <div className="mb-2">
+                  <svg
+                    className="w-7 h-7 text-purple-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                </div>
+                <span className="text-center font-medium">
+                  Completely anonymous & secure
+                </span>
               </div>
-              <div className="flex items-center gap-2">
-                <svg
-                  className="w-4 h-4 text-rose-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                <span className="text-left">No signup required</span>
+              {/* Tile 2: No Signup Required */}
+              <div className="flex flex-col items-center bg-[#181818] border border-[#292929] rounded-xl px-5 py-4 w-full shadow-md hover:shadow-rose-400/10 transition-all">
+                <div className="mb-2">
+                  <svg
+                    className="w-7 h-7 text-cyan-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </div>
+                <span className="text-center font-medium">
+                  No signup required
+                </span>
               </div>
-              <div className="flex items-center gap-2">
-                <svg
-                  className="w-4 h-4 text-rose-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                <span className="text-left">Results in ~10 minutes</span>
+              {/* Tile 3: Fast Results */}
+              <div className="flex flex-col items-center bg-[#181818] border border-[#292929] rounded-xl px-5 py-4 w-full shadow-md hover:shadow-rose-400/10 transition-all">
+                <div className="mb-2">
+                  <svg
+                    className="w-7 h-7 text-yellow-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    />
+                  </svg>
+                </div>
+                <span className="text-center font-medium">
+                  Results in {"<"} 10 minutes
+                </span>
               </div>
             </div>
           </div>

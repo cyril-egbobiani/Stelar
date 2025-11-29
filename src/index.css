@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
 html {
   overscroll-behavior: none;
 }
@@ -416,3 +420,5 @@ div {
 .feature-card-border {
   border-color: rgb(209, 213, 219);
 }
+
+ 
