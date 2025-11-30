@@ -10,6 +10,7 @@ import type { Message, WellbeingReport } from "./types";
 import WelcomeScreen from "./components/WelcomeScreen";
 import EngagementOptions from "./components/EngagementOptions";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import SelfReflectionScreen from "./components/SelfReflectionScreen";
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<
@@ -20,6 +21,7 @@ function App() {
     | "report"
     | "receipt"
     | "conclusion"
+    | "selfReflection"
     | "engage"
   >("welcome");
   const [conversationData, setConversationData] = useState<Message[]>([]);
@@ -40,6 +42,7 @@ function App() {
       | "report"
       | "receipt"
       | "conclusion"
+      | "selfReflection"
       | "engage"
   ) => {
     setCurrentScreen(screen);
@@ -55,7 +58,11 @@ function App() {
       case "welcome":
         return (
           <>
-            <Navbar />
+            {/* <UserDetailsScreen
+            onSubmit={handleUserNameSubmit}
+            onBack={() => handleNavigation("welcome")}
+          /> */}
+             <Navbar />
             <WelcomeScreen
               onStartQuestionnaire={() => {
                 handleNavigation("engage");
@@ -63,10 +70,20 @@ function App() {
             />
           </>
         );
+      case "selfReflection":
+        return (
+          <>
+            <SelfReflectionScreen
+              onNavigate={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
+          </>
+        );
       case "engage":
         return (
           <>
-             <EngagementOptions onNavigate={handleNavigation} />
+            <EngagementOptions onNavigate={handleNavigation} />
           </>
         );
       case "about":

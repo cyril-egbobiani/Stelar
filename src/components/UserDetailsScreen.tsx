@@ -97,7 +97,7 @@ function UserDetailsScreen({ onSubmit, onBack }: UserDetailsScreenProps) {
           <div ref={formRef} className="w-full max-w-md">
             {/* Header */}
             <div className="text-center mb-12">
-              <div className="w-16 h-16 bg-transparent flex items-center justify-center mx-auto mb-6 shadow-lg shadow-rose-500/20">
+              <div className="w-16 h-16 bg-transparent flex items-center justify-center mx-auto mb-6 ">
                  <img
                   src="/StelarLogo.svg"
                   alt="Stelar"
@@ -124,7 +124,7 @@ function UserDetailsScreen({ onSubmit, onBack }: UserDetailsScreenProps) {
                     onKeyDown={handleKeyDown}
                     placeholder="Your name"
                     disabled={isSubmitting}
-                    className="w-full bg-transparent text-2xl text-[#E6E6E6] placeholder-[#737373] focus:outline-none focus:placeholder-rose-100/24 transition-all duration-300 pb-4 border-0 geist-mono font-bold tracking-wide"
+                    className="w-full bg-transparent text-2xl text-[#E6E6E6] placeholder-[#737373] focus:outline-none focus:placeholder-rose-100/24 transition-all duration-300 pb-4 border-0  tracking-wide"
                     autoFocus
                     autoComplete="given-name"
                   />
@@ -174,7 +174,7 @@ function UserDetailsScreen({ onSubmit, onBack }: UserDetailsScreenProps) {
               <button
                 type="submit"
                 disabled={name.trim().length < 2 || isSubmitting}
-                className={`w-full py-4 px-6 rounded-xl font-semibold text-lg  tracking-wide transition-all duration-300 ${
+                className={`w-full py-4 px-6 rounded-xl font-medium text-lg  tracking-wide transition-all duration-300 ${
                   name.trim().length >= 2 && !isSubmitting
                     ? "bg-rose-400 hover:bg-rose-500 text-black hover:scale-[1.02] hover:shadow-lg hover:shadow-rose-400/20"
                     : "bg-[#171717] border border-[#282828] text-[#737373] cursor-not-allowed"

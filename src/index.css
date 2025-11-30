@@ -1,7 +1,8 @@
 @import "tailwindcss";
+@import "tailwind-squircle2/css";
 
+/* Now add plugins, custom variants, and other CSS below */
 @plugin "tailwindcss-animate";
-
 @custom-variant dark (&:is(.dark *));
 
 html {
@@ -420,5 +421,3 @@ div {
 .feature-card-border {
   border-color: rgb(209, 213, 219);
 }
-
- 

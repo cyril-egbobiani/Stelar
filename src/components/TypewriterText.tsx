@@ -8,48 +8,51 @@ interface TypewriterTextProps {
 
 const TypewriterText: React.FC<TypewriterTextProps> = ({
   text = "",
-  delay = 0,
+  delay = 9, // Fast default speed (ms per char)
   onComplete,
 }) => {
   const safeText = typeof text === "string" ? text : String(text ?? "");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const intervalRef = useRef<number | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const lastTimeRef = useRef<number>(0);
 
   useEffect(() => {
-    if (currentIndex < safeText.length) {
-      intervalRef.current = window.setTimeout(() => {
-        setCurrentIndex((prev) => prev + 1);
-      }, delay);
-      return () => {
-        if (intervalRef.current) clearTimeout(intervalRef.current);
-      };
-    } else {
-      if (onComplete) onComplete();
+    let cancelled = false;
+    function step(now: number) {
+      if (cancelled) return;
+      if (currentIndex < safeText.length) {
+        if (!lastTimeRef.current) lastTimeRef.current = now;
+        if (now - lastTimeRef.current >= delay) {
+          setCurrentIndex((prev) => prev + 1);
+          lastTimeRef.current = now;
+        }
+        rafRef.current = requestAnimationFrame(step);
+      } else {
+        if (onComplete) onComplete();
+      }
     }
+    rafRef.current = requestAnimationFrame(step);
+    return () => {
+      cancelled = true;
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      lastTimeRef.current = 0;
+    };
   }, [currentIndex, safeText, delay, onComplete]);
-
-  const revealWindow = 10;
 
   return (
     <span className="relative inline-block">
       {safeText.split("").map((char, idx) => {
         if (idx >= currentIndex) return null;
-        const animProgress = Math.min(1, (currentIndex - idx) / revealWindow);
-        const ease = (t: number) => 1 - Math.pow(1 - t, 2.5);
-        const eased = ease(animProgress);
         return (
           <span
             key={idx}
             className="inline-block"
             style={{
-              opacity: 0.4 + 0.6 * eased,
-              filter: `blur(${(1 - eased) * 1.2}px)`,
-              transform: `scale(${0.98 + 0.02 * eased}) translateY(${
-                (1 - eased) * 4
-              }px)`,
-              transition:
-                "opacity 0.7s cubic-bezier(.4,.8,.2,1), filter 1.2s cubic-bezier(.4,.8,.2,1), transform 0.7s cubic-bezier(.4,.8,.2,1)",
-              willChange: "opacity, filter, transform",
+              opacity: 1,
+              filter: "none",
+              transform: "none",
+              transition: "none",
+              willChange: "auto",
             }}
           >
             {char === " " ? (

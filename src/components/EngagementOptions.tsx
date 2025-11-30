@@ -8,19 +8,7 @@ const options = [
     title: "Self-Reflection Prompt",
     description: "Answer guided prompts to reflect on your wellbeing.",
     image: "/Solar.svg",
-    route: "/self-reflection",
-  },
-  {
-    title: "Mood Journal",
-    description: "Log your thoughts and emotions in a private journal.",
-    image: "/Solar.svg",
-    route: "/journal",
-  },
-  {
-    title: "Wellbeing Quiz",
-    description: "Take a quick quiz to assess your mental health.",
-    image: "/Solar.svg",
-    route: "/quiz",
+    route: "/selfReflection",
   },
   {
     title: "Chat with AI",
@@ -41,6 +29,7 @@ type EngagementOptionsProps = {
       | "receipt"
       | "conclusion"
       | "engage"
+      | "selfReflection"
   ) => void;
 };
 
@@ -49,66 +38,57 @@ const EngagementOptions: React.FC<EngagementOptionsProps> = ({
 }) => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#18181B] to-[#121212] text-white flex flex-col items-center justify-center px-4 py-12">
-      <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center tracking-tight">
-        Choose How You Want to Engage
-      </h1>
-      <p className="text-lg text-white/70 mb-10 text-center max-w-xl mx-auto">
-        Select an option below to begin your personalized wellbeing journey.
-      </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
-        {options.map((opt) => (
-          <div
-            key={opt.title}
-            className="group relative rounded-2xl p-8 flex flex-col items-center justify-between min-h-[320px] backdrop-blur-lg bg-black border border-[#232326] transition-all duration-300 hover:scale-[1.03] hover:shadow-rose-400/30 cursor-pointer"
-            style={{
-              background: "rgba(24, 24, 27, 0.85)",
-            }}
-            onClick={() => {
-              // Map route to screen name
-              switch (opt.route) {
-                case "/chat":
-                  onNavigate("chat");
-                  break;
-                case "/self-reflection":
-                  onNavigate("about");
-                  break;
-                case "/journal":
-                  onNavigate("userDetails");
-                  break;
-                case "/quiz":
-                  onNavigate("report");
-                  break;
-                default:
-                  onNavigate("welcome");
-              }
-            }}
-          >
-            {/* Glowing Icon Circle */}
-            <div className="flex items-center justify-center mb-6">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center  group-hover:shadow-rose-500/60 transition-all duration-300">
-                <img
-                  src={opt.image}
-                  alt={opt.title}
-                  className="w-12 h-12 drop-shadow-xl opacity-90"
-                />
-              </div>
-            </div>
-            <h2 className="text-2xl font-semibold mb-2 text-white text-center tracking-tight">
-              {opt.title}
-            </h2>
-            <p className="text-md text-white/70 text-center mb-6">
-              {opt.description}
-            </p>
-            <span className="mt-auto text-sm font-medium text-white bg-rose-500/80 px-6 py-2 rounded-full shadow-md transition-all duration-300 group-hover:bg-rose-400/90 group-hover:scale-105">
-              Explore
-            </span>
-            {/* Glassmorphism overlay for premium effect */}
+      <div className="w-full max-w-xl mx-auto flex flex-col items-center justify-center">
+        <h1 className="text-3xl md:text-4xl text-center mb-2 tracking-tight">
+          Before we start help us to
+          <br />
+          understand you better
+        </h1>
+        <div className="w-20 h-1 bg-white/10 rounded-full mb-8" />
+        <p className="text-base text-white/60 mb-10 text-center max-w-lg">
+          Select an option below to begin your personalized wellbeing journey.
+        </p>
+        <div className="w-full flex flex-col gap-6">
+          {options.map((opt) => (
             <div
-              className="absolute inset-0 rounded-2xl pointer-events-none"
-             
-            />
-          </div>
-        ))}
+              key={opt.title}
+              className="group relative rounded-xl px-6 py-7 flex flex-col items-start justify-center bg-zinc-900 border border-[#232326] medium-lg transition-all duration-300 hover:scale-[1.02] hover:medium-rose-400/20 cursor-pointer"
+              onClick={() => {
+                // Map route to screen name
+                switch (opt.route) {
+                  case "/chat":
+                    onNavigate("chat");
+                    break;
+                  case "/selfReflection":
+                    onNavigate("selfReflection");
+                    break;
+                  default:
+                    onNavigate("welcome");
+                }
+              }}
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center medium-rose-400/30 medium-md">
+                  <img
+                    src={opt.image}
+                    alt={opt.title}
+                    className="w-7 h-7 drop-medium-xl opacity-90"
+                  />
+                </div>
+                <h2 className="text-lg font-medium text-white tracking-tight">
+                  {opt.title}
+                </h2>
+              </div>
+              <p className="text-sm text-white/70 mb-2">{opt.description}</p>
+              <button
+                className="mt-4 w-full py-3 rounded-lg bg-white text-black font-medium text-base medium transition-all duration-200 hover:bg-rose-500 hover:text-white"
+                style={{ letterSpacing: "0.01em" }}
+              >
+                Explore
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
