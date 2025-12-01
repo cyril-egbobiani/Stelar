@@ -1,19 +1,14 @@
 import React from "react";
 
-// Example illustrations (replace with your own SVGs or images)
-// SVGs are now referenced from public folder, no import needed
-
 const options = [
   {
-    title: "Self-Reflection Prompt",
-    description: "Answer guided prompts to reflect on your wellbeing.",
-    image: "/Solar.svg",
+    title: "Self-Reflection",
+    description: "Answer a few prompts to explore your thoughts and feelings.",
     route: "/selfReflection",
   },
   {
-    title: "Chat with AI",
-    description: "Have a conversation with our AI for instant insights.",
-    image: "/Solar.svg",
+    title: "Chat Analysis",
+    description: "Have a conversation and get insights from our AI.",
     route: "/chat",
   },
 ];
@@ -37,59 +32,80 @@ const EngagementOptions: React.FC<EngagementOptionsProps> = ({
   onNavigate,
 }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#18181B] to-[#121212] text-white flex flex-col items-center justify-center px-4 py-12">
-      <div className="w-full max-w-xl mx-auto flex flex-col items-center justify-center">
-        <h1 className="text-3xl md:text-4xl text-center mb-2 tracking-tight">
-          Before we start help us to
-          <br />
-          understand you better
-        </h1>
-        <div className="w-20 h-1 bg-white/10 rounded-full mb-8" />
-        <p className="text-base text-white/60 mb-10 text-center max-w-lg">
-          Select an option below to begin your personalized wellbeing journey.
-        </p>
-        <div className="w-full flex flex-col gap-6">
-          {options.map((opt) => (
-            <div
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      {/* Header */}
+      <header className="p-4">
+        <button
+          onClick={() => onNavigate("welcome")}
+          className="p-2 text-zinc-500 hover:text-white"
+          aria-label="Go back"
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+      </header>
+
+      {/* Main content */}
+      <main className="flex-1 flex flex-col justify-center px-4 pb-12 max-w-lg mx-auto w-full">
+        <div className="mb-10">
+          <h1 className="text-2xl mb-3">How would you like to start?</h1>
+          <p className="text-zinc-500">
+            Choose an option that feels right for you.
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          {options.map((opt, index) => (
+            <button
               key={opt.title}
-              className="group relative rounded-xl px-6 py-7 flex flex-col items-start justify-center bg-zinc-900 border border-[#232326] medium-lg transition-all duration-300 hover:scale-[1.02] hover:medium-rose-400/20 cursor-pointer"
               onClick={() => {
-                // Map route to screen name
-                switch (opt.route) {
-                  case "/chat":
-                    onNavigate("chat");
-                    break;
-                  case "/selfReflection":
-                    onNavigate("selfReflection");
-                    break;
-                  default:
-                    onNavigate("welcome");
-                }
+                if (opt.route === "/chat") onNavigate("chat");
+                else if (opt.route === "/selfReflection")
+                  onNavigate("selfReflection");
               }}
+              className="w-full text-left p-5 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors"
             >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center medium-rose-400/30 medium-md">
-                  <img
-                    src={opt.image}
-                    alt={opt.title}
-                    className="w-7 h-7 drop-medium-xl opacity-90"
-                  />
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h2 className="text-lg text-white mb-1">{opt.title}</h2>
+                  <p className="text-sm text-zinc-500">{opt.description}</p>
                 </div>
-                <h2 className="text-lg font-medium text-white tracking-tight">
-                  {opt.title}
-                </h2>
+                <div className="mt-1 text-zinc-600">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </div>
               </div>
-              <p className="text-sm text-white/70 mb-2">{opt.description}</p>
-              <button
-                className="mt-4 w-full py-3 rounded-lg bg-white text-black font-medium text-base medium transition-all duration-200 hover:bg-rose-500 hover:text-white"
-                style={{ letterSpacing: "0.01em" }}
-              >
-                Explore
-              </button>
-            </div>
+              {index === 0 && (
+                <span className="inline-block mt-3 text-xs text-rose-400 bg-rose-500/10 px-2 py-1 rounded">
+                  Recommended
+                </span>
+              )}
+            </button>
           ))}
         </div>
-      </div>
+      </main>
     </div>
   );
 };

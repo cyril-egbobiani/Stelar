@@ -166,7 +166,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         />
 
         {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-[0.08]">
+        <div className="absolute inset-0 opacity-[0.05]">
           <div
             className="w-full h-full"
             style={{
@@ -186,7 +186,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           {/* Hero Section */}
           <div className="text-center mb-20">
             {/* New Product Badge */}
-            <div className=" inline-flex items-center gap-2 px-4 py-2 mb-6 bg-[#171717] border border-[#282828] rounded-full">
+            <div className=" inline-flex items-center gap-2 px-3 py-1 mb-6 bg-[#171717] border border-[#282828] rounded-full">
               <div className="w-2 h-2 bg-rose-400 rounded-full animate-pulse" />
               <span className="text-sm text-[#AAAAAA]   tracking-wide ">
                 New
@@ -214,12 +214,12 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             {/* Call to Action Button */}
             <button
               onClick={handleGetStarted}
-              className="group relative px-8 py-4 text-md font-medium text-black bg-rose-400 hover:bg-rose-500 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20 mb-12"
+              className="group relative px-8 py-4 text-md font-medium text-rose-100 bg-rose-500 hover:bg-rose-600 rounded-2xl transition-all duration-300 hover:scale-105  mb-12"
             >
               <span className="flex items-center gap-3  ">
-                <span>Start Your Analysis</span>
+                <span>Start Your Journey</span>
                 <svg
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                  className="w-5 h-5 group-hover:translate-x-1 bg-amber-200 text-amber-600 rounded-full transition-transform"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -395,14 +395,14 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           {/* Call to Action Section */}
           <div className="text-center">
             {/* Call to Action Button */}
-            <button
+           <button
               onClick={handleGetStarted}
-              className="group relative px-8 py-4 text-md font-medium text-black bg-rose-400 hover:bg-rose-500 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20 mb-12"
+              className="group relative px-8 py-4 text-md font-medium text-rose-100 bg-rose-500 hover:bg-rose-600 rounded-2xl transition-all duration-300 hover:scale-105 mb-12"
             >
               <span className="flex items-center gap-3  ">
-                <span>Start Your Analysis</span>
+                <span>Start Your Journey</span>
                 <svg
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                  className="w-5 h-5 group-hover:translate-x-1 bg-amber-200 text-amber-600 rounded-full transition-transform"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -416,7 +416,6 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                 </svg>
               </span>
             </button>
-
             {/* Responsive feature tiles without checkmark */}
             <div className="cta-features grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-center items-center text-sm text-[#F2F2F2] w-full max-w-2xl mx-auto">
               {/* Tile 1: Anonymous & Secure */}

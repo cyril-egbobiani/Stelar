@@ -82,7 +82,7 @@ function Navbar() {
     <>
       {/* Modern Navbar with sophisticated design */}
       <div className="fixed top-0 left-0 right-0 z-50">
-        <nav className="navbar-container max-w-7xl mx-auto bg-[#141414]/95 backdrop-blur-xl border border-b-[#282828] shadow-2xl shadow-black/20">
+        <nav className="navbar-container max-w-7xl mx-auto bg-[#141414]/15 backdrop-blur-xl border border-b-[#282828] shadow-2xl shadow-black/20">
           <div className="flex items-center justify-between px-6 lg:px-8 py-4">
             {/* Logo Section */}
             <div className="navbar-logo flex items-center gap-3 cursor-pointer group">
@@ -100,7 +100,7 @@ function Navbar() {
               {/* CTA Button */}
               <button
                 type="button"
-                className="navbar-cta px-6 py-3   rounded-xl bg-black border border-rose-800 hover:bg-rose-500 text-white font-semibold text-sm tracking-wide   transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20"
+                className="navbar-cta px-6 py-3   rounded-xl bg-rose-500 border border-rose-800 hover:bg-rose-600 text-rose-100 font-semibold text-sm tracking-wide   transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-rose-400/20"
               >
                 Start Journey
               </button>

@@ -1,10 +1,12 @@
 import React from "react";
 
+import type { Message } from "../../types";
+
 interface ChatHeaderProps {
   onNavigate: (
     screen: "welcome" | "about" | "chat" | "report" | "conclusion"
   ) => void;
-  conversationData: any[];
+  conversationData: Message[];
   userName: string;
 }
 
@@ -13,13 +15,28 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   conversationData,
   userName,
 }) => (
-  <div className="w-full flex justify-between items-center px-2 py-4 h-fit">
-    <button
-      className="pr-6 pl-5 py-3 geist-mono bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-rose-500/30 transition-all duration-300 ease-out hover:shadow-lg hover:shadow-rose-500/10 hover:scale-105 active:scale-95"
+  <div className="w-full flex justify-between items-center px-4 py-4 h-fit">
+   
+     <button
       onClick={() => onNavigate("welcome")}
-    >
-      ← Back
-    </button>
+          className="p-2 text-zinc-500 hover:text-white"
+          aria-label="Go back"
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+   
     {conversationData.length > 0 && (
       <div className="mx-6 flex justify-center ">
         <div className="flex items-center gap-2 text-sm text-[#737373]">

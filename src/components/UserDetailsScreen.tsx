@@ -67,7 +67,7 @@ function UserDetailsScreen({ onSubmit, onBack }: UserDetailsScreenProps) {
         <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-rose-400/3 to-transparent rounded-full blur-3xl" />
 
         {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-[0.08]">
+        <div className="absolute inset-0 opacity-[0.06]">
           <div
             className="w-full h-full"
             style={{
@@ -84,12 +84,25 @@ function UserDetailsScreen({ onSubmit, onBack }: UserDetailsScreenProps) {
       <div className="relative z-10">
         {/* Header */}
         <div className="w-full flex justify-start items-center px-6 py-4">
-          <button
-            className="px-6 py-3 geist-mono bg-[#171717] border border-[#282828] rounded-xl text-[#E6E6E6] hover:bg-[#1F1F1F] hover:border-rose-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-rose-500/10"
+           <button
             onClick={onBack}
+          className="p-2 text-zinc-500 hover:text-white"
+          aria-label="Go back"
+        >
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            ← Back
-          </button>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
         </div>
 
         {/* Main Content */}
@@ -98,14 +111,10 @@ function UserDetailsScreen({ onSubmit, onBack }: UserDetailsScreenProps) {
             {/* Header */}
             <div className="text-center mb-12">
               <div className="w-16 h-16 bg-transparent flex items-center justify-center mx-auto mb-6 ">
-                 <img
-                  src="/StelarLogo.svg"
-                  alt="Stelar"
-                  className="w-8 h-8"
-                />
+                <img src="/StelarLogo.svg" alt="Stelar" className="w-8 h-8" />
               </div>
 
-              <h1 className="text-3xl    text-[#E6E6E6] mb-4 tracking-wide">
+              <h1 className="text-3xl    text-white mb-4 tracking-tight">
                 Let's get to know you
               </h1>
             </div>
@@ -124,7 +133,7 @@ function UserDetailsScreen({ onSubmit, onBack }: UserDetailsScreenProps) {
                     onKeyDown={handleKeyDown}
                     placeholder="Your name"
                     disabled={isSubmitting}
-                    className="w-full bg-transparent text-2xl text-[#E6E6E6] placeholder-[#737373] focus:outline-none focus:placeholder-rose-100/24 transition-all duration-300 pb-4 border-0  tracking-wide"
+                    className="w-full bg-transparent text-2xl tracking-tight text-[#E6E6E6] placeholder-[#737373] focus:outline-none focus:placeholder-rose-100/24 transition-all duration-300 pb-4 border-0 "
                     autoFocus
                     autoComplete="given-name"
                   />
@@ -155,17 +164,17 @@ function UserDetailsScreen({ onSubmit, onBack }: UserDetailsScreenProps) {
                   <div className="flex justify-between items-center text-sm">
                     <span
                       className={`geist-mono transition-colors duration-300 ${
-                        name.trim().length >= 2
+                        name.trim().length >= 2 && name.trim().length <= 15
                           ? "text-rose-400"
                           : "text-[#737373]"
                       }`}
                     >
-                      {name.trim().length >= 2
+                      {name.trim().length >= 2 && name.trim().length <= 15
                         ? "✓ Ready to continue"
                         : "At least 2 characters needed"}
                     </span>
                     <span className="text-[#737373] geist-mono text-xs">
-                      {name.length}/50
+                      {name.length}/15
                     </span>
                   </div>
                 )}
@@ -173,24 +182,25 @@ function UserDetailsScreen({ onSubmit, onBack }: UserDetailsScreenProps) {
 
               <button
                 type="submit"
-                disabled={name.trim().length < 2 || isSubmitting}
-                className={`w-full py-4 px-6 rounded-xl font-medium text-lg  tracking-wide transition-all duration-300 ${
-                  name.trim().length >= 2 && !isSubmitting
-                    ? "bg-rose-400 hover:bg-rose-500 text-black hover:scale-[1.02] hover:shadow-lg hover:shadow-rose-400/20"
+                disabled={
+                  name.trim().length < 2 ||
+                  name.trim().length > 15 ||
+                  isSubmitting
+                }
+                className={`w-full py-4 px-6 rounded-xl font-medium text-lg  tracking-tight transition-all duration-300 ${
+                  name.trim().length >= 2 &&
+                  name.trim().length <= 15 &&
+                  !isSubmitting
+                    ? "bg-rose-500 hover:bg-rose-600 text-white hover:scale-[1.02] hover:shadow-lg hover:shadow-rose-400/20"
                     : "bg-[#171717] border border-[#282828] text-[#737373] cursor-not-allowed"
                 }`}
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center space-x-2">
-                    {/* <div className="flex items-center space-x-1">
-                      <div className="w-2 h-2 bg-current rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                      <div className="w-2 h-2 bg-current rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                      <div className="w-2 h-2 bg-current rounded-full animate-bounce"></div>
-                    </div> */}
                     <span>Getting ready...</span>
                   </div>
                 ) : (
-                  "Continue to Chat"
+                  "Continue"
                 )}
               </button>
             </form>
