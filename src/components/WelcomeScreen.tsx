@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,  } from "react";
 // Removed shadcn/ui imports
 import { gsap } from "gsap";
 import { TextPlugin } from "gsap/TextPlugin";
@@ -13,8 +13,7 @@ interface WelcomeScreenProps {
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   onStartQuestionnaire,
 }) => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
+ 
   useEffect(() => {
     // Set initial states for all animated elements
     gsap.set(
@@ -115,17 +114,9 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         "-=0.6"
       );
 
-    // Mouse position tracking for subtle parallax
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 10,
-        y: (e.clientY / window.innerHeight - 0.5) * 10,
-      });
-    };
+    
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+   }, []);
 
   const handleGetStarted = () => {
     gsap.to(".cta-button", {
@@ -147,23 +138,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
     <div className="min-h-screen bg-gradient-to-b from-[#0E0E0E] to-[#121212] text-white overflow-hidden relative">
       {/* Background texture and atmosphere */}
       <div className="absolute inset-0">
-        {/* Ambient background elements */}
-        <div
-          className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-rose-500/5 to-transparent rounded-full blur-3xl"
-          style={{
-            transform: `translate(${mousePosition.x * 0.3}px, ${
-              mousePosition.y * 0.3
-            }px)`,
-          }}
-        />
-        <div
-          className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-rose-400/3 to-transparent rounded-full blur-3xl"
-          style={{
-            transform: `translate(${-mousePosition.x * 0.2}px, ${
-              -mousePosition.y * 0.2
-            }px)`,
-          }}
-        />
+        
 
         {/* Subtle grid pattern */}
         <div className="absolute inset-0 opacity-[0.05]">

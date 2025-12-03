@@ -8,7 +8,7 @@ import {
 import ChatHeader from "./ChatScreen/ChatHeader";
 import ChatMessages from "./ChatScreen/ChatMessages";
 import ChatInput from "./ChatScreen/ChatInput";
-import ChatSuggestions from "./ChatScreen/ChatSuggestions";
+import { PromptSuggestion } from "./ui/prompt-suggestion";
 import ChatReportNotification from "./ChatScreen/ChatReportNotification";
 
 interface ChatScreenProps {
@@ -441,19 +441,7 @@ function ChatScreen({
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-rose-500/5 to-transparent rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-rose-400/3 to-transparent rounded-full blur-3xl" />
 
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-[0.08]">
-          <div
-            className="w-full h-full"
-            style={{
-              backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-            `,
-              backgroundSize: "50px 50px",
-            }}
-          />
-        </div>
+        
       </div>
 
       <div className="relative z-10">
@@ -466,7 +454,7 @@ function ChatScreen({
 
         {/* Chat Interface with welcome screen design */}
         <div className="flex flex-col items-center w-full px-4">
-          <div className="bg-black border border-zinc-900 rounded-2xl w-full md:max-w-3xl overflow-hidden">
+          <div className="bg-black border border-zinc-900 rounded-4xl w-full md:max-w-3xl overflow-hidden">
             {/* Messages Area */}
             <ChatMessages
               messages={conversationData}
@@ -511,25 +499,46 @@ function ChatScreen({
             )}
 
             {/* Chat Input and Suggestions always visible below messages */}
-            <div className="p-2 border-t border-zinc-900">
+            <div className="p-2">
+              {/* Suggestions above input */}
+              {conversationData.length > 0 &&
+                conversationData.length < 3 &&
+                !isTyping && (
+                  <div className="mb-3 flex flex-wrap gap-2">
+                    <PromptSuggestion
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        setInput("Tell me about a recent challenge")
+                      }
+                      className="text-xs"
+                    >
+                      Tell me about a recent challenge
+                    </PromptSuggestion>
+                    <PromptSuggestion
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setInput("How was your day?")}
+                      className="text-xs"
+                    >
+                      How was your day?
+                    </PromptSuggestion>
+                    <PromptSuggestion
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setInput("What's been on your mind?")}
+                      className="text-xs"
+                    >
+                      What's been on your mind?
+                    </PromptSuggestion>
+                  </div>
+                )}
               <ChatInput
                 input={input}
                 setInput={setInput}
                 onSend={handleSend}
                 disabled={isTyping}
               />
-              {conversationData.length > 0 &&
-                conversationData.length < 3 &&
-                !isTyping && (
-                  <ChatSuggestions
-                    suggestions={[
-                      "Tell me about a recent challenge",
-                      "How was your day?",
-                      "What's been on your mind?",
-                    ]}
-                    setInput={setInput}
-                  />
-                )}
             </div>
           </div>
         </div>

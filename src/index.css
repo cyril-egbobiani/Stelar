@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tailwind-squircle2/css";
 
 /* Now add plugins, custom variants, and other CSS below */
 @plugin "tailwindcss-animate";
@@ -421,3 +420,13 @@ div {
 .feature-card-border {
   border-color: rgb(209, 213, 219);
 }
+
+/* @layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+} */
+ 

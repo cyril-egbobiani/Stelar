@@ -61,11 +61,7 @@ function UserDetailsScreen({ onSubmit, onBack }: UserDetailsScreenProps) {
       className="min-h-screen bg-gradient-to-b from-[#0E0E0E] to-[#121212] text-white overflow-hidden relative"
     >
       {/* Background texture and atmosphere - same as welcome screen */}
-      <div className="absolute inset-0">
-        {/* Ambient background elements */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-rose-500/5 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-rose-400/3 to-transparent rounded-full blur-3xl" />
-
+      <div className="absolute inset-0"> 
         {/* Subtle grid pattern */}
         <div className="absolute inset-0 opacity-[0.06]">
           <div
