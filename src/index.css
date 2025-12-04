@@ -412,6 +412,15 @@ div {
   transform: translateZ(0);
 }
 
+/* Messages scrolling container */
+.messages-scroll {
+  height: calc(100vh - 200px);
+  max-height: calc(100vh - 200px);
+  min-height: 300px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
 .none {
   display: none;
 }
@@ -429,4 +438,3 @@ div {
     @apply bg-background text-foreground;
   }
 } */
- 

@@ -176,7 +176,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               <span className="text-[#EEEEEE]">Understand Your Mind</span>
               <br />
               <span className="text-[#EEEEEE]">Through </span>
-              <span className="bg-gradient-to-r from-rose-400 to-rose-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent">
                 Conversation
               </span>
             </h1>
@@ -189,12 +189,12 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             {/* Call to Action Button */}
             <button
               onClick={handleGetStarted}
-              className="group relative px-8 py-4 text-md font-medium text-rose-100 bg-rose-500 hover:bg-rose-600 rounded-2xl transition-all duration-300 hover:scale-105  mb-12"
+              className="group relative px-8 py-4 text-md font-medium text-rose-100 bg-rose-600 border-rose-500 border-2 hover:bg-rose-700 rounded-2xl transition-all duration-300 hover:scale-105  mb-12"
             >
               <span className="flex items-center gap-3  ">
                 <span>Start Your Journey</span>
                 <svg
-                  className="w-5 h-5 group-hover:translate-x-1 bg-amber-200 text-amber-600 rounded-full transition-transform"
+                  className="w-5 h-5 group-hover:translate-x-1 bg-rose-200 text-rose-600 rounded-full transition-transform"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

@@ -19,6 +19,15 @@ function PromptSuggestion({
   highlight,
   ...props
 }: PromptSuggestionProps) {
+  // If className is provided, use it directly as a custom styled button
+  if (className) {
+    return (
+      <button className={className} {...props}>
+        {children}
+      </button>
+    );
+  }
+
   const isHighlightMode = highlight !== undefined && highlight.trim() !== "";
   const content = typeof children === "string" ? children : "";
 
@@ -89,7 +98,7 @@ function PromptSuggestion({
           return (
             <>
               {before && (
-                <span className="text-muted-foreground bg-rose-900 whitespace-pre-wrap">
+                <span className="text-muted-foreground whitespace-pre-wrap">
                   {before}
                 </span>
               )}

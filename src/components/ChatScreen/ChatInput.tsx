@@ -33,7 +33,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         onValueChange={setInput}
         onSubmit={handleSend}
         disabled={disabled}
-        className="w-full"
+        className="w-full "
       >
         <PromptInputTextarea
           placeholder="Type your message..."
@@ -45,7 +45,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
               className={`p-2 rounded-full ml-auto flex items-center justify-center transition-all duration-200
                 ${
                   disabled || !input.trim()
-                    ? "bg-zinc-900 text-gray-500 cursor-not-allowed"
+                    ? "bg-zinc-950 text-gray-500 cursor-not-allowed"
                     : "bg-rose-500 text-white hover:bg-rose-600"
                 }
               `}

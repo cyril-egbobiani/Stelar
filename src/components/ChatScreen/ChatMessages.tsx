@@ -20,8 +20,9 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
   messagesEndRef,
 }) => (
   <div
-    className="no-scrollbar flex-1 overflow-y-auto px-2 py-8 space-y-6 max-h-[500px] messages-scroll"
+    className="no-scrollbar overflow-y-auto px-2 py-8 space-y-6 messages-scroll"
     id="messages-container"
+    style={{ height: "calc(100vh - 200px)", maxHeight: "calc(100vh - 200px)" }}
   >
     {messages.map((msg, idx) => {
       const isLatestMessage = idx === messages.length - 1;
