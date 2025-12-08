@@ -1,6 +1,7 @@
 import React from "react";
 import type { Message } from "../../types";
 import TypewriterText from "../TypewriterText";
+import { Loader } from "../ui/loader";
 
 interface ChatMessagesProps {
   messages: Message[];
@@ -9,6 +10,7 @@ interface ChatMessagesProps {
   setCompletedMessageIds: React.Dispatch<React.SetStateAction<Set<string>>>;
   setTypingMessageIds: React.Dispatch<React.SetStateAction<Set<string>>>;
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
+  isTyping?: boolean;
 }
 
 const ChatMessages: React.FC<ChatMessagesProps> = ({
@@ -18,6 +20,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
   setCompletedMessageIds,
   setTypingMessageIds,
   messagesEndRef,
+  isTyping = false,
 }) => (
   <div
     className="no-scrollbar overflow-y-auto px-2 py-8 space-y-6 messages-scroll"
@@ -119,6 +122,30 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         </div>
       );
     })}
+
+    {/* AI Typing Loader */}
+    {isTyping && (
+      <div className="flex justify-start message-enter">
+        <div className="flex items-start max-w-[85%] group">
+          {/* Avatar */}
+          <div className="flex-shrink-0 w-9 h-9 mt-1">
+            <div className="relative">
+              <img
+                src="/StelarLogo.svg"
+                alt="Stelar"
+                className="w-5 h-5 group-hover:scale-110 transition-transform duration-200"
+              />
+            </div>
+          </div>
+          {/* Loader in message bubble */}
+             <div className="">
+               <Loader variant="loading-dots" text="Thinking" />
+            </div>
+          
+        </div>
+      </div>
+    )}
+
     {/* Scroll anchor */}
     <div ref={messagesEndRef} />
   </div>

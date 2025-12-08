@@ -435,12 +435,7 @@ function ChatScreen({
       ref={containerRef}
       className="min-h-screen bg-black text-white overflow-hidden relative"
     >
-      {/* Background texture and atmosphere - same as welcome screen */}
-      <div className="absolute inset-0 bg-black">
-        {/* Ambient background elements */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-rose-500/5 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-gradient-to-tr from-rose-400/3 to-transparent rounded-full blur-3xl" />
-      </div>
+      
 
       <div className="relative z-10">
         {/* Header */}
@@ -461,6 +456,7 @@ function ChatScreen({
               setCompletedMessageIds={setCompletedMessageIds}
               setTypingMessageIds={setTypingMessageIds}
               messagesEndRef={messagesEndRef}
+              isTyping={isTyping}
             />
 
             {/* Intelligent Report Offer */}
