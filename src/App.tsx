@@ -9,8 +9,8 @@ import UserDetailsScreen from "./components/UserDetailsScreen";
 import type { Message, WellbeingReport } from "./types";
 import WelcomeScreen from "./components/WelcomeScreen";
 import EngagementOptions from "./components/EngagementOptions";
+import BreathingScreen from "./components/BreathingScreen";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import SelfReflectionScreen from "./components/SelfReflectionScreen";
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<
@@ -21,8 +21,8 @@ function App() {
     | "report"
     | "receipt"
     | "conclusion"
-    | "selfReflection"
     | "engage"
+    | "breathing"
   >("welcome");
   const [conversationData, setConversationData] = useState<Message[]>([]);
   const [wellbeingReport, setWellbeingReport] =
@@ -42,8 +42,8 @@ function App() {
       | "report"
       | "receipt"
       | "conclusion"
-      | "selfReflection"
       | "engage"
+      | "breathing"
   ) => {
     setCurrentScreen(screen);
   };
@@ -62,20 +62,10 @@ function App() {
             onSubmit={handleUserNameSubmit}
             onBack={() => handleNavigation("welcome")}
           /> */}
-             <Navbar />
+            <Navbar />
             <WelcomeScreen
               onStartQuestionnaire={() => {
                 handleNavigation("engage");
-              }}
-            />
-          </>
-        );
-      case "selfReflection":
-        return (
-          <>
-            <SelfReflectionScreen
-              onNavigate={function (): void {
-                throw new Error("Function not implemented.");
               }}
             />
           </>
@@ -86,6 +76,8 @@ function App() {
             <EngagementOptions onNavigate={handleNavigation} />
           </>
         );
+      case "breathing":
+        return <BreathingScreen onNavigate={handleNavigation} />;
       case "about":
         return (
           <>

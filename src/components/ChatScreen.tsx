@@ -8,8 +8,14 @@ import {
 import ChatHeader from "./ChatScreen/ChatHeader";
 import ChatMessages from "./ChatScreen/ChatMessages";
 import ChatInput from "./ChatScreen/ChatInput";
-import { PromptSuggestion } from "./ui/prompt-suggestion";
 import ChatReportNotification from "./ChatScreen/ChatReportNotification";
+import MoodCheckIn, {
+  type MoodSelection,
+  type IntentSelection,
+} from "./ChatScreen/MoodCheckIn";
+import ConversationProgress from "./ChatScreen/ConversationProgress";
+import { getPhaseFromMessageCount } from "./ChatScreen/conversationPhases";
+import QuickReplies from "./ChatScreen/QuickReplies";
 
 interface ChatScreenProps {
   onNavigate: (
@@ -33,8 +39,13 @@ function ChatScreen({
   userName,
 }: ChatScreenProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Mood check-in state (new guided flow)
+  const [hasCompletedCheckIn, setHasCompletedCheckIn] = useState(false);
+  const [userMood, setUserMood] = useState<MoodSelection | null>(null);
+  const [userIntent, setUserIntent] = useState<IntentSelection | null>(null);
+
   // Enhanced interaction states
-  // messagesEndRef is already declared above, remove duplicate
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const [showReportOffer, setShowReportOffer] = useState(false);
   const [hasOfferedReport, setHasOfferedReport] = useState(false);
@@ -44,8 +55,6 @@ function ChatScreen({
   const [completedMessageIds, setCompletedMessageIds] = useState<Set<string>>(
     new Set()
   );
-  // const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  // const [isTypingAdvanced, setIsTypingAdvanced] = useState(false);
   const [userId] = useState<string>(() => {
     // Generate or retrieve user ID from localStorage
     let storedUserId = localStorage.getItem("stelar_user_id");
@@ -67,13 +76,17 @@ function ChatScreen({
     return `${timestamp}_${random}_${idCounter}`;
   };
 
-  // If conversationData is empty, start conversation
+  // Only start conversation after mood check-in is complete
   useEffect(() => {
-    if (conversationData.length === 0 && !conversationId) {
+    if (
+      hasCompletedCheckIn &&
+      conversationData.length === 0 &&
+      !conversationId
+    ) {
       startNewConversation();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conversationData, conversationId]);
+  }, [hasCompletedCheckIn, conversationData, conversationId]);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -82,13 +95,27 @@ function ChatScreen({
     }
   }, [conversationData]);
 
+  // Handle mood check-in completion
+  const handleMoodCheckInComplete = (
+    mood: MoodSelection,
+    intent: IntentSelection
+  ) => {
+    setUserMood(mood);
+    setUserIntent(intent);
+    setHasCompletedCheckIn(true);
+  };
+
   const startNewConversation = async () => {
     try {
-      console.log("🚀 Starting new conversation with:", {
-        userId,
-        userName: userName || "there",
-        url: `${import.meta.env.VITE_BACKEND_URL}/api/conversations/start`,
-      });
+      // Build context-aware greeting based on mood/intent
+      const moodContext = userMood
+        ? `User is feeling ${userMood.label.toLowerCase()} (${userMood.emoji}).`
+        : "";
+      const intentContext = userIntent
+        ? `They want to: ${userIntent.label.toLowerCase()} - ${
+            userIntent.description
+          }.`
+        : "";
 
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/conversations/start`,
@@ -97,50 +124,44 @@ function ChatScreen({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId,
-            userName: userName || "there", // fallback if somehow no name
+            userName: userName || "there",
+            context: {
+              mood: userMood,
+              intent: userIntent,
+              moodContext,
+              intentContext,
+            },
           }),
         }
       );
 
-      console.log("📡 Start conversation response status:", response.status);
-      console.log("📡 Start conversation response ok:", response.ok);
-
       if (response.ok) {
         const data = await response.json();
-        console.log("📋 Start conversation response data:", data);
         setConversationId(data.conversation.id);
 
-        // Add personalized greeting
-        const personalizedGreeting = data.greeting
-          ? data.greeting
-          : `Hi ${
-              userName || "there"
-            }! I'm Stelar, your AI mental health companion. I'm here to listen and help you understand your thoughts and feelings better. How are you doing today?`;
-
-        console.log("💬 Setting initial greeting:", personalizedGreeting);
+        // Generate contextual greeting based on mood/intent
+        let greeting = data.greeting;
+        if (!greeting) {
+          greeting = getContextualGreeting(userName, userMood, userIntent);
+        }
 
         setConversationData([
           {
             id: generateUniqueId(),
-            text: personalizedGreeting,
+            text: greeting,
             sender: "stelar",
             timestamp: Date.now(),
           },
         ]);
-      } else {
-        console.error(
-          "❌ Failed to start conversation, status:",
-          response.status
-        );
       }
     } catch (error) {
       console.error("Failed to start conversation:", error);
-      // Fallback personalized greeting even if backend fails
-      const fallbackGreeting = `Hi ${
-        userName || "there"
-      }! I'm Stelar, your AI mental health companion. I'm here to listen and help you understand your thoughts and feelings better. How are you doing today?`;
-
-      console.log("🔄 Using fallback greeting:", fallbackGreeting);
+      // Fallback contextual greeting even if backend fails
+      const fallbackGreeting = getContextualGreeting(
+        userName,
+        userMood,
+        userIntent
+      );
 
       setConversationData([
         {
@@ -151,6 +172,48 @@ function ChatScreen({
         },
       ]);
     }
+  };
+
+  // Generate greeting based on mood and intent
+  const getContextualGreeting = (
+    name: string,
+    mood: MoodSelection | null,
+    intent: IntentSelection | null
+  ): string => {
+    const displayName = name || "there";
+
+    // Low mood greetings
+    if (mood && mood.value <= 2) {
+      if (intent?.id === "vent") {
+        return `Hey ${displayName}. I can see things feel heavy right now. I'm here to listen — no judgment, no advice unless you want it. Take your time.`;
+      }
+      if (intent?.id === "anxious") {
+        return `Hey ${displayName}. Anxiety can be really draining. Let's slow down together. What's weighing on your mind?`;
+      }
+      return `Hey ${displayName}. I'm glad you're here. Sometimes just showing up is the hardest part. What's going on?`;
+    }
+
+    // Neutral mood greetings
+    if (mood && mood.value === 3) {
+      if (intent?.id === "reflect") {
+        return `Hey ${displayName}. Ready to do some thinking? I'll help you work through whatever's on your mind.`;
+      }
+      if (intent?.id === "talk") {
+        return `Hey ${displayName}! I'm here for it — no agenda needed. What's been on your mind lately?`;
+      }
+      return `Hey ${displayName}. I'm here whenever you're ready. What would you like to explore?`;
+    }
+
+    // Good/Great mood greetings
+    if (mood && mood.value >= 4) {
+      if (intent?.id === "reflect") {
+        return `Hey ${displayName}! Love the energy. Let's channel that into some reflection. What's been going well?`;
+      }
+      return `Hey ${displayName}! Good to see you in good spirits. What brings you here today?`;
+    }
+
+    // Default
+    return `Hey ${displayName}! I'm Stelar. I'm here to listen and help you understand your thoughts better. What's on your mind?`;
   };
 
   const [input, setInput] = useState("");
@@ -435,110 +498,111 @@ function ChatScreen({
       ref={containerRef}
       className="min-h-screen bg-black text-white overflow-hidden relative"
     >
-      
-
-      <div className="relative z-10">
-        {/* Header */}
-        <ChatHeader
-          onNavigate={onNavigate}
-          conversationData={conversationData}
+      {/* Show mood check-in if not completed */}
+      {!hasCompletedCheckIn ? (
+        <MoodCheckIn
+          onComplete={handleMoodCheckInComplete}
           userName={userName}
         />
+      ) : (
+        <div className="relative z-10 flex flex-col h-screen">
+          {/* Header */}
+          <ChatHeader
+            onNavigate={onNavigate}
+            conversationData={conversationData}
+            userName={userName}
+          />
 
-        {/* Chat Interface with welcome screen design */}
-        <div className="flex flex-col items-center w-full px-4">
-          <div className="bg-black border-x border-t border-zinc-900 rounded-t-4xl w-full md:max-w-3xl overflow-hidden">
-            {/* Messages Area */}
-            <ChatMessages
-              messages={conversationData}
-              typingMessageIds={typingMessageIds}
-              completedMessageIds={completedMessageIds}
-              setCompletedMessageIds={setCompletedMessageIds}
-              setTypingMessageIds={setTypingMessageIds}
-              messagesEndRef={messagesEndRef}
-              isTyping={isTyping}
-            />
+          {/* Progress indicator */}
+          <ConversationProgress
+            currentPhase={getPhaseFromMessageCount(conversationData.length)}
+            messageCount={conversationData.length}
+          />
 
-            {/* Intelligent Report Offer */}
-            {showReportOffer && !isGeneratingReport && (
-              <div className="px-4 pb-4 user-fade-in">
-                <div className="mb-3 p-4 bg-gradient-to-r from-rose-500/10 to-cyan-500/10 rounded-xl border border-rose-400/30">
-                  <div>
+          {/* Chat Interface */}
+          <div className="flex-1 flex flex-col items-center w-full px-4 min-h-0">
+            <div className="bg-black border-x border-t border-zinc-900 rounded-t-4xl w-full md:max-w-3xl overflow-hidden flex flex-col h-full">
+              {/* Messages Area */}
+              <ChatMessages
+                messages={conversationData}
+                typingMessageIds={typingMessageIds}
+                completedMessageIds={completedMessageIds}
+                setCompletedMessageIds={setCompletedMessageIds}
+                setTypingMessageIds={setTypingMessageIds}
+                messagesEndRef={messagesEndRef}
+                isTyping={isTyping}
+              />
+
+              {/* Intelligent Report Offer */}
+              {showReportOffer && !isGeneratingReport && (
+                <div className="px-4 pb-4">
+                  <div className="p-4 bg-gradient-to-r from-rose-500/10 to-zinc-900 rounded-xl border border-rose-500/30">
                     <h3 className="text-rose-300 font-medium mb-2">
-                      Your Mental Health Fingerprint is Ready!
+                      Your insights are ready
                     </h3>
-                    <p className="text-rose-100 text-sm mb-3">
-                      I've analyzed your communication patterns, thinking style,
-                      and emotional expressions. Your unique mental health
-                      fingerprint reveals personalized insights about how you
-                      process thoughts and emotions.
+                    <p className="text-zinc-400 text-sm mb-3">
+                      I've gathered enough to share some personalized insights
+                      about your mental wellbeing.
                     </p>
                     <div className="flex gap-3">
                       <button
                         onClick={handleNavigateToReport}
-                        className="px-4 py-2 bg-gradient-to-r from-rose-500 to-cyan-500 text-white rounded-lg font-medium hover:from-rose-600 hover:to-cyan-600 transition-all duration-200 text-sm"
+                        className="px-4 py-2 bg-rose-500 text-white rounded-lg font-medium hover:bg-rose-600 transition-all duration-200 text-sm"
                       >
-                        View My Fingerprint 🧬
+                        View insights
                       </button>
                       <button
                         onClick={() => setShowReportOffer(false)}
-                        className="px-4 py-2 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-all duration-200 text-sm"
+                        className="px-4 py-2 bg-zinc-800 text-zinc-300 rounded-lg font-medium hover:bg-zinc-700 transition-all duration-200 text-sm"
                       >
-                        Continue chatting
+                        Keep chatting
                       </button>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Chat Input and Suggestions always visible below messages */}
-            <div className="p-2">
-              {/* Suggestions above input */}
-              {conversationData.length > 0 &&
-                conversationData.length < 3 &&
-                !isTyping && (
-                  <div className="mb-3 flex flex-wrap gap-2">
-                    <PromptSuggestion
-                      onClick={() =>
-                        setInput("Tell me about a recent challenge")
+              {/* Chat Input with Quick Replies */}
+              <div className="p-3 border-t border-zinc-900">
+                {/* Quick Replies */}
+                <QuickReplies
+                  phase={getPhaseFromMessageCount(conversationData.length)}
+                  intent={userIntent}
+                  onSelect={(reply) => {
+                    setInput(reply);
+                    // Auto-send after a brief delay for UX
+                    setTimeout(() => {
+                      if (reply.trim()) {
+                        handleSend();
                       }
-                      className="px-4 py-2 bg-zinc-900 rounded-full text-white hover:text-rose-400 transition-all text-sm duration-300 ease-out"
-                    >
-                      Tell me about a recent challenge
-                    </PromptSuggestion>
-                    <PromptSuggestion
-                      onClick={() => setInput("How was your day?")}
-                      className="px-4 py-2 bg-zinc-900 rounded-full text-white hover:text-rose-400 transition-all text-sm duration-300 ease-out"
-                    >
-                      How was your day?
-                    </PromptSuggestion>
-                    <PromptSuggestion
-                      onClick={() => setInput("What's been on your mind?")}
-                      className="px-4 py-2 bg-zinc-900 rounded-full text-white hover:text-rose-400 transition-all duration-300 ease-out"
-                    >
-                      What's been on your mind?
-                    </PromptSuggestion>
-                  </div>
-                )}
-              <ChatInput
-                input={input}
-                setInput={setInput}
-                onSend={handleSend}
-                disabled={isTyping}
-              />
+                    }, 100);
+                  }}
+                  disabled={isTyping}
+                  lastAiMessage={
+                    conversationData.filter((m) => m.sender === "stelar").pop()
+                      ?.text || ""
+                  }
+                />
+
+                <ChatInput
+                  input={input}
+                  setInput={setInput}
+                  onSend={handleSend}
+                  disabled={isTyping}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Auto-generation notification */}
-        {isGeneratingReport && (
-          <ChatReportNotification
-            onShowReport={handleNavigateToReport}
-            userName={userName}
-          />
-        )}
-      </div>
+          {/* Auto-generation notification */}
+          {isGeneratingReport && (
+            <ChatReportNotification
+              onShowReport={handleNavigateToReport}
+              userName={userName}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -2,14 +2,40 @@ import React from "react";
 
 const options = [
   {
-    title: "Self-Reflection",
-    description: "Answer a few prompts to explore your thoughts and feelings.",
-    route: "/selfReflection",
+    title: "Breathing Exercise",
+    description: "Quick guided breathing to calm your mind.",
+    route: "breathing",
+    icon: (
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <circle cx="12" cy="12" r="9" strokeWidth={1.5} />
+        <circle cx="12" cy="12" r="4" strokeWidth={1.5} />
+      </svg>
+    ),
   },
   {
-    title: "Chat Analysis",
+    title: "Chat with Stelar",
     description: "Have a conversation and get insights from our AI.",
-    route: "/chat",
+    route: "chat",
+    icon: (
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+        />
+      </svg>
+    ),
   },
 ];
 
@@ -24,7 +50,7 @@ type EngagementOptionsProps = {
       | "receipt"
       | "conclusion"
       | "engage"
-      | "selfReflection"
+      | "breathing"
   ) => void;
 };
 
@@ -65,18 +91,15 @@ const EngagementOptions: React.FC<EngagementOptionsProps> = ({
           </p>
         </div>
 
-        <div className="space-y-4">
-          {options.map((opt, index) => (
+        <div className="space-y-3">
+          {options.map((opt) => (
             <button
               key={opt.title}
-              onClick={() => {
-                if (opt.route === "/chat") onNavigate("chat");
-                else if (opt.route === "/selfReflection")
-                  onNavigate("selfReflection");
-              }}
+              onClick={() => onNavigate(opt.route as "chat" | "breathing")}
               className="w-full text-left p-5 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors"
             >
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="mt-0.5 text-rose-400">{opt.icon}</div>
                 <div className="flex-1">
                   <h2 className="text-lg text-white mb-1">{opt.title}</h2>
                   <p className="text-sm text-zinc-500">{opt.description}</p>
@@ -97,11 +120,6 @@ const EngagementOptions: React.FC<EngagementOptionsProps> = ({
                   </svg>
                 </div>
               </div>
-              {index === 0 && (
-                <span className="inline-block mt-3 text-xs text-rose-400 bg-rose-500/10 px-2 py-1 rounded">
-                  Recommended
-                </span>
-              )}
             </button>
           ))}
         </div>
